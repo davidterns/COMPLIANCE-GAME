@@ -72,6 +72,41 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .gym-locked .gym-building{opacity:.5;}.gym-locked .gym-label{color:#666;}
 .badge-check{position:absolute;top:-4px;right:-4px;width:13px;height:13px;border-radius:50%;
   background:gold;border:1px solid #a07800;font-size:7px;display:flex;align-items:center;justify-content:center;}
+
+/* ── EXCLAMATION BUBBLE (Pokemon-style) ── */
+.gym-exclaim{
+  display:none;position:absolute;top:-26px;left:50%;
+  transform:translateX(-50%);
+  font-family:'Press Start 2P',monospace;font-size:10px;
+  color:#fff;background:#1a1a1a;border:2px solid #fff;
+  border-radius:3px;padding:1px 5px;line-height:1.4;
+  animation:exclaimBounce .35s ease-in-out infinite alternate;
+  z-index:25;pointer-events:none;
+}
+@keyframes exclaimBounce{
+  from{transform:translateX(-50%) translateY(0);}
+  to{transform:translateX(-50%) translateY(-5px);}
+}
+/* A-button prompt near gym */
+#map-interact-prompt{
+  display:none;position:absolute;z-index:26;
+  font-family:'Press Start 2P',monospace;font-size:5px;
+  color:#fff;background:rgba(0,0,0,.82);border:1px solid #86BC25;
+  border-radius:2px;padding:2px 5px;pointer-events:none;
+  white-space:nowrap;
+  animation:blink .8s step-end infinite;
+}
+/* D-pad arrow buttons */
+.dpad-btn{
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:#aaa;
+  background:transparent;border:none;cursor:pointer;
+  position:absolute;z-index:5;
+  transition:color .1s,background .1s;
+  user-select:none;-webkit-user-select:none;
+}
+.dpad-btn:active,.dpad-btn.pressed{color:#fff;background:rgba(255,255,255,.15);}
+
 /* Badge above each gym (always visible, dims when not earned) */
 .gym-badge-above{
   font-size:22px;
@@ -1204,6 +1239,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
             <!-- GYM 0 – Anticorrupción: red brick building, lock symbol, gold door -->
             <div class="gym-node" style="left:240px;top:12px;" onclick="enterGymIfNear(0)" id="gn0">
+              <div id="gym-exclaim-0" class="gym-exclaim">!</div>
               <div id="gym-badge-0" class="gym-badge-above" style="display:none;"></div>
               <svg viewBox="0 0 56 52" width="72" height="66" style="image-rendering:pixelated;display:block;">
                 <rect x="2" y="50" width="52" height="2" fill="#000" opacity=".4"/>
@@ -1235,6 +1271,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
             <!-- GYM 1 – Canal Denuncias: blue building, megaphone, light windows -->
             <div class="gym-node" style="left:430px;top:114px;" onclick="enterGymIfNear(1)" id="gn1">
+              <div id="gym-exclaim-1" class="gym-exclaim">!</div>
               <div id="gym-badge-1" class="gym-badge-above" style="display:none;"></div>
               <svg viewBox="0 0 56 52" width="72" height="66" style="image-rendering:pixelated;display:block;">
                 <rect x="2" y="50" width="52" height="2" fill="#000" opacity=".4"/>
@@ -1273,6 +1310,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
             <!-- GYM 2 – Conflictos Interés: green marble courthouse, scales -->
             <div class="gym-node" style="left:358px;top:281px;" onclick="enterGymIfNear(2)" id="gn2">
+              <div id="gym-exclaim-2" class="gym-exclaim">!</div>
               <div id="gym-badge-2" class="gym-badge-above" style="display:none;"></div>
               <svg viewBox="0 0 56 52" width="72" height="66" style="image-rendering:pixelated;display:block;">
                 <rect x="2" y="50" width="52" height="2" fill="#000" opacity=".4"/>
@@ -1304,6 +1342,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
             <!-- GYM 3 – Función Compliance: golden institution, pillars, scroll -->
             <div class="gym-node" style="left:122px;top:281px;" onclick="enterGymIfNear(3)" id="gn3">
+              <div id="gym-exclaim-3" class="gym-exclaim">!</div>
               <div id="gym-badge-3" class="gym-badge-above" style="display:none;"></div>
               <svg viewBox="0 0 56 52" width="72" height="66" style="image-rendering:pixelated;display:block;">
                 <rect x="2" y="50" width="52" height="2" fill="#000" opacity=".4"/>
@@ -1347,6 +1386,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
             <!-- GYM 4 – Mi Rol Empleado: modern purple office tower -->
             <div class="gym-node" style="left:50px;top:114px;" onclick="enterGymIfNear(4)" id="gn4">
+              <div id="gym-exclaim-4" class="gym-exclaim">!</div>
               <div id="gym-badge-4" class="gym-badge-above" style="display:none;"></div>
               <svg viewBox="0 0 56 52" width="72" height="66" style="image-rendering:pixelated;display:block;">
                 <rect x="2" y="50" width="52" height="2" fill="#000" opacity=".4"/>
@@ -1587,6 +1627,8 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
             <!-- Badges bar -->
             <div id="map-badges" style="position:absolute;bottom:3px;left:4px;right:4px;display:flex;gap:3px;justify-content:center;"></div>
+            <!-- Pokemon-style interaction prompt -->
+            <div id="map-interact-prompt">▲ Pulsa A</div>
           </div><!-- /map-area -->
           </div><!-- /map-world -->
         </div><!-- /screen-map -->
@@ -1993,15 +2035,30 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
     <!-- Row 1: D-Pad LEFT · Green buttons CENTER · A/B RIGHT -->
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
 
-      <!-- D-PAD -->
-      <div style="position:relative;width:54px;height:54px;flex-shrink:0;">
-        <div style="position:absolute;width:100%;height:34%;top:33%;left:0;background:#222;border-radius:2px;"></div>
-        <div style="position:absolute;width:34%;height:100%;top:0;left:33%;background:#222;border-radius:2px;"></div>
-        <div style="position:absolute;width:34%;height:34%;top:33%;left:33%;background:#333;border-radius:2px;z-index:2;"></div>
-        <button style="position:absolute;top:0;left:33%;width:34%;height:33%;background:transparent;border:none;cursor:pointer;z-index:5;" onclick="movePlayer(0,-1)"></button>
-        <button style="position:absolute;bottom:0;left:33%;width:34%;height:33%;background:transparent;border:none;cursor:pointer;z-index:5;" onclick="movePlayer(0,1)"></button>
-        <button style="position:absolute;top:33%;left:0;width:33%;height:34%;background:transparent;border:none;cursor:pointer;z-index:5;" onclick="movePlayer(-1,0)"></button>
-        <button style="position:absolute;top:33%;right:0;width:33%;height:34%;background:transparent;border:none;cursor:pointer;z-index:5;" onclick="movePlayer(1,0)"></button>
+      <!-- D-PAD (Pokemon GB style) -->
+      <div id="dpad" style="position:relative;width:60px;height:60px;flex-shrink:0;">
+        <!-- Horizontal arm -->
+        <div style="position:absolute;width:100%;height:34%;top:33%;left:0;background:#1c1c1c;border-radius:4px;box-shadow:0 2px 0 #111,inset 0 1px 2px rgba(255,255,255,.08);"></div>
+        <!-- Vertical arm -->
+        <div style="position:absolute;width:34%;height:100%;top:0;left:33%;background:#1c1c1c;border-radius:4px;box-shadow:2px 0 0 #111,inset 1px 0 2px rgba(255,255,255,.08);"></div>
+        <!-- Center disc -->
+        <div style="position:absolute;width:34%;height:34%;top:33%;left:33%;background:#2a2a2a;border-radius:3px;z-index:2;box-shadow:inset 0 0 4px rgba(0,0,0,.6);"></div>
+        <!-- UP -->
+        <button id="dpad-up" class="dpad-btn" style="top:0;left:33%;width:34%;height:33%;border-radius:4px 4px 0 0;"
+          onmousedown="dpadPress('up')" onmouseup="dpadRelease('up')" ontouchstart="dpadPress('up');event.preventDefault()" ontouchend="dpadRelease('up');event.preventDefault()"
+          onclick="movePlayer(0,-1)">▲</button>
+        <!-- DOWN -->
+        <button id="dpad-down" class="dpad-btn" style="bottom:0;left:33%;width:34%;height:33%;border-radius:0 0 4px 4px;"
+          onmousedown="dpadPress('down')" onmouseup="dpadRelease('down')" ontouchstart="dpadPress('down');event.preventDefault()" ontouchend="dpadRelease('down');event.preventDefault()"
+          onclick="movePlayer(0,1)">▼</button>
+        <!-- LEFT -->
+        <button id="dpad-left" class="dpad-btn" style="top:33%;left:0;width:33%;height:34%;border-radius:4px 0 0 4px;"
+          onmousedown="dpadPress('left')" onmouseup="dpadRelease('left')" ontouchstart="dpadPress('left');event.preventDefault()" ontouchend="dpadRelease('left');event.preventDefault()"
+          onclick="movePlayer(-1,0)">◀</button>
+        <!-- RIGHT -->
+        <button id="dpad-right" class="dpad-btn" style="top:33%;right:0;width:33%;height:34%;border-radius:0 4px 4px 0;"
+          onmousedown="dpadPress('right')" onmouseup="dpadRelease('right')" ontouchstart="dpadPress('right');event.preventDefault()" ontouchend="dpadRelease('right');event.preventDefault()"
+          onclick="movePlayer(1,0)">▶</button>
       </div>
 
       <!-- GREEN BUTTONS (stacked) -->
@@ -2947,6 +3004,7 @@ function showMap(){
   document.getElementById('map-header').textContent='★ LÍDER ÉTICO '+S.name+' | REGIÓN COMPLIANCE ★';
   setTimeout(scrollCamera,50);
   setTimeout(()=>{ if(musicMode!=='map') startMapMusic(); }, 200);
+  setTimeout(startMapLoop, 100);
   // Initialise first-time hint (base info not yet seen)
   if(!S.hasOwnProperty('lexBaseSeen')) S.lexBaseSeen = false;
   if(!S.lexShown) S.lexShown = [false,false,false,false,false];
@@ -3548,18 +3606,38 @@ function scrollCamera(){
   world.style.top  = (20 - camY) + 'px';
 }
 function checkNearGym(){
+  let anyNear = false;
+  let nearestDist = 9999, nearestPos = null;
   GYM_POS.forEach((pos,i)=>{
     const cx=S.px+12, cy=S.py+16;
     const dist=Math.sqrt((cx-pos.x)**2+(cy-pos.y)**2);
-    if(dist<38){
-      // Auto-enter if walking into the door (very close + moving up toward building)
+    const exclaim=document.getElementById('gym-exclaim-'+i);
+    if(dist<46){
+      anyNear = true;
+      if(exclaim) exclaim.style.display='block';
+      if(dist<nearestDist){ nearestDist=dist; nearestPos=pos; }
       if(dist<22 && walkDir==='up'){
+        if(exclaim) exclaim.style.display='none';
         enterGymIfNear(i);
         return;
       }
       flashHeader('¡Pulsa A o entra por la puerta!');
+    } else {
+      if(exclaim) exclaim.style.display='none';
     }
   });
+  // Show/hide floating interaction prompt near player
+  const prompt=document.getElementById('map-interact-prompt');
+  if(prompt){
+    if(anyNear && nearestPos){
+      prompt.style.display='block';
+      // Position above the player
+      prompt.style.left=(S.px-10)+'px';
+      prompt.style.top=(S.py-18)+'px';
+    } else {
+      prompt.style.display='none';
+    }
+  }
 }
 
 function enterGymIfNear(id){
@@ -4273,30 +4351,86 @@ function showPolicyPopup(gym){
 function hidePolicyPopup(){document.getElementById('policy-popup').style.display='none';}
 
 // ================================================
-// KEYBOARD
+// KEYBOARD + CONTINUOUS MOVEMENT LOOP (Pokemon-style)
 // ================================================
 const keys={};
+
+// Virtual D-pad key state (for mobile hold)
+const dpadKeys={up:false,down:false,left:false,right:false};
+function dpadPress(dir){
+  dpadKeys[dir]=true;
+  const btn=document.getElementById('dpad-'+dir);
+  if(btn) btn.classList.add('pressed');
+  if(S.screen==='map'){
+    if(dir==='up')movePlayer(0,-1);
+    else if(dir==='down')movePlayer(0,1);
+    else if(dir==='left')movePlayer(-1,0);
+    else if(dir==='right')movePlayer(1,0);
+  }
+}
+function dpadRelease(dir){
+  dpadKeys[dir]=false;
+  const btn=document.getElementById('dpad-'+dir);
+  if(btn) btn.classList.remove('pressed');
+}
+
+// Pokemon-style held-key repeat loop
+let mapLoopId=null;
+let lastMoveTS=0;
+const MOVE_REPEAT_MS=110; // time between steps when holding (ms)
+
+function mapLoopTick(ts){
+  if(S.screen!=='map'){ mapLoopId=null; return; }
+  mapLoopId=requestAnimationFrame(mapLoopTick);
+  if(ts-lastMoveTS < MOVE_REPEAT_MS) return;
+
+  const kU=keys['ArrowUp']||keys['w']||keys['W']||dpadKeys.up;
+  const kD=keys['ArrowDown']||keys['s']||keys['S']||dpadKeys.down;
+  const kL=keys['ArrowLeft']||keys['a']||keys['A']||dpadKeys.left;
+  const kR=keys['ArrowRight']||keys['d']||keys['D']||dpadKeys.right;
+  if(!(kU||kD||kL||kR)){ lastMoveTS=0; return; }
+
+  lastMoveTS=ts;
+  if(kU) movePlayer(0,-1);
+  else if(kD) movePlayer(0,1);
+  else if(kL) movePlayer(-1,0);
+  else if(kR) movePlayer(1,0);
+}
+
+function startMapLoop(){
+  if(mapLoopId) return;
+  lastMoveTS=0;
+  mapLoopId=requestAnimationFrame(mapLoopTick);
+}
+
 document.addEventListener('keydown',e=>{
+  const wasDown=keys[e.key];
   keys[e.key]=true;
   initAudio();
   if(e.key==='z'||e.key==='Z'||e.key===' ')handleA();
   if(e.key==='x'||e.key==='X')handleB();
   if(e.key==='Enter'&&S.screen!=='name'){
-    // If lex overlay is open, advance
     if(document.getElementById('lex-overlay').style.display==='flex'){lexNext();return;}
     handleA();
   }
   if(e.key==='Escape'){hidePokedex();hidePolicyPopup();hideAccPopup();closeNewspaper();hideNewsInventory();}
-  if(S.screen==='map'){
-    if(e.key==='ArrowUp'||e.key==='w'||e.key==='W')movePlayer(0,-1);
-    if(e.key==='ArrowDown'||e.key==='s'||e.key==='S')movePlayer(0,1);
-    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')movePlayer(-1,0);
-    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')movePlayer(1,0);
+  if(S.screen==='map'&&!wasDown){
+    // First press: instant move + highlight D-pad button
+    if(e.key==='ArrowUp'||e.key==='w'||e.key==='W'){movePlayer(0,-1);document.getElementById('dpad-up')?.classList.add('pressed');}
+    if(e.key==='ArrowDown'||e.key==='s'||e.key==='S'){movePlayer(0,1);document.getElementById('dpad-down')?.classList.add('pressed');}
+    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){movePlayer(-1,0);document.getElementById('dpad-left')?.classList.add('pressed');}
+    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){movePlayer(1,0);document.getElementById('dpad-right')?.classList.add('pressed');}
+    lastMoveTS=performance.now(); // reset so loop waits before repeating
   }
-  // Prevent arrow scroll
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)&&S.screen==='map')e.preventDefault();
 });
-document.addEventListener('keyup',e=>{keys[e.key]=false;});
+document.addEventListener('keyup',e=>{
+  keys[e.key]=false;
+  // Remove D-pad highlight on keyup
+  const map={'ArrowUp':'up','ArrowDown':'down','ArrowLeft':'left','ArrowRight':'right',
+             'w':'up','W':'up','s':'down','S':'down','a':'left','A':'left','d':'right','D':'right'};
+  if(map[e.key]) document.getElementById('dpad-'+map[e.key])?.classList.remove('pressed');
+});
 
 
 
