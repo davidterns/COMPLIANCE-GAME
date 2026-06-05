@@ -1070,21 +1070,21 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
                 <rect x="40" y="26" width="6" height="6" fill="#283820"/><rect x="41" y="27" width="4" height="4" fill="#1a2818"/>
                 <rect x="52" y="26" width="6" height="6" fill="#283820"/><rect x="53" y="27" width="4" height="4" fill="#1a2818"/>
                 <rect x="62" y="26" width="6" height="6" fill="#283820"/><rect x="63" y="27" width="4" height="4" fill="#1a2818"/>
-                <!-- ══ VENTANAS fila 2 (y=36) ══ -->
+                <!-- ══ VENTANAS fila 2 (y=36) — todas incluidas ══ -->
                 <rect x="4"  y="36" width="6" height="6" fill="#283820"/><rect x="5"  y="37" width="4" height="4" fill="#1a2818"/>
                 <rect x="16" y="36" width="6" height="6" fill="#283820"/><rect x="17" y="37" width="4" height="4" fill="#1a2818"/>
-                <!-- puerta en centro: x=28-44 -->
+                <rect x="28" y="36" width="6" height="6" fill="#283820"/><rect x="29" y="37" width="4" height="4" fill="#1a2818"/>
                 <rect x="40" y="36" width="6" height="6" fill="#283820"/><rect x="41" y="37" width="4" height="4" fill="#1a2818"/>
                 <rect x="52" y="36" width="6" height="6" fill="#283820"/><rect x="53" y="37" width="4" height="4" fill="#1a2818"/>
                 <rect x="62" y="36" width="6" height="6" fill="#283820"/><rect x="63" y="37" width="4" height="4" fill="#1a2818"/>
-                <!-- ══ PUERTA ══ -->
-                <rect x="29" y="35" width="14" height="23" fill="#3a2008"/>
-                <rect x="30" y="36" width="12" height="21" fill="#8a5820"/>
-                <rect x="30" y="36" width="12" height="2"  fill="#b07030"/>
-                <rect x="30" y="36" width="1"  height="21" fill="#b07030"/>
-                <rect x="41" y="36" width="1"  height="21" fill="#6a4010"/>
+                <!-- ══ PUERTA (más pequeña, sobre ventanas) ══ -->
+                <rect x="31" y="43" width="10" height="15" fill="#3a2008"/>
+                <rect x="32" y="44" width="8"  height="13" fill="#8a5820"/>
+                <rect x="32" y="44" width="8"  height="2"  fill="#b07030"/>
+                <rect x="32" y="44" width="1"  height="13" fill="#b07030"/>
+                <rect x="39" y="44" width="1"  height="13" fill="#6a4010"/>
                 <!-- pomo -->
-                <rect x="39" y="46" width="2" height="2" fill="#c8a040"/>
+                <rect x="38" y="50" width="2" height="2" fill="#c8a040"/>
                 <!-- ══ BASE / SUELO ══ -->
                 <rect x="0" y="58" width="72" height="4" fill="#a8b090"/>
                 <rect x="0" y="58" width="72" height="1" fill="#c0c8a8"/>
@@ -1092,6 +1092,37 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
 
             <!-- GYM 1 – Canal Denuncias: blue building, megaphone, light windows -->
+            <!-- Cartel de madera Anticorrupción junto a Gym 0 -->
+            <div style="position:absolute;left:92px;top:32px;pointer-events:none;">
+              <svg viewBox="0 0 52 38" width="65" height="47" style="image-rendering:pixelated;display:block;">
+                <!-- poste izquierdo -->
+                <rect x="4"  y="10" width="3" height="28" fill="#5a3810"/>
+                <rect x="5"  y="10" width="1" height="28" fill="#7a5020"/>
+                <!-- poste derecho -->
+                <rect x="45" y="10" width="3" height="28" fill="#5a3810"/>
+                <rect x="46" y="10" width="1" height="28" fill="#7a5020"/>
+                <!-- tablero fondo oscuro -->
+                <rect x="1"  y="8"  width="50" height="20" fill="#3a2008"/>
+                <!-- tablero madera -->
+                <rect x="2"  y="9"  width="48" height="18" fill="#a06828"/>
+                <!-- veta madera -->
+                <rect x="2"  y="11" width="48" height="1"  fill="#b87830" opacity=".6"/>
+                <rect x="2"  y="14" width="48" height="1"  fill="#b87830" opacity=".4"/>
+                <rect x="2"  y="17" width="48" height="1"  fill="#b87830" opacity=".6"/>
+                <rect x="2"  y="20" width="48" height="1"  fill="#b87830" opacity=".4"/>
+                <!-- highlight superior -->
+                <rect x="2"  y="9"  width="48" height="2"  fill="#c8882a" opacity=".7"/>
+                <!-- texto ANTICORRUPCIÓN -->
+                <text x="26" y="17" text-anchor="middle" font-family="monospace" font-size="4.5" font-weight="bold" fill="#1a0800">ANTI</text>
+                <text x="26" y="23" text-anchor="middle" font-family="monospace" font-size="3.5" font-weight="bold" fill="#1a0800">CORRUPCIÓN</text>
+                <!-- tornillos esquinas -->
+                <rect x="4"  y="11" width="2" height="2" fill="#3a2008"/>
+                <rect x="46" y="11" width="2" height="2" fill="#3a2008"/>
+                <rect x="4"  y="23" width="2" height="2" fill="#3a2008"/>
+                <rect x="46" y="23" width="2" height="2" fill="#3a2008"/>
+              </svg>
+            </div>
+
             <div class="gym-node" style="left:554px;top:0px;" onclick="enterGymIfNear(1)" id="gn1">
               <div id="gym-exclaim-1" class="gym-exclaim">!</div>
               <div id="gym-badge-1" class="gym-badge-above" style="display:none;"></div>
