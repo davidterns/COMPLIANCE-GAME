@@ -64,6 +64,18 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .gym-node{position:absolute;width:80px;height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .gym-building{width:40px;height:36px;position:relative;transition:transform .15s;}
 .gym-node:hover .gym-building{transform:translateY(-2px);}
+/* Pokemon-style gym entrance highlight */
+.gym-node:hover svg { filter: brightness(1.15) drop-shadow(0 0 4px rgba(255,255,200,.6)); }
+.gym-node { transition: transform .12s; }
+.gym-node:active { transform: scale(.96); }
+/* Gym name tag below building */
+.gym-tag {
+  font-size:5px;color:var(--gb-dark);text-align:center;
+  background:rgba(200,215,150,.95);
+  border:1px solid var(--gb-dark);border-top:none;
+  padding:2px 4px;max-width:80px;line-height:1.5;
+  font-family:'Press Start 2P',monospace;
+}
 .gym-roof{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;position:absolute;top:0;left:0;}
 .gym-walls{position:absolute;bottom:0;left:4px;width:32px;height:24px;display:flex;align-items:center;justify-content:center;}
 .gym-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:8px;height:10px;}
@@ -80,6 +92,28 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   font-family:'Press Start 2P',monospace;font-size:10px;
   color:#fff;background:#1a1a1a;border:2px solid #fff;
   border-radius:3px;padding:1px 5px;line-height:1.4;
+  animation:exclaimBounce .35s ease-in-out infinite alternate;
+  z-index:25;pointer-events:none;
+}
+/* NPC styles */
+.map-npc {
+  position:absolute;
+  width:24px;height:32px;
+  z-index:15;cursor:pointer;
+}
+.npc-label {
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  font-family:'Press Start 2P',monospace;font-size:4px;
+  color:var(--gb-dark);background:rgba(200,220,150,.92);
+  border:1px solid var(--gb-dark);padding:1px 3px;
+  white-space:nowrap;pointer-events:none;
+}
+.npc-exclaim {
+  display:none;position:absolute;top:-22px;left:50%;
+  transform:translateX(-50%);
+  font-family:'Press Start 2P',monospace;font-size:9px;
+  color:#fff;background:#1a1a1a;border:2px solid #fff;
+  border-radius:3px;padding:1px 4px;line-height:1.4;
   animation:exclaimBounce .35s ease-in-out infinite alternate;
   z-index:25;pointer-events:none;
 }
@@ -1424,7 +1458,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
                         <!-- Player (movable) – green suit, DELOITTE cap -->
             <!-- Player: sprite redrawn by JS based on badge count -->
-            <div id="map-player" style="position:absolute;z-index:20;width:24px;height:32px;transition:left .08s,top .08s;">
+            <div id="map-player" style="position:absolute;z-index:20;width:24px;height:32px;transition:left .05s linear,top .05s linear;">
               <svg id="map-player-svg" viewBox="0 0 12 16" width="24" height="32" style="image-rendering:pixelated;"></svg>
             </div>
             <!-- Integrimon companion (shown after all 5 badges) -->
@@ -3358,7 +3392,7 @@ function updateMap(){
 }
 
 // -- PLAYER MOVEMENT --
-const STEP=8;
+const STEP=4;
 const HEDGE_BOXES = [];
 
 function collidesWithHedge(nx, ny){
@@ -4377,7 +4411,7 @@ function dpadRelease(dir){
 // Pokemon-style held-key repeat loop
 let mapLoopId=null;
 let lastMoveTS=0;
-const MOVE_REPEAT_MS=110; // time between steps when holding (ms)
+const MOVE_REPEAT_MS=75; // time between steps when holding (ms)
 
 function mapLoopTick(ts){
   if(S.screen!=='map'){ mapLoopId=null; return; }
