@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>JuegoPoke — Demo Pixel Art</title>
+<style>
+  body { background: #1a1a2e; display: flex; flex-direction: column; align-items: center;
+         font-family: monospace; color: #eee; gap: 32px; padding: 40px; }
+  h1   { color: #ffd700; letter-spacing: 4px; font-size: 20px; }
+  .row { display: flex; gap: 40px; align-items: flex-end; flex-wrap: wrap; justify-content: center; }
+  .sprite-card { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .label { font-size: 11px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; }
+  canvas { image-rendering: pixelated; border: 2px solid #333; background: #c8d8c0; }
+  .battle-canvas { background: #e8f0e8; }
+  .map-canvas    { background: #6ab04c; }
+  .dialog-canvas { background: #1a1a2e; border: none; }
+  hr { border-color: #333; width: 100%; max-width: 900px; }
+  .section-title { color: #ffd700; font-size: 13px; letter-spacing: 3px; margin-bottom: -20px; }
+</style>
+</head>
+<body>
+<h1>⚡ JUEGOPOKE — ESTILO PIXEL ART ⚡</h1>
+<p style="color:#888;font-size:12px">Todos los sprites generados por código JavaScript puro (sin PNGs)</p>
+
+<p class="section-title">SPRITES DE PERSONAJES (16×16 px → escalado ×6)</p>
+<div class="row">
+
+  <!-- JUGADOR (de espaldas, modo exploración) -->
+  <div class="sprite-card">
+    <canvas id="player" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">Jugador (mapa)</span>
+  </div>
+
+  <!-- JUGADOR (de espaldas, modo combate) -->
+  <div class="sprite-card">
+    <canvas id="playerBack" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">Jugador (combate)</span>
+  </div>
+
+  <!-- NPC GENÉRICO -->
+  <div class="sprite-card">
+    <canvas id="npc" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">NPC ciudadano</span>
+  </div>
+
+  <!-- ADA — LÍDER GIMNASIO IA -->
+  <div class="sprite-card">
+    <canvas id="ada" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">Ada (Líder IA)</span>
+  </div>
+
+  <!-- SILVIA — LÍDER ANTICORRUPCIÓN -->
+  <div class="sprite-card">
+    <canvas id="silvia" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">Silvia (Anticorrupción)</span>
+  </div>
+
+  <!-- CARLOS — LÍDER COMPETENCIA -->
+  <div class="sprite-card">
+    <canvas id="carlos" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">Carlos (Competencia)</span>
+  </div>
+
+  <!-- PROFESOR OAK -->
+  <div class="sprite-card">
+    <canvas id="oak" width="96" height="96" class="battle-canvas"></canvas>
+    <span class="label">Prof. Oak Compliance</span>
+  </div>
+</div>
+
+<hr>
+<p class="section-title">MAPA DEL PUEBLO (previsualización)</p>
+<canvas id="map" width="480" height="320" class="map-canvas"></canvas>
+
+<hr>
+<p class="section-title">PANTALLA DE COMBATE (previsualización)</p>
+<canvas id="battle" width="480" height="320" class="battle-canvas"></canvas>
+
+<hr>
+<p class="section-title">CAJA DE DIÁLOGO</p>
+<canvas id="dialog" width="480" height="80" class="dialog-canvas"></canvas>
+
+<script>
+const S = 6; // escala: 1 pixel del sprite = 6px en pantalla
+
+// ─── PALETA ───────────────────────────────────────────────────────────────────
+const P = {
+  // piel
+  skin:    '#f5c5a3', skinD: '#d4956a',
+  // pelo jugador (marrón)
+  hair:    '#5c3317', hairD: '#3b1f0a',
+  // ropa jugador (azul compliance)
+  shirt:   '#4169e1', shirtD: '#2a45a0', shirtL: '#7090f0',
+  pants:   '#2f2f5a', pantsD: '#1a1a35',
+  // Ada (lila + blanco)
+  adaHair: '#6a0dad', adaShirt: '#e8d5f5', adaShirtD: '#c4a8e8', adaAcc: '#ff69b4',
+  // Silvia (rojo/negro estricto)
+  silvHair: '#1a1a1a', silvShirt: '#c0392b', silvShirtD: '#922b21', silvAcc: '#f39c12',
+  // Carlos (verde oscuro/gris)
+  carHair: '#4a3728', carShirt: '#2ecc71', carShirtD: '#1a8a4a', carAcc: '#95a5a6',
+  // Oak (gris/bata)
+  oakHair: '#888', oakShirt: '#ecf0f1', oakShirtD: '#bdc3c7', oakAcc: '#3498db',
+  // NPC (naranja/amarillo)
+  npcHair: '#e67e22', npcShirt: '#f1c40f', npcShirtD: '#d4ac0d',
+  // mapa
+  grass:   '#6ab04c', grassD: '#4e8a35', path: '#d4b483', pathD: '#b8966a',
+  water:   '#3498db', waterL: '#5dade2',
+  gym1:    '#9b59b6', gym2:   '#e74c3c', gym3:   '#27ae60',
+  gymRoof: '#7d3c98', gym2R:  '#cb4335', gym3R:  '#1e8449',
+  wall:    '#ecf0f1', wallD:  '#bdc3c7', roof: '#e74c3c',
+  tree:    '#27ae60', treeD: '#1e8449', trunk: '#8B5E3C',
+  // HUD
+  hpGreen: '#27ae60', hpYellow: '#f39c12', hpRed: '#e74c3c',
+  hpBg:    '#555', hpBorder: '#222',
+  white: '#fff', black: '#000', darkBlue: '#1a1a2e',
+  gold: '#ffd700',
+};
+
+// ─── UTILIDAD: dibuja un sprite desde una matriz de colores ───────────────────
+function drawSprite(ctx, matrix, scale=S, ox=0, oy=0) {
+  matrix.forEach((row, r) => {
+    row.forEach((col, c) => {
+      if (!col || col === 'X') return;
+      ctx.fillStyle = col;
+      ctx.fillRect(ox + c*scale, oy + r*scale, scale, scale);
+    });
+  });
+}
+
+// ─── SPRITE: Jugador (frente/mapa, 16×16) ────────────────────────────────────
+const playerFrontMatrix = [
+  ['X','X','X','X','X','X',P.hair,P.hair,P.hair,P.hair,'X','X','X','X','X','X'],
+  ['X','X','X','X',P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,'X','X','X','X','X'],
+  ['X','X','X',P.hair,P.hair,P.skin,P.skin,P.skin,P.skin,P.hair,P.hair,P.hair,'X','X','X','X'],
+  ['X','X','X',P.hair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.hair,'X','X','X','X'],
+  ['X','X','X',P.hair,P.skin,P.skinD,P.skin,P.skin,P.skin,P.skinD,P.skin,P.hair,'X','X','X','X'],
+  ['X','X','X',P.hair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.hair,'X','X','X','X'],
+  ['X','X','X','X',P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,'X','X','X','X','X'],
+  ['X','X',P.shirtL,P.shirtL,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirtL,P.shirtL,'X','X','X'],
+  ['X',P.shirtL,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirtL,'X','X'],
+  ['X',P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,'X','X'],
+  ['X',P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,'X','X'],
+  ['X',P.shirt,P.shirtD,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirtD,P.shirt,'X','X'],
+  ['X','X',P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,'X','X','X'],
+  ['X','X',P.pants,P.pants,'X','X',P.pants,P.pants,P.pants,'X','X',P.pants,P.pants,'X','X','X'],
+  ['X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── SPRITE: Jugador (de espaldas, combate, 16×16) ───────────────────────────
+const playerBackMatrix = [
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X',P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,'X','X','X','X','X'],
+  ['X','X','X',P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,P.hair,'X','X','X','X'],
+  ['X','X','X',P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,'X','X','X','X'],
+  ['X','X','X',P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,P.hairD,'X','X','X','X'],
+  ['X','X','X',P.hair,P.hair,P.skin,P.skin,P.skin,P.skin,P.skin,P.hair,P.hair,'X','X','X','X'],
+  ['X','X','X','X',P.hair,P.skin,P.skin,P.skin,P.skin,P.skin,P.hair,'X','X','X','X','X'],
+  ['X','X',P.shirtL,P.shirtL,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirtL,P.shirtL,'X','X','X'],
+  ['X',P.shirtL,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirtL,'X','X'],
+  ['X',P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,'X','X'],
+  ['X',P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,'X','X'],
+  ['X',P.shirt,P.shirtD,P.shirtD,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirt,P.shirtD,P.shirtD,P.shirt,'X','X'],
+  ['X','X',P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,'X','X','X'],
+  ['X','X',P.pants,P.pants,'X','X',P.pants,P.pants,P.pants,'X','X',P.pants,P.pants,'X','X','X'],
+  ['X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── SPRITE: NPC ciudadano ────────────────────────────────────────────────────
+const npcMatrix = [
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X',P.npcHair,P.npcHair,P.npcHair,P.npcHair,P.npcHair,P.npcHair,'X','X','X','X','X','X'],
+  ['X','X','X',P.npcHair,P.npcHair,P.skin,P.skin,P.skin,P.skin,P.npcHair,P.npcHair,'X','X','X','X','X'],
+  ['X','X','X',P.npcHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.npcHair,'X','X','X','X','X'],
+  ['X','X','X',P.npcHair,P.skin,P.skinD,P.skin,P.skin,P.skinD,P.skin,P.npcHair,'X','X','X','X','X'],
+  ['X','X','X',P.npcHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.npcHair,'X','X','X','X','X'],
+  ['X','X','X','X',P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,'X','X','X','X','X','X'],
+  ['X','X',P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,'X','X','X'],
+  ['X',P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,'X','X'],
+  ['X',P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,'X','X'],
+  ['X',P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,'X','X'],
+  ['X',P.npcShirt,P.npcShirtD,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirt,P.npcShirtD,P.npcShirt,'X','X'],
+  ['X','X',P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,'X','X','X'],
+  ['X','X',P.pants,P.pants,'X','X',P.pants,P.pants,P.pants,'X','X',P.pants,P.pants,'X','X','X'],
+  ['X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── SPRITE: Ada (Líder IA, lila + cabello morado) ───────────────────────────
+const adaMatrix = [
+  ['X','X','X','X',P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,'X','X','X','X','X'],
+  ['X','X','X',P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,P.adaHair,'X','X','X','X'],
+  ['X','X',P.adaHair,P.adaHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.adaHair,P.adaHair,P.adaHair,'X','X','X'],
+  ['X','X',P.adaHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.adaHair,'X','X','X','X'],
+  ['X','X',P.adaHair,P.skin,P.skin,P.skinD,P.skin,P.skin,P.skinD,P.skin,P.skin,P.adaHair,'X','X','X','X'],
+  ['X','X',P.adaHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.adaHair,'X','X','X','X'],
+  ['X','X','X',P.adaHair,P.skin,P.skin,P.adaAcc,P.adaAcc,P.skin,P.skin,P.adaHair,'X','X','X','X','X'],
+  ['X','X',P.adaShirtD,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirtD,'X','X','X','X'],
+  ['X',P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,'X','X','X'],
+  ['X',P.adaShirt,P.adaShirt,P.adaHair,P.adaHair,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaHair,P.adaHair,P.adaShirt,P.adaShirt,'X','X','X'],
+  ['X',P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,'X','X','X'],
+  ['X',P.adaShirtD,P.adaShirtD,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirt,P.adaShirtD,P.adaShirtD,'X','X','X'],
+  ['X','X',P.pants,P.pants,P.pants,P.adaHair,P.pants,P.pants,P.pants,P.adaHair,P.pants,P.pants,P.pants,'X','X','X'],
+  ['X','X','X',P.pants,P.pants,'X','X',P.pants,P.pants,'X','X',P.pants,P.pants,'X','X','X'],
+  ['X','X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── SPRITE: Silvia (rojo/negro estricta) ────────────────────────────────────
+const silviaMatrix = [
+  ['X','X','X','X',P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,'X','X','X','X','X'],
+  ['X','X','X',P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,'X','X','X','X'],
+  ['X','X',P.silvHair,P.silvHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.silvHair,P.silvHair,'X','X','X','X'],
+  ['X','X',P.silvHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.silvHair,'X','X','X','X'],
+  ['X','X',P.silvHair,P.skin,P.skin,P.skinD,P.skin,P.skin,P.skinD,P.skin,P.skin,P.silvHair,'X','X','X','X'],
+  ['X','X',P.silvHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.silvHair,'X','X','X','X'],
+  ['X','X','X',P.silvHair,P.skin,P.skin,P.silvHair,P.silvHair,P.skin,P.skin,P.silvHair,'X','X','X','X','X'],
+  ['X','X',P.silvShirtD,P.silvShirt,P.silvShirt,P.silvAcc,P.silvShirt,P.silvShirt,P.silvAcc,P.silvShirt,P.silvShirt,P.silvShirtD,'X','X','X','X'],
+  ['X',P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,'X','X','X'],
+  ['X',P.silvShirt,P.silvShirt,P.silvHair,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvHair,P.silvShirt,P.silvShirt,'X','X','X'],
+  ['X',P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,'X','X','X'],
+  ['X',P.silvShirtD,P.silvShirtD,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirt,P.silvShirtD,P.silvShirtD,'X','X','X'],
+  ['X','X',P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,P.silvHair,'X','X','X'],
+  ['X','X','X',P.silvHair,P.silvHair,'X','X',P.silvHair,P.silvHair,'X','X',P.silvHair,P.silvHair,'X','X','X'],
+  ['X','X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── SPRITE: Carlos (verde/gris corporativo) ─────────────────────────────────
+const carlosMatrix = [
+  ['X','X','X','X',P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,'X','X','X','X','X'],
+  ['X','X','X',P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,P.carHair,'X','X','X','X'],
+  ['X','X',P.carHair,P.carHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.carHair,P.carHair,'X','X','X','X'],
+  ['X','X',P.carHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.carHair,'X','X','X','X'],
+  ['X','X',P.carHair,P.skin,P.skin,P.skinD,P.skin,P.skin,P.skinD,P.skin,P.skin,P.carHair,'X','X','X','X'],
+  ['X','X',P.carHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.carHair,'X','X','X','X'],
+  ['X','X','X',P.carHair,P.skin,P.skin,P.carHair,P.carHair,P.skin,P.skin,P.carHair,'X','X','X','X','X'],
+  ['X','X',P.carShirtD,P.carShirt,P.carShirt,P.carShirt,P.white,P.white,P.carShirt,P.carShirt,P.carShirt,P.carShirtD,'X','X','X','X'],
+  ['X',P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,'X','X','X'],
+  ['X',P.carShirt,P.carShirt,P.carAcc,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carAcc,P.carShirt,P.carShirt,'X','X','X'],
+  ['X',P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,'X','X','X'],
+  ['X',P.carShirtD,P.carShirtD,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirt,P.carShirtD,P.carShirtD,'X','X','X'],
+  ['X','X',P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X',P.pants,P.pants,'X','X',P.pants,P.pants,'X','X',P.pants,P.pants,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── SPRITE: Profesor Oak (bata blanca, pelo gris) ───────────────────────────
+const oakMatrix = [
+  ['X','X','X','X',P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,'X','X','X','X','X'],
+  ['X','X','X',P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,P.oakHair,'X','X','X','X'],
+  ['X','X',P.oakHair,P.oakHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.oakHair,P.oakHair,'X','X','X','X'],
+  ['X','X',P.oakHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.oakHair,'X','X','X','X'],
+  ['X','X',P.oakHair,P.skin,P.skin,P.skinD,P.skin,P.skin,P.skinD,P.skin,P.skin,P.oakHair,'X','X','X','X'],
+  ['X','X',P.oakHair,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.skin,P.oakHair,'X','X','X','X'],
+  ['X','X','X',P.oakHair,P.skin,P.skin,P.oakAcc,P.oakAcc,P.skin,P.skin,P.oakHair,'X','X','X','X','X'],
+  ['X','X',P.oakShirtD,P.oakShirt,P.oakShirt,P.oakAcc,P.oakShirt,P.oakShirt,P.oakAcc,P.oakShirt,P.oakShirt,P.oakShirtD,'X','X','X','X'],
+  ['X',P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,'X','X','X'],
+  ['X',P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,'X','X','X'],
+  ['X',P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,'X','X','X'],
+  ['X',P.oakShirtD,P.oakShirtD,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirt,P.oakShirtD,P.oakShirtD,'X','X','X'],
+  ['X','X',P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,P.pants,'X','X','X'],
+  ['X','X','X',P.pants,P.pants,'X','X',P.pants,P.pants,'X','X',P.pants,P.pants,'X','X','X'],
+  ['X','X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X',P.pantsD,P.pantsD,'X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+
+// ─── RENDER DE SPRITES ────────────────────────────────────────────────────────
+function renderSprite(canvasId, matrix, bgColor='#c8d8c0') {
+  const c = document.getElementById(canvasId);
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0,0,c.width,c.height);
+  drawSprite(ctx, matrix, S, 0, 0);
+}
+renderSprite('player',     playerFrontMatrix);
+renderSprite('playerBack', playerBackMatrix);
+renderSprite('npc',        npcMatrix);
+renderSprite('ada',        adaMatrix);
+renderSprite('silvia',     silviaMatrix);
+renderSprite('carlos',     carlosMatrix);
+renderSprite('oak',        oakMatrix);
+
+// ─── MAPA DEL PUEBLO ─────────────────────────────────────────────────────────
+(function drawMap() {
+  const c = document.getElementById('map');
+  const ctx = c.getContext('2d');
+  const T = 32; // tile size en px
+  const W = 15, H = 10;
+
+  // fondo hierba
+  ctx.fillStyle = P.grass;
+  ctx.fillRect(0,0,c.width,c.height);
+
+  // patrón hierba detalle
+  ctx.fillStyle = P.grassD;
+  for(let r=0;r<H;r++) for(let col=0;col<W;col++) {
+    if((r+col)%3===0) { ctx.fillRect(col*T+8,r*T+8,4,4); ctx.fillRect(col*T+20,r*T+20,4,4); }
+  }
+
+  // camino horizontal central
+  ctx.fillStyle = P.path;
+  ctx.fillRect(0, 3*T, c.width, 2*T);
+  ctx.fillStyle = P.pathD;
+  ctx.fillRect(0, 3*T, c.width, 2);
+  ctx.fillRect(0, 5*T-2, c.width, 2);
+
+  // camino vertical izquierda (laboratorio)
+  ctx.fillStyle = P.path;
+  ctx.fillRect(T, 0, 2*T, 3*T);
+
+  // ── Edificio: LABORATORIO (izq arriba) ───────────────────────────────────
+  ctx.fillStyle = P.wall;
+  ctx.fillRect(0, 0, 3*T, 3*T);
+  ctx.fillStyle = P.roof;
+  ctx.fillRect(0, 0, 3*T, T);
+  // puerta
+  ctx.fillStyle = P.pathD;
+  ctx.fillRect(T+4, 2*T, T-8, T);
+  // texto
+  ctx.fillStyle = P.black;
+  ctx.font = 'bold 8px monospace';
+  ctx.fillText('LAB', 6, 20);
+
+  // ── Gimnasio 1: IA (derecha arriba) ─────────────────────────────────────
+  ctx.fillStyle = P.wallD;
+  ctx.fillRect(10*T, 0, 4*T, 3*T);
+  ctx.fillStyle = P.gym1;
+  ctx.fillRect(10*T, 0, 4*T, T);
+  ctx.fillStyle = P.gymRoof;
+  ctx.fillRect(10*T, 0, 4*T, 8);
+  ctx.fillStyle = P.pathD;
+  ctx.fillRect(11*T+4, 2*T, 2*T-8, T);
+  ctx.fillStyle = P.white;
+  ctx.font = 'bold 7px monospace';
+  ctx.fillText('GYM IA', 10*T+6, 22);
+  ctx.fillStyle = P.gym1;
+  ctx.font = 'bold 9px monospace';
+  ctx.fillText('①', 11*T+4, 38);
+
+  // ── Gimnasio 2: Anticorrupción (centro) ──────────────────────────────────
+  ctx.fillStyle = P.wallD;
+  ctx.fillRect(5*T, 5*T+4, 4*T, 5*T-4);
+  ctx.fillStyle = P.gym2;
+  ctx.fillRect(5*T, 5*T+4, 4*T, T);
+  ctx.fillStyle = P.gym2R;
+  ctx.fillRect(5*T, 5*T+4, 4*T, 4);
+  ctx.fillStyle = P.pathD;
+  ctx.fillRect(6*T+4, 9*T, 2*T-8, T);
+  ctx.fillStyle = P.white;
+  ctx.font = 'bold 7px monospace';
+  ctx.fillText('GYM AC', 5*T+4, 5*T+22);
+  ctx.fillStyle = P.gym2;
+  ctx.font = 'bold 9px monospace';
+  ctx.fillText('②', 6*T+8, 5*T+38);
+
+  // ── Gimnasio 3: Competencia (derecha abajo) ──────────────────────────────
+  ctx.fillStyle = P.wallD;
+  ctx.fillRect(11*T, 5*T+4, 4*T, 5*T-4);
+  ctx.fillStyle = P.gym3;
+  ctx.fillRect(11*T, 5*T+4, 4*T, T);
+  ctx.fillStyle = P.gym3R;
+  ctx.fillRect(11*T, 5*T+4, 4*T, 4);
+  ctx.fillStyle = P.pathD;
+  ctx.fillRect(12*T+4, 9*T, 2*T-8, T);
+  ctx.fillStyle = P.white;
+  ctx.font = 'bold 7px monospace';
+  ctx.fillText('GYM C', 11*T+6, 5*T+22);
+  ctx.fillStyle = P.gym3;
+  ctx.font = 'bold 9px monospace';
+  ctx.fillText('③', 12*T+8, 5*T+38);
+
+  // árboles decorativos
+  function tree(tx,ty) {
+    ctx.fillStyle = P.trunk; ctx.fillRect(tx+10,ty+20,12,12);
+    ctx.fillStyle = P.treeD; ctx.fillRect(tx,ty+8,32,16);
+    ctx.fillStyle = P.tree;  ctx.fillRect(tx+4,ty,24,16);
+    ctx.fillStyle = '#85e65c'; ctx.fillRect(tx+10,ty-4,12,8);
+  }
+  tree(4*T+2, T+2); tree(4*T+2, 6*T+8); tree(8*T+2, 0);
+  tree(0, 6*T+8); tree(T+2, 7*T+8); tree(8*T+2, 6*T+8);
+
+  // NPC dots (personajes mini)
+  function miniChar(tx,ty,color) {
+    ctx.fillStyle = P.skin;  ctx.fillRect(tx+6,ty,8,8);
+    ctx.fillStyle = color;   ctx.fillRect(tx+4,ty+8,12,10);
+    ctx.fillStyle = P.pants; ctx.fillRect(tx+4,ty+18,5,6); ctx.fillRect(tx+11,ty+18,5,6);
+  }
+  miniChar(4*T+8, 4*T-4, P.npcShirt);   // NPC1 cerca gym IA
+  miniChar(6*T+8, 3*T+4, P.adaShirt);   // NPC2 cerca gym AC
+  miniChar(9*T+8, 4*T-4, P.carShirt);   // NPC3 cerca gym C
+
+  // jugador mini
+  ctx.fillStyle = P.skin;   ctx.fillRect(2*T+6, 4*T-4, 8, 8);
+  ctx.fillStyle = P.shirt;  ctx.fillRect(2*T+4, 4*T+4, 12, 10);
+  ctx.fillStyle = P.pants;  ctx.fillRect(2*T+4, 4*T+14, 5,6); ctx.fillRect(2*T+11, 4*T+14, 5,6);
+
+  // borde del mapa
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1,1,c.width-2,c.height-2);
+})();
+
+// ─── PANTALLA DE COMBATE ──────────────────────────────────────────────────────
+(function drawBattle() {
+  const c = document.getElementById('battle');
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+
+  // fondo split: cielo + suelo
+  ctx.fillStyle = '#dce9f5'; ctx.fillRect(0,0,W,H*0.55);
+  ctx.fillStyle = '#b8d4a8'; ctx.fillRect(0,H*0.55,W,H*0.45);
+  // línea horizonte
+  ctx.fillStyle = '#8ab890'; ctx.fillRect(0,H*0.55-3,W,6);
+
+  // plataforma enemigo (arriba derecha)
+  ctx.fillStyle = '#c8d4b0'; ctx.beginPath();
+  ctx.ellipse(340,130,80,22,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#a8b890'; ctx.beginPath();
+  ctx.ellipse(340,134,80,22,0,0,Math.PI*2); ctx.fill();
+
+  // plataforma jugador (abajo izquierda)
+  ctx.fillStyle = '#a8c490'; ctx.beginPath();
+  ctx.ellipse(130,210,80,22,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#88a870'; ctx.beginPath();
+  ctx.ellipse(130,214,80,22,0,0,Math.PI*2); ctx.fill();
+
+  // ── Sprite Ada (enemigo, ×3 escala) ─────────────────────────────────────
+  const es = 3;
+  adaMatrix.forEach((row,r) => row.forEach((col,cc) => {
+    if(!col||col==='X') return;
+    ctx.fillStyle = col;
+    ctx.fillRect(280+cc*es, 70+r*es, es, es);
+  }));
+
+  // ── Sprite Jugador de espaldas (×3 escala) ────────────────────────────────
+  playerBackMatrix.forEach((row,r) => row.forEach((col,cc) => {
+    if(!col||col==='X') return;
+    ctx.fillStyle = col;
+    ctx.fillRect(70+cc*es, 155+r*es, es, es);
+  }));
+
+  // ── HUD Enemigo (arriba izquierda) ────────────────────────────────────────
+  ctx.fillStyle = '#f0f0e8';
+  ctx.fillRect(8,8,200,60);
+  ctx.strokeStyle='#333'; ctx.lineWidth=2; ctx.strokeRect(8,8,200,60);
+  ctx.fillStyle='#333'; ctx.font='bold 12px monospace';
+  ctx.fillText('ADA', 16, 26);
+  ctx.fillStyle='#888'; ctx.font='10px monospace';
+  ctx.fillText('HP', 16, 44);
+  // barra HP enemigo (5 HP → 5 segmentos)
+  for(let i=0;i<5;i++) {
+    ctx.fillStyle = P.hpBorder; ctx.fillRect(34+i*30,36,28,12);
+    ctx.fillStyle = i<4 ? P.hpGreen : P.hpYellow;
+    ctx.fillRect(35+i*30,37,26,10);
+  }
+
+  // ── HUD Jugador (abajo derecha) ───────────────────────────────────────────
+  ctx.fillStyle = '#f0f0e8';
+  ctx.fillRect(W-210,H-75,200,60);
+  ctx.strokeStyle='#333'; ctx.lineWidth=2; ctx.strokeRect(W-210,H-75,200,60);
+  ctx.fillStyle='#333'; ctx.font='bold 12px monospace';
+  ctx.fillText('TÚ', W-200, H-57);
+  ctx.fillText('REP', W-200, H-40);
+  // barra HP jugador (3 HP = 3 corazones)
+  for(let i=0;i<3;i++) {
+    ctx.fillStyle = i<3 ? P.hpRed : P.hpBg;
+    ctx.font='16px monospace';
+    ctx.fillText('♥', W-180+i*24, H-38);
+  }
+
+  // ── Caja de pregunta (abajo) ──────────────────────────────────────────────
+  ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0,H-90,W,90);
+  ctx.strokeStyle=P.gold; ctx.lineWidth=2; ctx.strokeRect(2,H-88,W-4,86);
+  ctx.fillStyle='#fff'; ctx.font='11px monospace';
+  ctx.fillText('¿Quién es el responsable si una IA causa un perjuicio?', 10, H-70);
+  // opciones
+  const opts = ['A) La empresa y los humanos que la implementaron ✓','B) El desarrollador externo','C) Nadie, es fuerza mayor'];
+  opts.forEach((t,i) => {
+    ctx.fillStyle = i===0 ? P.hpGreen : '#aaa';
+    ctx.fillRect(8, H-55+i*17, 8, 8);
+    ctx.fillStyle = i===0 ? '#fff' : '#888';
+    ctx.font = (i===0?'bold ':'')+'10px monospace';
+    ctx.fillText(t, 22, H-47+i*17);
+  });
+
+  // borde
+  ctx.strokeStyle='#111'; ctx.lineWidth=3; ctx.strokeRect(1,1,W-2,H-2);
+})();
+
+// ─── CAJA DE DIÁLOGO ──────────────────────────────────────────────────────────
+(function drawDialog() {
+  const c = document.getElementById('dialog');
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0,0,c.width,c.height);
+  ctx.strokeStyle = P.gold; ctx.lineWidth=3; ctx.strokeRect(3,3,c.width-6,c.height-6);
+  ctx.strokeStyle = '#fff';  ctx.lineWidth=1; ctx.strokeRect(6,6,c.width-12,c.height-12);
+  ctx.fillStyle = '#fff'; ctx.font = '13px monospace';
+  ctx.fillText('¡Hola! Te doy la bienvenida al mundo de la', 14, 28);
+  ctx.fillText('Integridad Corporativa. Mi nombre es...', 14, 48);
+  // cursor parpadeante (estático)
+  ctx.fillStyle = P.gold; ctx.fillRect(c.width-20, c.height-20, 8, 12);
+})();
+</script>
+</body>
+</html>

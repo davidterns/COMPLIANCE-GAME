@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>JuegoPoke — Pixel Art GBC v2</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex; flex-direction: column; align-items: center;
+    font-family: 'Courier New', monospace; color: #eee;
+    gap: 36px; padding: 40px;
+  }
+  h1   { color: #ffd700; letter-spacing: 4px; font-size: 22px; margin: 0; }
+  h2   { color: #87ceeb; letter-spacing: 3px; font-size: 13px; margin: 0; border-bottom: 1px solid #333; padding-bottom: 8px; width: 100%; max-width: 960px; }
+  .row { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  .card { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .label { font-size: 11px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+  .sublabel { font-size: 10px; color: #666; text-align: center; }
+  canvas {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    display: block;
+  }
+  .principle-name { color: #ffd700; font-size: 12px; font-weight: bold; letter-spacing: 1px; }
+  .principle-skill { color: #87ceeb; font-size: 10px; max-width: 180px; text-align: center; line-height: 1.4; }
+  hr { border-color: #2a2a4e; width: 100%; max-width: 960px; }
+  .gbc-frame {
+    border: 4px solid #4a4a6a;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(135,206,235,0.2);
+  }
+</style>
+</head>
+<body>
+
+<h1>⚡ JUEGOPOKE — PIXEL ART ESTILO GBC ⚡</h1>
+<p style="color:#666;font-size:11px;margin:0">160×144px nativos (resolución Game Boy Color) · Escala 3× en pantalla · Sin PNG externos</p>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<h2>▶ PRINCIPIOS — SPRITE FRONTAL (selección + combate enemigo)</h2>
+<div class="row">
+  <div class="card">
+    <canvas id="cristal-front" width="56" height="56" style="width:280px;height:280px"></canvas>
+    <span class="principle-name">CRISTAL</span>
+    <span class="label">Brújula de Transparencia</span>
+    <span class="principle-skill">Habilidad: Auditoría Visual<br>Elimina una respuesta incorrecta</span>
+  </div>
+  <div class="card">
+    <canvas id="valor-front" width="56" height="56" style="width:280px;height:280px"></canvas>
+    <span class="principle-name">VALOR</span>
+    <span class="label">Brújula de Integridad</span>
+    <span class="principle-skill">Habilidad: Escudo de Valores<br>Falla sin perder HP una vez</span>
+  </div>
+  <div class="card">
+    <canvas id="sabio-front" width="56" height="56" style="width:280px;height:280px"></canvas>
+    <span class="principle-name">SABIO</span>
+    <span class="label">Brújula de Prudencia</span>
+    <span class="principle-skill">Habilidad: Análisis de Riesgos<br>Muestra pista de la respuesta</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<h2>▶ PRINCIPIOS — SPRITE TRASERO (batalla · esquina inferior izquierda)</h2>
+<div class="row">
+  <div class="card">
+    <canvas id="cristal-back" width="48" height="48" style="width:192px;height:192px"></canvas>
+    <span class="label">Cristal (espalda)</span>
+  </div>
+  <div class="card">
+    <canvas id="valor-back" width="48" height="48" style="width:192px;height:192px"></canvas>
+    <span class="label">Valor (espalda)</span>
+  </div>
+  <div class="card">
+    <canvas id="sabio-back" width="48" height="48" style="width:192px;height:192px"></canvas>
+    <span class="label">Sabio (espalda)</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<h2>▶ PERSONAJES OVERWORLD (16×32px · estilo GBC Gold/Silver)</h2>
+<div class="row">
+  <div class="card">
+    <canvas id="char-player" width="16" height="32" style="width:96px;height:192px"></canvas>
+    <span class="label">Jugador</span>
+  </div>
+  <div class="card">
+    <canvas id="char-oak" width="16" height="32" style="width:96px;height:192px"></canvas>
+    <span class="label">Prof. Oak</span>
+  </div>
+  <div class="card">
+    <canvas id="char-npc1" width="16" height="32" style="width:96px;height:192px"></canvas>
+    <span class="label">NPC ciudadano</span>
+  </div>
+  <div class="card">
+    <canvas id="char-ada" width="16" height="32" style="width:96px;height:192px"></canvas>
+    <span class="label">Ada (Líder IA)</span>
+  </div>
+  <div class="card">
+    <canvas id="char-silvia" width="16" height="32" style="width:96px;height:192px"></canvas>
+    <span class="label">Silvia (Anticorr.)</span>
+  </div>
+  <div class="card">
+    <canvas id="char-carlos" width="16" height="32" style="width:96px;height:192px"></canvas>
+    <span class="label">Carlos (Compet.)</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<h2>▶ SALA DEL LABORATORIO (interior GBC) · 160×144px → 480×432</h2>
+<canvas id="interior" width="160" height="144" style="width:480px;height:432px" class="gbc-frame"></canvas>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<h2>▶ PANTALLA DE COMBATE (160×144px → 480×432)</h2>
+<canvas id="battle" width="160" height="144" style="width:480px;height:432px" class="gbc-frame"></canvas>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<h2>▶ CAJA DE DIÁLOGO (estilo GBC)</h2>
+<canvas id="dialog" width="160" height="48" style="width:480px;height:144px" class="gbc-frame"></canvas>
+
+<script>
+'use strict';
+
+// ─── DISABLE SMOOTHING EVERYWHERE ────────────────────────────────────────────
+document.querySelectorAll('canvas').forEach(c => {
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+});
+
+// ─── PIXEL ART HELPERS ───────────────────────────────────────────────────────
+function getCtx(id) {
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  return ctx;
+}
+
+// Single pixel
+function px(ctx, x, y, c) {
+  if (!c || c === 'X') return;
+  ctx.fillStyle = c;
+  ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);
+}
+
+// Rectangle
+function r(ctx, x, y, w, h, c) {
+  if (!c) return;
+  ctx.fillStyle = c;
+  ctx.fillRect(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
+}
+
+// Pixel-perfect filled circle (Bresenham)
+function fillCircle(ctx, cx, cy, radius, color) {
+  ctx.fillStyle = color;
+  for (let y = -radius; y <= radius; y++) {
+    const hw = Math.floor(Math.sqrt(radius * radius - y * y));
+    ctx.fillRect(Math.floor(cx) - hw, Math.floor(cy) + y, hw * 2 + 1, 1);
+  }
+}
+
+// Pixel-perfect circle outline
+function strokeCircle(ctx, cx, cy, radius, color) {
+  let x = radius, y = 0, err = 0;
+  while (x >= y) {
+    const pts = [[x,y],[y,x],[-y,x],[-x,y],[-x,-y],[-y,-x],[y,-x],[x,-y]];
+    pts.forEach(([dx,dy]) => px(ctx, Math.round(cx+dx), Math.round(cy+dy), color));
+    y++;
+    if (err <= 0) err += 2 * y + 1;
+    if (err > 0) { x--; err -= 2 * x + 1; }
+  }
+}
+
+// Dithered fill (checker pattern, for shading)
+function dither(ctx, x, y, w, h, c1, c2) {
+  for (let row = 0; row < h; row++)
+    for (let col = 0; col < w; col++)
+      px(ctx, x+col, y+row, (row+col)%2===0 ? c1 : c2);
+}
+
+// ─── PALETA ──────────────────────────────────────────────────────────────────
+const C = {
+  // cristal (magnifying glass)
+  CR_rim:   '#1B4F8E', CR_glass: '#87CEEB', CR_shine: '#D6EEFF',
+  CR_hat:   '#333344', CR_hatF:  '#555566', CR_band:  '#C8A420',
+  CR_hand:  '#8B5A2B', CR_handD: '#5C3817',
+  // valor (shield)
+  VA_gold:  '#E8B800', VA_goldD: '#A07800', VA_goldL: '#FFE040',
+  VA_blue:  '#1E3A8A', VA_blueL: '#3060C0', VA_rim:   '#888888',
+  VA_rimL:  '#CCCCCC', VA_star:  '#FFD700',
+  // sabio (owl)
+  SA_body:  '#8B5E2A', SA_bodyL: '#C8903A', SA_cream: '#F5E8C8',
+  SA_eyes:  '#FFE040', SA_pupil: '#1A1A1A', SA_glass: '#225522',
+  SA_glassL:'#449944', SA_beak:  '#E87820',
+  // skin & hair
+  skin:  '#F5C5A3', skinD: '#D09070', skinL: '#F8D8C0',
+  hair1: '#5C3317', hair2: '#3B1F0A',  // player (brown)
+  hairG: '#888888', hairGD:'#666666',  // oak (gray)
+  hairO: '#E87820', hairOD:'#A04010',  // npc (orange)
+  hairP: '#6A0DAD', hairPD:'#4A0880',  // ada (purple)
+  hairR: '#1A1A1A', hairRD:'#0A0A0A',  // silvia (black)
+  hairM: '#4A3728', hairMD:'#2A1A0A',  // carlos (dark brown)
+  // clothes
+  shirtBlue: '#4169E1', shirtBlueD:'#2A45A0', shirtBlueL:'#7090F0',
+  shirtWht:  '#E8E8E8', shirtWhtD: '#CCCCCC',
+  shirtYel:  '#F0C020', shirtYelD: '#C09010',
+  shirtLil:  '#C080E0', shirtLilD: '#906AB0',
+  shirtRed:  '#C83020', shirtRedD: '#902010',
+  shirtGrn:  '#30A850', shirtGrnD: '#208030',
+  tie:       '#C03020', tieDark:   '#801000',
+  pants:     '#303060', pantsD:    '#202040',
+  pantsGray: '#707080', pantsGrayD:'#505060',
+  // ui
+  black: '#111111', white: '#FFFFFF', gold: '#FFD700',
+  uiBg:  '#F0F0D8', uiDark:'#383828',
+  hpGrn: '#30A030', hpYel: '#E8A000', hpRed: '#C03020',
+  // map
+  grass:  '#68B030', grassD:'#4A8020', grassL:'#88C848',
+  path:   '#D0A870', pathD: '#A08050',
+  floorL: '#C8C8C8', floorD:'#A0A0A0', floorDD:'#787878',
+  wallA:  '#8890A8', wallAD:'#6070888', wallB:'#B0A888',
+  woodL:  '#C8903A', woodD: '#8B5E2A', woodDD:'#5C3817',
+  sky:    '#90C8F0', skyD:  '#6098C0',
+  // battle
+  battleSky: '#D0E8F8', battleGnd: '#78C848', battleGndD:'#58A030',
+  platE:  '#A8B888', platED:'#889868',
+  platP:  '#88A870', platPD:'#689050',
+};
+
+// ─── SPRITE: CRISTAL front (56×56) ───────────────────────────────────────────
+(function() {
+  const ctx = getCtx('cristal-front');
+  const W=56;
+
+  // detective hat
+  r(ctx, 17, 2,  22, 8,  C.CR_hat);   // hat top fill
+  r(ctx, 18, 3,  20, 6,  C.CR_hatF);  // lighter inside
+  r(ctx, 14, 9,  28, 3,  C.CR_hat);   // brim
+  r(ctx, 17, 8,  22, 2,  C.CR_band);  // golden band
+  // hat outline
+  r(ctx, 17, 1,  22, 1,  C.black);
+  r(ctx, 16, 2,  1,  7,  C.black);
+  r(ctx, 39, 2,  1,  7,  C.black);
+  r(ctx, 13, 9,  30, 1,  C.black);
+  r(ctx, 13,11,  1,  1,  C.black);
+  r(ctx, 42,11,  1,  1,  C.black);
+
+  // main glass circle body — outline first
+  fillCircle(ctx, 28, 30, 18, C.black);
+  // metal rim
+  fillCircle(ctx, 28, 30, 17, C.CR_rim);
+  // rim highlight
+  fillCircle(ctx, 27, 28, 16, C.CR_rimHL || '#2E6AB0');
+  // glass fill
+  fillCircle(ctx, 28, 30, 15, C.CR_glass);
+  // shine (top-left)
+  fillCircle(ctx, 22, 23, 5,  C.CR_shine);
+  dither(ctx, 18,20,8,6, C.CR_shine, C.CR_glass);
+  // second shine
+  r(ctx, 17, 17, 4, 4, C.CR_shine);
+
+  // eyes
+  r(ctx, 20, 28, 5, 5, C.black);      // left eye
+  r(ctx, 31, 28, 5, 5, C.black);      // right eye
+  r(ctx, 21, 29, 3, 3, '#4a8fc8');    // left iris
+  r(ctx, 32, 29, 3, 3, '#4a8fc8');    // right iris
+  r(ctx, 21, 28, 2, 2, C.white);      // left highlight
+  r(ctx, 32, 28, 2, 2, C.white);      // right highlight
+  px(ctx, 22, 30, C.black);           // left pupil
+  px(ctx, 33, 30, C.black);           // right pupil
+
+  // blush
+  r(ctx, 16, 33, 4, 2, '#FFB8C0');    // left blush
+  r(ctx, 36, 33, 4, 2, '#FFB8C0');    // right blush
+
+  // smile (5 pixels arc)
+  r(ctx, 24, 36, 8, 1, C.black);
+  px(ctx, 23, 35, C.black);
+  px(ctx, 32, 35, C.black);
+
+  // handle (bottom right, connects to circle)
+  r(ctx, 38, 44, 8, 3, C.black);      // handle outline
+  r(ctx, 39, 45, 6, 1, C.CR_hand);    // handle fill
+  r(ctx, 38, 44, 2, 1, C.black);
+  r(ctx, 42, 43, 4, 8, C.black);      // connector outline
+  r(ctx, 43, 44, 2, 7, C.CR_hand);    // connector fill
+  r(ctx, 44, 44, 1, 7, C.CR_handD);   // shadow
+
+  // small feet at bottom of glass
+  r(ctx, 22, 47, 4, 4, C.black);
+  r(ctx, 30, 47, 4, 4, C.black);
+  r(ctx, 23, 48, 2, 3, C.CR_hand);
+  r(ctx, 31, 48, 2, 3, C.CR_hand);
+  r(ctx, 22, 51, 6, 2, C.black);  // left shoe
+  r(ctx, 30, 51, 6, 2, C.black);  // right shoe
+  r(ctx, 22, 51, 5, 1, C.pantsD);
+  r(ctx, 30, 51, 5, 1, C.pantsD);
+})();
+
+// ─── SPRITE: CRISTAL back (48×48) ────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('cristal-back');
+
+  // hat from behind
+  r(ctx, 14, 1, 20, 8, C.CR_hat);
+  r(ctx, 11, 8, 26, 3, C.CR_hat);
+  r(ctx, 14, 7, 20, 2, C.CR_band);
+  r(ctx, 13, 0, 22, 1, C.black);
+  r(ctx, 12, 1, 1,  7, C.black);
+  r(ctx, 36, 1, 1,  7, C.black);
+  r(ctx, 10, 8, 28, 1, C.black);
+
+  // glass from behind (mostly metal rim + reflections)
+  fillCircle(ctx, 24, 28, 17, C.black);
+  fillCircle(ctx, 24, 28, 16, '#2A2A3A');   // dark back
+  fillCircle(ctx, 24, 28, 14, '#383848');   // metal back
+  // rim reflections
+  r(ctx, 10, 15, 3, 6, C.CR_rim);
+  r(ctx, 35, 15, 3, 6, C.CR_rim);
+  r(ctx, 14, 11, 6, 3, C.CR_rim);
+  r(ctx, 28, 11, 6, 3, C.CR_rim);
+  // handle attachment point
+  r(ctx, 22, 40, 4, 4, C.CR_hand);
+  r(ctx, 21, 39, 6, 1, C.black);
+  r(ctx, 20, 40, 1, 4, C.black);
+  r(ctx, 27, 40, 1, 4, C.black);
+  r(ctx, 21, 44, 6, 1, C.black);
+
+  // handle going to bottom right
+  r(ctx, 26, 40, 12, 4, C.black);
+  r(ctx, 27, 41, 10, 2, C.CR_hand);
+  r(ctx, 36, 41, 1,  2, C.CR_handD);
+
+  // feet
+  r(ctx, 18, 44, 4, 4, C.black);
+  r(ctx, 26, 44, 4, 4, C.black);
+  r(ctx, 19, 45, 2, 3, C.CR_hand);
+  r(ctx, 27, 45, 2, 3, C.CR_hand);
+  r(ctx, 18, 47, 6, 1, C.black);
+  r(ctx, 26, 47, 6, 1, C.black);
+  r(ctx, 18, 47, 5, 1, C.pantsD);
+  r(ctx, 26, 47, 5, 1, C.pantsD);
+})();
+
+// ─── SPRITE: VALOR front (56×56) ─────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('valor-front');
+
+  // shield body outline
+  const shieldPoints = [
+    [16,4],[40,4],[40,5],[42,5],[42,6],[44,6],[44,34],[43,36],[42,38],[40,40],
+    [38,42],[36,44],[34,46],[32,48],[28,52],[24,48],[22,46],[20,44],[18,42],
+    [16,40],[14,38],[13,36],[12,34],[12,6],[14,6],[14,5],[16,5]
+  ];
+
+  // fill shield in blue
+  for(let row=4; row<=52; row++) {
+    let minX=56, maxX=0;
+    // left boundary
+    if(row>=4  && row<=6)  minX=16;
+    if(row>=6  && row<=34) minX=12;
+    if(row>=34 && row<=40) minX=12+(row-34)*0.5;
+    if(row>=40 && row<=52) minX=12+(row-40)*2.5;
+    // right boundary
+    if(row>=4  && row<=6)  maxX=40;
+    if(row>=6  && row<=34) maxX=44;
+    if(row>=34 && row<=40) maxX=44-(row-34)*0.5;
+    if(row>=40 && row<=52) maxX=44-(row-40)*2.5;
+    if(minX<maxX) {
+      // outer rim (silver/gold)
+      const rimW = 3;
+      r(ctx, minX, row, rimW, 1, C.VA_rimL);
+      r(ctx, maxX-rimW, row, rimW, 1, C.VA_rimL);
+      // inner fill (blue)
+      if(maxX-minX > rimW*2)
+        r(ctx, minX+rimW, row, maxX-minX-rimW*2, 1, row<28 ? C.VA_blueL : C.VA_blue);
+    }
+  }
+
+  // gold horizontal bands
+  r(ctx, 15, 12, 26, 3, C.VA_gold);
+  r(ctx, 15, 20, 26, 3, C.VA_gold);
+  r(ctx, 15, 28, 26, 3, C.VA_goldD);
+
+  // face in upper shield area
+  fillCircle(ctx, 28, 13, 7, C.skin);
+  // hair
+  r(ctx, 22, 6,  12, 6, C.hair1);
+  r(ctx, 21, 7,  14, 4, C.hair1);
+  r(ctx, 22, 10, 12, 2, C.hair2);
+  // eyes
+  r(ctx, 23, 13, 3, 3, C.black);
+  r(ctx, 31, 13, 3, 3, C.black);
+  r(ctx, 24, 13, 2, 2, '#4080E0');
+  r(ctx, 32, 13, 2, 2, '#4080E0');
+  px(ctx, 24, 13, C.white);
+  px(ctx, 32, 13, C.white);
+  // mouth
+  r(ctx, 26, 18, 4, 1, C.black);
+
+  // STAR in center of shield
+  const S28 = [[0,0,0,1,1,1,0,0,0],[0,0,1,1,1,1,1,0,0],[1,1,1,1,1,1,1,1,1],
+               [0,1,1,1,1,1,1,1,0],[0,0,1,1,1,1,1,0,0],[0,1,0,1,1,1,0,1,0],
+               [1,0,0,0,1,0,0,0,1]];
+  S28.forEach((row,ri) => row.forEach((v,ci) => {
+    if(v) r(ctx, 24+ci, 33+ri, 1, 1, C.VA_star);
+  }));
+
+  // arms / gauntlets (sides)
+  r(ctx, 6,  20, 8, 8,  C.black);       // left arm outline
+  r(ctx, 7,  21, 6, 6,  C.VA_rimL);     // left gauntlet
+  r(ctx, 7,  21, 3, 6,  C.VA_gold);     // gold part
+  r(ctx, 42, 20, 8, 8,  C.black);       // right arm
+  r(ctx, 43, 21, 6, 6,  C.VA_rimL);
+  r(ctx, 46, 21, 3, 6,  C.VA_gold);
+
+  // feet / base
+  r(ctx, 22, 50, 6, 5,  C.black);
+  r(ctx, 28, 50, 6, 5,  C.black);
+  r(ctx, 23, 51, 4, 4,  C.VA_rimL);
+  r(ctx, 29, 51, 4, 4,  C.VA_rimL);
+  r(ctx, 23, 54, 5, 1,  C.VA_gold);
+  r(ctx, 29, 54, 5, 1,  C.VA_gold);
+
+  // outline
+  for(let row=4; row<=52; row++) {
+    let minX=56, maxX=0;
+    if(row>=4  && row<=6)  { minX=16; maxX=40; }
+    if(row>=6  && row<=34) { minX=12; maxX=44; }
+    if(row>=34 && row<=40) { minX=Math.round(12+(row-34)*0.5); maxX=Math.round(44-(row-34)*0.5); }
+    if(row>=40 && row<=52) { minX=Math.round(12+(row-40)*2.5); maxX=Math.round(44-(row-40)*2.5); }
+    if(minX<maxX) {
+      px(ctx, minX-1, row, C.black);
+      px(ctx, maxX,   row, C.black);
+    }
+  }
+})();
+
+// ─── SPRITE: VALOR back (48×48) ──────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('valor-back');
+
+  // back of shield — leather/metal construction
+  for(let row=2; row<=44; row++) {
+    let minX=48, maxX=0;
+    if(row>=2  && row<=4)  { minX=14; maxX=34; }
+    if(row>=4  && row<=28) { minX=10; maxX=38; }
+    if(row>=28 && row<=34) { minX=Math.round(10+(row-28)*0.5); maxX=Math.round(38-(row-28)*0.5); }
+    if(row>=34 && row<=44) { minX=Math.round(10+(row-34)*2.2); maxX=Math.round(38-(row-34)*2.2); }
+    if(minX<maxX) {
+      // rim
+      r(ctx, minX, row, 3, 1, '#AAAAAA');
+      r(ctx, maxX-3, row, 3, 1, '#AAAAAA');
+      // metal back
+      r(ctx, minX+3, row, maxX-minX-6, 1, row%4<2 ? '#606070' : '#505060');
+      // outline
+      px(ctx, minX-1, row, C.black);
+      px(ctx, maxX, row, C.black);
+    }
+  }
+  // leather straps (cross pattern)
+  r(ctx, 20, 5, 3, 30, C.woodD);
+  r(ctx, 25, 5, 3, 30, C.woodD);
+  r(ctx, 14, 15, 14, 3, C.woodD);
+  r(ctx, 14, 22, 14, 3, C.woodD);
+  r(ctx, 21, 6, 1, 28, C.woodL);
+  r(ctx, 26, 6, 1, 28, C.woodL);
+  r(ctx, 15, 16, 12, 1, C.woodL);
+  r(ctx, 15, 23, 12, 1, C.woodL);
+  // buckle center
+  r(ctx, 19, 14, 10, 10, C.black);
+  r(ctx, 20, 15, 8,  8,  C.VA_gold);
+  r(ctx, 21, 16, 6,  6,  '#8B6000');
+  r(ctx, 23, 18, 2,  2,  C.VA_gold);
+  // feet
+  r(ctx, 16, 43, 5, 5, C.black);
+  r(ctx, 27, 43, 5, 5, C.black);
+  r(ctx, 17, 44, 3, 4, C.VA_rimL);
+  r(ctx, 28, 44, 3, 4, C.VA_rimL);
+})();
+
+// ─── SPRITE: SABIO front (56×56) ─────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('sabio-front');
+
+  // owl body (large oval)
+  fillCircle(ctx, 28, 36, 16, C.black);
+  fillCircle(ctx, 28, 36, 15, C.SA_body);
+  // belly (lighter cream oval)
+  fillCircle(ctx, 28, 38, 10, C.SA_cream);
+  // feather texture on body
+  for(let i=0;i<8;i++) {
+    const angle = (i/8)*Math.PI + Math.PI*0.1;
+    const bx = Math.round(28 + Math.cos(angle)*10);
+    const by = Math.round(38 + Math.sin(angle)*8);
+    r(ctx, bx-2, by-1, 4, 2, C.SA_bodyL);
+  }
+  // ear tufts
+  r(ctx, 21, 19, 4, 6, C.black);
+  r(ctx, 31, 19, 4, 6, C.black);
+  r(ctx, 22, 20, 2, 4, C.SA_body);
+  r(ctx, 32, 20, 2, 4, C.SA_body);
+  // head circle
+  fillCircle(ctx, 28, 30, 12, C.black);
+  fillCircle(ctx, 28, 30, 11, C.SA_body);
+  fillCircle(ctx, 28, 30, 8, C.SA_cream);
+
+  // EYES (big owl eyes)
+  fillCircle(ctx, 22, 29, 6, C.black);
+  fillCircle(ctx, 34, 29, 6, C.black);
+  fillCircle(ctx, 22, 29, 5, '#FFF8C0');  // yellow sclera
+  fillCircle(ctx, 34, 29, 5, '#FFF8C0');
+  fillCircle(ctx, 22, 29, 3, C.black);    // pupil
+  fillCircle(ctx, 34, 29, 3, C.black);
+  fillCircle(ctx, 23, 28, 2, '#FF8000');  // amber iris ring
+  fillCircle(ctx, 35, 28, 2, '#FF8000');
+  r(ctx, 21, 27, 2, 2, C.white);          // left shine
+  r(ctx, 33, 27, 2, 2, C.white);          // right shine
+
+  // GLASSES (green spectacles)
+  strokeCircle(ctx, 22, 29, 7, C.SA_glass);
+  strokeCircle(ctx, 34, 29, 7, C.SA_glass);
+  strokeCircle(ctx, 22, 29, 8, C.SA_glassL);
+  strokeCircle(ctx, 34, 29, 8, C.SA_glassL);
+  // bridge of glasses
+  r(ctx, 27, 28, 4, 2, C.SA_glass);
+  r(ctx, 27, 27, 4, 1, C.SA_glassL);
+  // temple arms (sides of glasses)
+  r(ctx, 14, 28, 6, 2, C.SA_glass);
+  r(ctx, 42, 28, 6, 2, C.SA_glass);
+
+  // beak
+  r(ctx, 26, 34, 4, 1, C.black);
+  r(ctx, 27, 35, 4, 3, C.black);
+  r(ctx, 27, 35, 3, 2, C.SA_beak);
+  px(ctx, 28, 36, C.SA_beak);
+
+  // wings
+  r(ctx, 10, 32, 8, 14, C.black);
+  r(ctx, 11, 33, 6, 12, C.SA_body);
+  r(ctx, 11, 37, 6,  4, C.SA_bodyL);  // wing tip
+  r(ctx, 11, 43, 6,  2, C.SA_body);
+  r(ctx, 38, 32, 8, 14, C.black);
+  r(ctx, 39, 33, 6, 12, C.SA_body);
+  r(ctx, 39, 37, 6,  4, C.SA_bodyL);
+  r(ctx, 39, 43, 6,  2, C.SA_body);
+
+  // tail feathers (bottom)
+  r(ctx, 22, 50, 4, 6, C.black);
+  r(ctx, 26, 50, 4, 6, C.black);
+  r(ctx, 30, 50, 4, 6, C.black);
+  r(ctx, 23, 51, 2, 4, C.SA_body);
+  r(ctx, 27, 51, 2, 4, C.SA_bodyL);
+  r(ctx, 31, 51, 2, 4, C.SA_body);
+
+  // talons
+  r(ctx, 21, 50, 5, 4, C.black);
+  r(ctx, 30, 50, 5, 4, C.black);
+  r(ctx, 19, 52, 4, 2, C.SA_beak);  // left talon
+  r(ctx, 21, 52, 4, 2, C.SA_beak);
+  r(ctx, 28, 52, 4, 2, C.SA_beak);
+  r(ctx, 32, 52, 4, 2, C.SA_beak);
+})();
+
+// ─── SPRITE: SABIO back (48×48) ──────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('sabio-back');
+
+  // body from behind
+  fillCircle(ctx, 24, 32, 14, C.black);
+  fillCircle(ctx, 24, 32, 13, C.SA_body);
+  // feather pattern (back view)
+  for(let row=20; row<=44; row+=3) {
+    for(let col=12; col<=36; col+=4) {
+      const dist = Math.sqrt((col-24)**2+(row-32)**2);
+      if(dist<12) r(ctx, col, row, 3, 2, C.SA_bodyL);
+    }
+  }
+  // head
+  fillCircle(ctx, 24, 20, 11, C.black);
+  fillCircle(ctx, 24, 20, 10, C.SA_body);
+  // head feathers
+  r(ctx, 16, 12, 4, 5, C.black);
+  r(ctx, 26, 12, 4, 5, C.black);
+  r(ctx, 17, 13, 2, 3, C.SA_body);
+  r(ctx, 27, 13, 2, 3, C.SA_body);
+  // back of glasses visible
+  r(ctx, 12, 19, 6, 2, C.SA_glass);
+  r(ctx, 30, 19, 6, 2, C.SA_glass);
+  // wings
+  r(ctx, 8,  28, 8, 12, C.black);
+  r(ctx, 9,  29, 6, 10, C.SA_body);
+  r(ctx, 9,  35, 6,  4, C.SA_bodyL);
+  r(ctx, 32, 28, 8, 12, C.black);
+  r(ctx, 33, 29, 6, 10, C.SA_body);
+  r(ctx, 33, 35, 6,  4, C.SA_bodyL);
+  // tail feathers (prominent from behind)
+  for(let i=0; i<5; i++) {
+    const tx = 16+i*4, len = 4+Math.abs(i-2)*2;
+    r(ctx, tx, 44, 3, len, C.black);
+    r(ctx, tx+1, 45, 1, len-2, i%2===0 ? C.SA_body : C.SA_bodyL);
+  }
+  // talons
+  r(ctx, 17, 44, 5, 4, C.black);
+  r(ctx, 26, 44, 5, 4, C.black);
+  r(ctx, 15, 46, 4, 2, C.SA_beak);
+  r(ctx, 19, 46, 4, 2, C.SA_beak);
+  r(ctx, 24, 46, 4, 2, C.SA_beak);
+  r(ctx, 29, 46, 4, 2, C.SA_beak);
+})();
+
+// ─── HELPER: character sprite overworld (16×32) ──────────────────────────────
+function drawChar(id, opts) {
+  const ctx = getCtx(id);
+  const { hair, hairD, shirt, shirtD, shirtL, pants, pantsD, eye=C.black } = opts;
+  // head
+  r(ctx, 4, 0, 8, 2, hair);
+  r(ctx, 3, 2, 10, 6, skin_for(opts));
+  r(ctx, 2, 2, 1, 5, hair);
+  r(ctx, 13,2, 1, 5, hair);
+  r(ctx, 3, 1, 10, 1, hair);
+  // hair top detail
+  r(ctx, 4, 0, 8, 3, hair);
+  r(ctx, 5, 0, 6, 2, hairD || hair);
+  // eyes
+  px(ctx, 5, 4, eye);
+  px(ctx, 10, 4, eye);
+  // mouth
+  px(ctx, 7, 6, '#C08070');
+  px(ctx, 8, 6, '#C08070');
+  // torso
+  r(ctx, 2, 8,  12, 10, shirt);
+  r(ctx, 2, 8,  12, 1,  shirtL || shirt);
+  r(ctx, 2, 16, 12, 2,  shirtD || shirt);
+  // collar
+  r(ctx, 6, 8, 4, 2, C.skinD);
+  // arms
+  r(ctx, 0, 8,  2, 10, shirt);
+  r(ctx, 14,8,  2, 10, shirt);
+  // legs
+  r(ctx, 3, 18, 4, 10, pants);
+  r(ctx, 9, 18, 4, 10, pants);
+  r(ctx, 3, 22, 4,  6, pantsD || pants);
+  r(ctx, 9, 22, 4,  6, pantsD || pants);
+  // shoes
+  r(ctx, 2, 28, 5, 4, C.black);
+  r(ctx, 9, 28, 5, 4, C.black);
+  r(ctx, 2, 28, 4, 3, '#403030');
+  r(ctx, 9, 28, 4, 3, '#403030');
+  // outline head
+  r(ctx, 3, 0,  10, 1, C.black);
+  r(ctx, 2, 1,  1, 7, C.black);
+  r(ctx, 13,1,  1, 7, C.black);
+  r(ctx, 3, 7,  10, 1, C.black);
+}
+function skin_for(opts) { return opts.skin || C.skin; }
+
+drawChar('char-player', {
+  hair: C.hair1, hairD: C.hair2,
+  shirt: C.shirtBlue, shirtD: C.shirtBlueD, shirtL: C.shirtBlueL,
+  pants: C.pants, pantsD: C.pantsD
+});
+drawChar('char-oak', {
+  hair: C.hairG, hairD: C.hairGD,
+  shirt: C.shirtWht, shirtD: C.shirtWhtD, shirtL: '#ffffff',
+  pants: C.pantsGray, pantsD: C.pantsGrayD
+});
+drawChar('char-npc1', {
+  hair: C.hairO, hairD: C.hairOD,
+  shirt: C.shirtYel, shirtD: C.shirtYelD, shirtL: '#FFE860',
+  pants: C.pants, pantsD: C.pantsD
+});
+drawChar('char-ada', {
+  hair: C.hairP, hairD: C.hairPD,
+  shirt: C.shirtLil, shirtD: '#7050A0', shirtL: '#D8A8F8',
+  pants: C.pantsGray, pantsD: C.pantsGrayD
+});
+drawChar('char-silvia', {
+  hair: C.hairR, hairD: C.hairRD,
+  shirt: C.shirtRed, shirtD: '#701010', shirtL: '#F05040',
+  pants: C.black, pantsD: '#222222'
+});
+drawChar('char-carlos', {
+  hair: C.hairM, hairD: C.hairMD,
+  shirt: C.shirtGrn, shirtD: '#186030', shirtL: '#50C870',
+  pants: C.pantsGray, pantsD: C.pantsGrayD
+});
+
+// ─── INTERIOR ROOM (160×144 GBC) ─────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('interior');
+  const W=160, H=144;
+
+  // === WALL ===
+  r(ctx, 0, 0, W, 56, C.wallA);
+  r(ctx, 0, 0, W, 4,  '#6878A0');  // top dark trim
+  r(ctx, 0, 50, W, 6, '#70808C'); // wall/floor border
+  // wall stripes
+  for(let x=0; x<W; x+=16) r(ctx, x, 4, 1, 46, '#7A8AAC');
+  // window (left side)
+  r(ctx, 10, 8, 30, 28, '#90C8F0');  // window glass
+  r(ctx, 10, 8, 30, 2,  '#A0D0F8');  // glass top shine
+  r(ctx, 10, 8, 1, 28,  '#B0D8FF');  // glass left shine
+  r(ctx, 8,  6, 34, 2,  C.woodD);    // window frame top
+  r(ctx, 8,  36,34, 2,  C.woodD);    // frame bottom
+  r(ctx, 8,  6, 2, 32,  C.woodD);    // frame left
+  r(ctx, 40, 6, 2, 32,  C.woodD);    // frame right
+  r(ctx, 23, 6, 2, 32,  C.woodD);    // center divide
+  r(ctx, 8, 20, 34, 2,  C.woodD);    // horizontal divide
+  // window light effect on floor (later)
+
+  // === BOOKSHELVES (right side) ===
+  r(ctx, 90,  4, 66, 48, C.woodD);   // shelf unit back
+  r(ctx, 90,  4, 66, 2,  C.woodL);   // top edge
+  r(ctx, 90, 16, 66, 2,  C.woodL);   // shelf 1
+  r(ctx, 90, 28, 66, 2,  C.woodL);   // shelf 2
+  r(ctx, 90, 40, 66, 2,  C.woodL);   // shelf 3
+  // books on shelves
+  const bookColors = ['#C03020','#2050C0','#20A040','#C0A020','#8020C0','#C05020','#208080','#A04060'];
+  bookColors.forEach((bc,i) => r(ctx, 92+i*8, 6, 6, 10, bc));
+  bookColors.forEach((bc,i) => r(ctx, 94+i*7, 18, 5, 8, bc));
+  const boxColors = ['#D4A870','#8090A8','#C8783C','#90A060'];
+  boxColors.forEach((bc,i) => r(ctx, 92+i*16, 30, 14, 10, bc));
+  // shelf outlines
+  r(ctx, 90, 4, 1, 48, C.black);
+  r(ctx, 155,4, 1, 48, C.black);
+  r(ctx, 90, 4, 66, 1, C.black);
+
+  // === FLOOR ===
+  // base floor color with perspective (darker bottom, lighter top)
+  for(let row=56; row<H; row++) {
+    const t = (row-56)/(H-56);
+    const grayVal = Math.round(200 - t*40);
+    const gray = `rgb(${grayVal},${grayVal},${Math.round(grayVal*0.95)})`;
+    r(ctx, 0, row, W, 1, gray);
+  }
+  // floor tile lines (horizontal)
+  for(let row=56; row<H; row+=12) {
+    r(ctx, 0, row, W, 1, '#A0A0A0');
+  }
+  // floor tile lines (vertical, with perspective)
+  for(let col=0; col<W; col+=16) {
+    r(ctx, col, 56, 1, H-56, '#A8A8A8');
+  }
+  // floor edge/skirting board
+  r(ctx, 0, 54, W, 4, '#888078');
+  r(ctx, 0, 54, W, 1, '#AAA898');
+
+  // === DESK/TABLE ===
+  r(ctx, 48, 56, 36, 4,  C.woodL);   // table top
+  r(ctx, 48, 56, 36, 1,  '#E8A840'); // top highlight
+  r(ctx, 46, 56, 2, 28,  C.woodD);   // left leg
+  r(ctx, 84, 56, 2, 28,  C.woodD);   // right leg
+  r(ctx, 48, 56, 36, 4,  C.woodL);   // surface (overdraw)
+  r(ctx, 46, 54, 40, 2,  C.woodDD);  // front edge of table
+  // items on desk
+  r(ctx, 54, 50, 8, 6,  '#3868C8'); // monitor base
+  r(ctx, 52, 40, 12,10, '#C8C8C8'); // monitor screen
+  r(ctx, 53, 41, 10, 8, '#3060B0'); // screen content
+  r(ctx, 56, 43, 4,  4, '#80C0FF'); // screen glow
+  // pokéball-style items (principle orbs)
+  [70, 80].forEach(bx => {
+    fillCircle(ctx, bx, 52, 4, C.black);
+    fillCircle(ctx, bx, 52, 3, '#E04030');
+    r(ctx, bx-3, 51, 6, 2, '#E04030');
+    r(ctx, bx-3, 52, 6, 2, C.white);
+    r(ctx, bx-3, 52, 7, 1, C.black);
+    fillCircle(ctx, bx, 52, 1, C.white);
+  });
+
+  // === CHARACTERS ===
+  // Professor Oak (standing right of desk)
+  function placeChar(ctx, charId, dx, dy, scale=1) {
+    const charCanvas = document.getElementById(charId);
+    // Draw character scaled
+    for(let row=0; row<32; row++) {
+      for(let col=0; col<16; col++) {
+        // get pixel from character canvas - use ImageData
+      }
+    }
+  }
+
+  // Manual mini-characters at GBC scale (8×16 on 160×144 canvas)
+  function miniChar(ctx, x, y, opts) {
+    const { hair, shirt, pants=C.pants } = opts;
+    // head
+    r(ctx, x+1, y, 5, 1, hair);
+    r(ctx, x, y+1, 7, 5, C.skin);
+    r(ctx, x, y+1, 1, 4, hair);
+    r(ctx, x+6, y+1, 1, 4, hair);
+    r(ctx, x+1, y, 5, 2, hair);
+    px(ctx, x+1, y+3, C.black); // eyes
+    px(ctx, x+4, y+3, C.black);
+    // body
+    r(ctx, x, y+6, 7, 6, shirt);
+    // legs
+    r(ctx, x, y+12, 3, 4, pants);
+    r(ctx, x+4, y+12, 3, 4, pants);
+    r(ctx, x, y+15, 3, 1, C.black);
+    r(ctx, x+4, y+15, 3, 1, C.black);
+    // outline head
+    r(ctx, x+1, y-1, 5, 1, C.black);
+    px(ctx, x, y+1, C.black);
+    px(ctx, x+6, y+1, C.black);
+    px(ctx, x, y+5, C.black);
+    px(ctx, x+6, y+5, C.black);
+    r(ctx, x+1, y+6, 5, 1, C.black);
+  }
+
+  // Prof Oak in room
+  miniChar(ctx, 80, 64, { hair: C.hairG, shirt: C.shirtWht, pants: C.pantsGray });
+  // Player character
+  miniChar(ctx, 64, 72, { hair: C.hair1, shirt: C.shirtBlue, pants: C.pants });
+
+  // === DIALOG BOX ===
+  r(ctx, 0, 112, W, 32, C.uiDark);
+  r(ctx, 2, 114, W-4, 28, C.uiBg);
+  r(ctx, 2, 114, W-4, 1, '#FFFFFF');
+  r(ctx, 4, 116, W-8, 1, C.uiDark);
+  // text (pixel font simulation with rectangles)
+  ctx.fillStyle = C.uiDark;
+  ctx.font = 'bold 8px monospace';
+  ctx.fillText('¡Bienvenido! Soy el Profesor Oak.', 6, 127);
+  ctx.fillText('Elige tu principio inicial.', 6, 138);
+  // cursor arrow
+  r(ctx, W-12, 138, 1, 4, C.uiDark);
+  r(ctx, W-11, 139, 1, 2, C.uiDark);
+  px(ctx, W-10, 140, C.uiDark);
+})();
+
+// ─── BATTLE SCENE (160×144 GBC) ──────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('battle');
+  const W=160, H=144;
+
+  // sky background
+  for(let row=0; row<80; row++) {
+    const t = row/80;
+    const r2 = Math.round(208 - t*30);
+    const g2 = Math.round(232 - t*20);
+    const b2 = Math.round(248 - t*10);
+    r(ctx, 0, row, W, 1, `rgb(${r2},${g2},${b2})`);
+  }
+  // ground
+  for(let row=80; row<H; row++) {
+    const t=(row-80)/(H-80);
+    const gv=Math.round(120-t*30);
+    r(ctx, 0, row, W, 1, `rgb(${Math.round(gv*0.6)},${gv},${Math.round(gv*0.4)})`);
+  }
+  // horizon line
+  r(ctx, 0, 79, W, 3, '#58A830');
+
+  // enemy platform (top-right oval)
+  for(let row=0; row<12; row++) {
+    const hw = Math.round(Math.sqrt(1-(row-6)**2/36)*28);
+    const shade = row<6 ? C.platE : C.platED;
+    r(ctx, 108-hw, 58+row, hw*2, 1, shade);
+    if(row===0) r(ctx, 108-hw, 58, hw*2, 1, C.black);
+    if(row===11) r(ctx, 108-hw, 69, hw*2, 1, '#3A6820');
+  }
+
+  // player platform (bottom-left oval)
+  for(let row=0; row<10; row++) {
+    const hw = Math.round(Math.sqrt(1-(row-5)**2/25)*26);
+    const shade = row<5 ? C.platP : C.platPD;
+    r(ctx, 44-hw, 94+row, hw*2, 1, shade);
+    if(row===0) r(ctx, 44-hw, 94, hw*2, 1, C.black);
+    if(row===9) r(ctx, 44-hw, 103, hw*2, 1, '#2A5818');
+  }
+
+  // === ENEMY SPRITE: Ada (mini, 18×18 on 160×144) ===
+  function miniLeader(ctx, x, y, hairC, shirtC, pantsC) {
+    r(ctx, x+4, y, 10, 2, hairC);
+    r(ctx, x+2, y+2, 14, 12, C.skin);
+    r(ctx, x, y+2, 2, 10, hairC);
+    r(ctx, x+16,y+2, 2, 10, hairC);
+    r(ctx, x+2, y, 14, 3, hairC);
+    // eyes
+    r(ctx, x+4, y+5, 3, 3, C.black);
+    r(ctx, x+11,y+5, 3, 3, C.black);
+    r(ctx, x+5, y+5, 2, 2, '#4080E0');
+    r(ctx, x+12,y+5, 2, 2, '#4080E0');
+    px(ctx, x+5, y+5, C.white);
+    px(ctx, x+12,y+5, C.white);
+    // mouth
+    r(ctx, x+7, y+10, 4, 1, '#C08080');
+    // body
+    r(ctx, x+2, y+14, 14, 12, shirtC);
+    r(ctx, x, y+14, 2, 10, shirtC);
+    r(ctx, x+16,y+14, 2, 10, shirtC);
+    // collar
+    r(ctx, x+7, y+14, 4, 3, C.skinD);
+    // legs
+    r(ctx, x+3, y+26, 5, 10, pantsC);
+    r(ctx, x+10,y+26, 5, 10, pantsC);
+    r(ctx, x+2, y+35, 6, 2, C.black);
+    r(ctx, x+10,y+35, 6, 2, C.black);
+    // outline
+    r(ctx, x+2, y-1, 14, 1, C.black);
+    px(ctx, x, y+2, C.black); px(ctx, x+18, y+2, C.black);
+    px(ctx, x, y+13, C.black); px(ctx, x+18, y+13, C.black);
+  }
+  miniLeader(ctx, 90, 20, C.hairP, C.shirtLil, C.pantsGray);
+
+  // === PLAYER'S PRINCIPLE (Sabio back sprite, mini 16×18) ===
+  function miniPrincipleBack(ctx, x, y) {
+    // mini owl back
+    fillCircle(ctx, x+8, y+12, 8, C.SA_body);
+    fillCircle(ctx, x+8, y+5, 6, C.SA_body);
+    r(ctx, x, y+10, 5, 8, C.SA_body); // left wing
+    r(ctx, x+11,y+10, 5, 8, C.SA_body); // right wing
+    // feather detail
+    r(ctx, x+3, y+8, 10, 2, C.SA_bodyL);
+    r(ctx, x+3,y+14, 10, 2, C.SA_bodyL);
+    // glasses back
+    r(ctx, x, y+4, 4, 2, C.SA_glass);
+    r(ctx, x+12,y+4, 4, 2, C.SA_glass);
+    // ear tufts
+    r(ctx, x+3, y-1, 2, 3, C.SA_body);
+    r(ctx, x+11,y-1, 2, 3, C.SA_body);
+    // tail
+    r(ctx, x+5, y+18, 3, 4, C.SA_body);
+    r(ctx, x+8, y+18, 3, 4, C.SA_bodyL);
+    // talons
+    r(ctx, x+3, y+20, 4, 2, C.SA_beak);
+    r(ctx, x+9, y+20, 4, 2, C.SA_beak);
+    // outline
+    strokeCircle(ctx, x+8, y+12, 9, C.black);
+    strokeCircle(ctx, x+8, y+5, 7, C.black);
+  }
+  miniPrincipleBack(ctx, 20, 70);
+
+  // === HUD ===
+  // Enemy HP bar (top-left box)
+  r(ctx, 2, 2, 76, 26, C.uiBg);
+  r(ctx, 2, 2, 76, 26, 'rgba(0,0,0,0)'); // transparent, use border
+  ctx.strokeStyle = C.uiDark; ctx.lineWidth = 1;
+  ctx.strokeRect(2, 2, 76, 26);
+  ctx.fillStyle = C.uiDark; ctx.font = 'bold 7px monospace';
+  ctx.fillText('ADA', 5, 11);
+  ctx.fillText('HP', 5, 22);
+  // HP bar (5 segments)
+  for(let i=0;i<5;i++) {
+    r(ctx, 18+i*11, 17, 10, 6, '#808060');
+    r(ctx, 19+i*11, 18, 8,  4, i<4 ? C.hpGrn : C.hpYel);
+  }
+
+  // Player HP box (bottom-right)
+  r(ctx, 82, H-30, 76, 28, C.uiBg);
+  ctx.strokeStyle = C.uiDark; ctx.lineWidth = 1;
+  ctx.strokeRect(82, H-30, 76, 28);
+  ctx.fillStyle = C.uiDark; ctx.font = 'bold 7px monospace';
+  ctx.fillText('SABIO', 85, H-20);
+  ctx.fillText('REP', 85, H-10);
+  // Hearts
+  ['♥','♥','♥'].forEach((h,i) => {
+    ctx.fillStyle = i<3 ? C.hpRed : '#808060';
+    ctx.font = '10px monospace';
+    ctx.fillText(h, 103+i*16, H-8);
+  });
+
+  // Battle dialog box
+  r(ctx, 0, H-36, W, 36, C.uiDark);
+  r(ctx, 1, H-35, W-2, 34, C.uiBg);
+  r(ctx, 1, H-35, W-2, 1,  C.white);
+  r(ctx, 2, H-34, W-4, 1,  C.uiDark);
+  ctx.fillStyle = C.uiDark; ctx.font = '7px monospace';
+  ctx.fillText('¿Quién responde si la IA causa un', 4, H-22);
+  ctx.fillText('perjuicio? Elige con sabiduría.', 4, H-13);
+  // cursor
+  r(ctx, W-8, H-10, 1, 4, C.uiDark);
+  r(ctx, W-7, H-9, 1, 2, C.uiDark);
+  px(ctx, W-6, H-8, C.uiDark);
+})();
+
+// ─── DIALOG BOX (160×48 GBC) ─────────────────────────────────────────────────
+(function() {
+  const ctx = getCtx('dialog');
+  const W=160, H=48;
+  r(ctx, 0, 0, W, H, C.uiDark);
+  r(ctx, 2, 2, W-4, H-4, C.uiBg);
+  r(ctx, 3, 3, W-6, H-6, C.uiBg);
+  // inner border
+  r(ctx, 2, 2, W-4, 1, C.white);
+  r(ctx, 2, 2, 1, H-4, C.white);
+  r(ctx, 2, 3, W-4, 1, C.uiDark);
+  r(ctx, 3, 2, 1, H-4, C.uiDark);
+  // corner decorations (GBC style)
+  r(ctx, 2, 2, 3, 3, C.uiDark);
+  r(ctx, W-5, 2, 3, 3, C.uiDark);
+  r(ctx, 2, H-5, 3, 3, C.uiDark);
+  r(ctx, W-5, H-5, 3, 3, C.uiDark);
+  // text
+  ctx.fillStyle = C.uiDark; ctx.font = 'bold 8px monospace';
+  ctx.fillText('¡Hola! Bienvenido al mundo de la', 8, 18);
+  ctx.fillText('Integridad Corporativa...', 8, 30);
+  // animated cursor (down arrow)
+  r(ctx, W-14, H-12, 1, 5, C.uiDark);
+  r(ctx, W-13, H-10, 1, 3, C.uiDark);
+  r(ctx, W-12, H-9,  1, 2, C.uiDark);
+  px(ctx, W-11, H-8, C.uiDark);
+})();
+</script>
+</body>
+</html>

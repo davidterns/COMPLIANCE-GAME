@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>JuegoPoke — Pixel Art GBC v3</title>
+<style>
+  * { box-sizing: border-box; }
+  body { background:#1a1a2e; display:flex; flex-direction:column; align-items:center;
+         font-family:'Courier New',monospace; color:#eee; gap:32px; padding:40px; }
+  h1  { color:#ffd700; letter-spacing:4px; font-size:20px; margin:0; }
+  h2  { color:#87ceeb; letter-spacing:3px; font-size:12px; margin:0;
+        border-bottom:1px solid #333; padding-bottom:6px; width:100%; max-width:1000px; }
+  .row { display:flex; gap:32px; align-items:flex-end; flex-wrap:wrap; justify-content:center; }
+  .card { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .label { font-size:10px; color:#aaa; letter-spacing:2px; text-transform:uppercase; text-align:center; }
+  .note  { font-size:10px; color:#666; max-width:480px; text-align:center; line-height:1.6; }
+  canvas { image-rendering:pixelated; image-rendering:crisp-edges; display:block; }
+  .gbc  { border:3px solid #4a4a6a; box-shadow:0 0 16px rgba(135,206,235,0.15); }
+  hr    { border-color:#2a2a4e; width:100%; max-width:1000px; }
+</style>
+</head>
+<body>
+<h1>⚡ JUEGOPOKE v3 — SPRITES GBC COMPRIMIDOS ⚡</h1>
+
+<h2>▶ PERSONAJES OVERWORLD — 16×16px (estilo Gold/Silver) · escala ×6</h2>
+<div class="row" id="chars-row"></div>
+<p class="note">Cada personaje es exactamente 16×16 píxeles nativos, igual que Pokémon Gold/Silver. La cabeza ocupa ~40% del sprite (estilo chibi). Sin suavizado.</p>
+
+<hr>
+<h2>▶ INTERIOR — LABORATORIO · 160×144px nativo GBC · escala ×3</h2>
+<canvas id="interior" width="160" height="144" style="width:480px;height:432px" class="gbc"></canvas>
+
+<hr>
+<h2>▶ MAPA EXTERIOR — PUEBLO · 160×144px nativo GBC · escala ×3</h2>
+<canvas id="map" width="160" height="144" style="width:480px;height:432px" class="gbc"></canvas>
+
+<hr>
+<h2>▶ PRINCIPIOS (sin cambios, aprobados) — escala ×4</h2>
+<div class="row">
+  <div class="card">
+    <canvas id="cristal" width="56" height="56" style="width:224px;height:224px"></canvas>
+    <span class="label">Cristal · Transparencia</span>
+  </div>
+  <div class="card">
+    <canvas id="valor" width="56" height="56" style="width:224px;height:224px"></canvas>
+    <span class="label">Valor · Integridad</span>
+  </div>
+  <div class="card">
+    <canvas id="sabio" width="56" height="56" style="width:224px;height:224px"></canvas>
+    <span class="label">Sabio · Prudencia</span>
+  </div>
+</div>
+<p class="note">⚠ Textos en juego: Phaser usará bitmap font pixel (imagen de caracteres 8×8px dibujados a mano). Se verán nítidos como en GBC. Lo del demo es limitación del canvas HTML con fuentes del sistema.</p>
+
+<script>
+'use strict';
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function ctx(id) {
+  const c = document.getElementById(id);
+  const cx = c.getContext('2d');
+  cx.imageSmoothingEnabled = false;
+  return cx;
+}
+function makeCtx(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const cx = c.getContext('2d');
+  cx.imageSmoothingEnabled = false;
+  return cx;
+}
+function p(ctx, x, y, c) {
+  if (!c || c === '_') return;
+  ctx.fillStyle = c; ctx.fillRect(x|0, y|0, 1, 1);
+}
+function r(ctx, x, y, w, h, c) {
+  if (!c) return;
+  ctx.fillStyle = c; ctx.fillRect(x|0, y|0, w|0, h|0);
+}
+function fillCircle(ctx, cx, cy, rad, color) {
+  ctx.fillStyle = color;
+  for (let y = -rad; y <= rad; y++) {
+    const hw = Math.sqrt(rad*rad - y*y)|0;
+    ctx.fillRect((cx-hw)|0, (cy+y)|0, hw*2+1, 1);
+  }
+}
+function strokeCircle(ctx, cx, cy, rad, color) {
+  let x=rad, y=0, err=0;
+  while (x >= y) {
+    [[x,y],[y,x],[-y,x],[-x,y],[-x,-y],[-y,-x],[y,-x],[x,-y]]
+      .forEach(([dx,dy]) => p(ctx, (cx+dx)|0, (cy+dy)|0, color));
+    y++; if (err<=0) err+=2*y+1; if (err>0) { x--; err-=2*x+1; }
+  }
+}
+function drawMatrix(ctx, matrix, ox, oy) {
+  matrix.forEach((row, ri) => row.forEach((c, ci) => p(ctx, ox+ci, oy+ri, c)));
+}
+function lighten(hex) {
+  const n=parseInt(hex.slice(1),16);
+  const r=Math.min(255,((n>>16)&0xFF)+40), g=Math.min(255,((n>>8)&0xFF)+40), b=Math.min(255,(n&0xFF)+40);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ─── CHARACTER SPRITE FACTORY (16×16) ────────────────────────────────────────
+function makeSprite({ h1, h2, eye='#111', sL, sM, sD, pa, pD, bk='#111' }) {
+  const sk='#F5C5A3', skD='#D09070', _ = null;
+  return [
+    [_,_,_,_,h1,h1,h1,h1,h1,h1,h1,h1,_,_,_,_],
+    [_,_,_,h1,h2,h2,h2,h2,h2,h2,h2,h2,h1,_,_,_],
+    [_,_,h1,h2,sk,sk,sk,sk,sk,sk,sk,sk,h2,h1,_,_],
+    [_,_,h1,sk,sk,sk,sk,sk,sk,sk,sk,sk,sk,h1,_,_],
+    [_,_,h1,sk,eye,sk,sk,sk,sk,sk,eye,sk,sk,h1,_,_],
+    [_,_,h1,sk,sk,sk,skD,skD,sk,sk,sk,sk,sk,h1,_,_],
+    [_,_,_,h1,sk,sk,sk,sk,sk,sk,sk,sk,h1,_,_,_],
+    [_,_,sL,sL,sM,sM,sM,sM,sM,sM,sM,sM,sL,sL,_,_],
+    [_,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,_],
+    [_,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,_],
+    [_,sM,sD,sM,sM,sM,sM,sM,sM,sM,sM,sM,sM,sD,sM,_],
+    [_,_,sD,pa,pa,pa,pa,pa,pa,pa,pa,pa,pa,sD,_,_],
+    [_,_,pa,pa,_,_,pa,pa,pa,pa,_,_,pa,pa,_,_],
+    [_,_,pa,pD,_,_,pa,pa,pa,pa,_,_,pD,pa,_,_],
+    [_,_,bk,bk,_,_,bk,bk,bk,bk,_,_,bk,bk,_,_],
+    [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+  ];
+}
+
+const CHARS = [
+  { id:'char-player', label:'Jugador',
+    s: makeSprite({ h1:'#5C3317',h2:'#3B1F0A', sL:'#7090F0',sM:'#4169E1',sD:'#2A45A0', pa:'#303060',pD:'#202040' }) },
+  { id:'char-oak',    label:'Prof. Oak',
+    s: makeSprite({ h1:'#AAAAAA',h2:'#888888', sL:'#FFFFFF',sM:'#E8E8E8',sD:'#CCCCCC', pa:'#707080',pD:'#505060' }) },
+  { id:'char-npc',    label:'NPC',
+    s: makeSprite({ h1:'#E87820',h2:'#A04010', sL:'#FFE040',sM:'#F0C020',sD:'#C09010', pa:'#303060',pD:'#202040' }) },
+  { id:'char-ada',    label:'Ada (IA)',
+    s: makeSprite({ h1:'#8030C0',h2:'#501080', sL:'#D8A8F8',sM:'#B070D0',sD:'#8050A8', pa:'#606070',pD:'#404050' }) },
+  { id:'char-silvia', label:'Silvia (AC)',
+    s: makeSprite({ h1:'#2A2A2A',h2:'#111111', sL:'#F05040',sM:'#C83020',sD:'#901010', pa:'#111122',pD:'#0A0A18' }) },
+  { id:'char-carlos', label:'Carlos (DC)',
+    s: makeSprite({ h1:'#4A3728',h2:'#2A1A08', sL:'#50C870',sM:'#30A850',sD:'#186030', pa:'#404858',pD:'#303040' }) },
+];
+
+// Render character canvases
+const charRow = document.getElementById('chars-row');
+CHARS.forEach(({ id, label, s }) => {
+  const card = document.createElement('div'); card.className = 'card';
+  const canvas = document.createElement('canvas');
+  canvas.id = id; canvas.width = 16; canvas.height = 16;
+  canvas.style.width = '96px'; canvas.style.height = '96px';
+  canvas.style.imageRendering = 'pixelated';
+  const lbl = document.createElement('span'); lbl.className = 'label'; lbl.textContent = label;
+  card.appendChild(canvas); card.appendChild(lbl);
+  charRow.appendChild(card);
+  const cx = canvas.getContext('2d'); cx.imageSmoothingEnabled = false;
+  drawMatrix(cx, s, 0, 0);
+});
+
+// ─── INTERIOR ROOM (160×144) ─────────────────────────────────────────────────
+(function() {
+  const cx = ctx('interior');
+  const W=160, H=144;
+
+  // == WALL (y 0-43) ==
+  r(cx, 0, 0,  W, 44, '#8890A8');
+  // top dark trim
+  r(cx, 0, 0,  W,  3, '#3A4260');
+  r(cx, 0, 3,  W,  1, '#6070888'.slice(0,7));
+  // vertical wall pillar lines
+  for (let x=0; x<W; x+=16) r(cx, x, 3, 1, 37, '#78809A');
+  // horizontal stripe mid-wall
+  r(cx, 0, 20, W,  2, '#7880A0');
+  r(cx, 0, 22, W,  1, '#9CA4BC');
+  // baseboard
+  r(cx, 0, 40, W,  4, '#505868');
+  r(cx, 0, 40, W,  1, '#707888');
+
+  // == WINDOW (left wall, x=8-46, y=5-38) ==
+  r(cx, 6,  4, 42, 36, '#5A6070');  // outer frame
+  r(cx, 8,  6, 38, 32, '#A8D0F0');  // glass
+  r(cx, 8,  6, 38,  3, '#C8E8FF');  // top shine
+  r(cx, 8,  6,  3, 32, '#C0E0FF');  // left shine
+  r(cx, 6,  4, 42,  2, '#404858');  // top frame
+  r(cx, 6, 38, 42,  2, '#404858');  // bottom frame
+  r(cx, 6,  4,  2, 36, '#404858');  // left frame
+  r(cx,46,  4,  2, 36, '#404858');  // right frame
+  r(cx, 6, 20, 42,  2, '#404858');  // horiz divider
+  r(cx,26,  4,  2, 36, '#404858');  // vert divider
+  // window sill
+  r(cx, 5, 38, 44,  3, '#7A6A50');
+
+  // == SHELVING UNIT (right wall x=80-159, y=0-43) ==
+  r(cx, 80,  3, 78, 40, '#5C4028');  // back panel
+  r(cx, 80,  3, 78,  1, '#A07850');  // top edge
+  // shelf boards
+  for (let sy of [14, 26, 38]) {
+    r(cx, 80, sy, 78, 3, '#6E4830');
+    r(cx, 80, sy, 78, 1, '#9A7050');  // highlight
+    r(cx, 80, sy+2, 78, 1, '#3A2010'); // shadow
+  }
+  // side panels
+  r(cx, 80,  3, 3, 40, '#6E4830');
+  r(cx,157,  3, 3, 40, '#6E4830');
+
+  // Books row 1 (y=4-13)
+  const bk1=['#B82818','#1848A8','#18883A','#B89018','#701898','#B84018','#187878'];
+  bk1.forEach((c,i)=>{ r(cx,83+i*10,4,8,10,c); r(cx,83+i*10,4,8,1,lighten(c)); r(cx,83+i*10,4,1,10,lighten(c)); r(cx,90+i*10,4,1,10,'#000'); });
+  // Boxes row 2 (y=17-25)
+  const bx=['#C89858','#7888A0','#B87030','#8898584'.slice(0,7)];
+  bx.forEach((c,i)=>{ r(cx,83+i*19,17,16,8,c); r(cx,83+i*19,17,16,1,lighten(c)); r(cx,83+i*19,17,1,8,lighten(c)); r(cx,98+i*19,17,1,8,'#00000044'.slice(0,4)); r(cx,83+i*19,17,16,1,lighten(c)); });
+  // Books row 3 (y=29-37)
+  const bk3=['#D84818','#18A848','#5828B8','#C05818','#2878A8','#A83858'];
+  bk3.forEach((c,i)=>{ r(cx,83+i*12,29,10,8,c); r(cx,83+i*12,29,10,1,lighten(c)); r(cx,83+i*12,29,1,8,lighten(c)); });
+
+  // == FLOOR (y=44-107) ==
+  for (let row=44; row<108; row++) {
+    const t=(row-44)/64;
+    const lum=Math.round(192-t*32);
+    cx.fillStyle=`rgb(${lum},${lum},${Math.round(lum*0.97)})`;
+    cx.fillRect(0,row,W,1);
+  }
+  // tile horizontal lines
+  for (let ty=44; ty<108; ty+=16) {
+    r(cx, 0, ty, W, 1, '#888');
+    r(cx, 0, ty+8, W, 1, '#C0C0C0');
+  }
+  // tile vertical lines
+  for (let tx=0; tx<W; tx+=16) r(cx, tx, 44, 1, 64, '#ABABAB');
+  // tile corner dots
+  for (let ty=44; ty<108; ty+=16)
+    for (let tx=0; tx<W; tx+=16)
+      r(cx, tx+1, ty+1, 2, 2, '#CCCCCC');
+
+  // == TABLE (x=28-95, y=55-67) ==
+  // shadow under table (on floor)
+  r(cx, 30, 67, 66, 3, '#A0A0A0');
+  // table top surface
+  r(cx, 28, 48, 68, 7, '#C8903A');
+  r(cx, 28, 48, 68, 1, '#E0A840');  // highlight
+  r(cx, 28, 53, 68, 2, '#A07028');  // shadow at back
+  // table front face
+  r(cx, 28, 55, 68, 12, '#8B5E2A');
+  r(cx, 28, 55, 68,  1, '#9A6E34');
+  r(cx, 95, 48,  1, 19, '#6B4018');  // right shadow
+  // table legs
+  r(cx, 30, 67,  5, 14, '#7A5222');
+  r(cx, 91, 67,  5, 14, '#7A5222');
+  r(cx, 31, 67,  3, 14, '#9A6A32');
+
+  // Items on table:
+  // Monitor
+  r(cx, 32, 34, 20, 14, '#505050');  // frame
+  r(cx, 33, 35, 18, 12, '#2858A8');  // screen
+  r(cx, 34, 36,  7,  4, '#70B0FF');  // glow
+  r(cx, 34, 40,  3,  2, '#4890E0');
+  r(cx, 40, 48,  6,  2, '#505050');  // stand
+  r(cx, 38, 50,  8,  1, '#404040');  // base
+
+  // 3 Principle orbs on table
+  const orbs = [
+    { cx2:68, c1:'#87CEEB', c2:'#1B4F8E', shine:'#D6EEFF' },
+    { cx2:80, c1:'#FFD700', c2:'#1E3A8A', shine:'#FFFAB0' },
+    { cx2:92, c1:'#C8903A', c2:'#2A6622', shine:'#F0D090' },
+  ];
+  orbs.forEach(({ cx2, c1, c2, shine }) => {
+    fillCircle(cx, cx2, 44, 5, '#222');
+    fillCircle(cx, cx2, 44, 4, c2);
+    fillCircle(cx, cx2, 44, 3, c1);
+    r(cx, cx2-1, 41, 2, 1, shine);
+  });
+
+  // == CHARACTERS (16×16 sprites) ==
+  // Prof Oak behind/beside table
+  drawMatrix(cx, makeSprite({ h1:'#AAAAAA',h2:'#888888', sL:'#FFFFFF',sM:'#E8E8E8',sD:'#CCCCCC', pa:'#707080',pD:'#505060' }), 96, 54);
+  // Player in front of table
+  drawMatrix(cx, makeSprite({ h1:'#5C3317',h2:'#3B1F0A', sL:'#7090F0',sM:'#4169E1',sD:'#2A45A0', pa:'#303060',pD:'#202040' }), 56, 70);
+
+  // == DIALOG BOX ==
+  r(cx, 0, 108, W, 1, '#222');
+  r(cx, 0, 109, W, 35, '#383828');
+  r(cx, 2, 111, W-4, 31, '#F0F0D8');
+  // border
+  r(cx, 2, 111, W-4, 1, '#fff');
+  r(cx, 2, 111, 1, 31, '#fff');
+  r(cx, 3, 112, W-4, 1, '#383828');
+  r(cx, 3, 112, 1, 30, '#383828');
+  // corner marks
+  [[2,111],[W-5,111],[2,H-4],[W-5,H-4]].forEach(([x,y]) => r(cx,x,y,3,3,'#383828'));
+
+  // pixel-font simulation (draw text as colored rects row by row for demo)
+  cx.fillStyle = '#383828';
+  cx.font = 'bold 8px monospace';
+  cx.fillText('Prof. Oak: ¡Hola! Elige tu', 6, 126);
+  cx.fillText('principio en la mesa.', 6, 137);
+  // cursor arrow
+  r(cx, W-10, H-9, 1, 5, '#383828');
+  r(cx, W-9,  H-8, 1, 3, '#383828');
+  r(cx, W-8,  H-7, 1, 1, '#383828');
+})();
+
+// ─── OUTDOOR MAP (160×144) ───────────────────────────────────────────────────
+(function() {
+  const cx = ctx('map');
+  const W=160, H=144;
+
+  // == SKY / BG ==
+  r(cx, 0, 0, W, H, '#68B030');
+
+  // == GRASS TILES with subtle pattern ==
+  for (let ty=0; ty<H; ty+=16)
+    for (let tx=0; tx<W; tx+=16) {
+      const g = ((tx+ty)/16|0)%2===0 ? '#68B030' : '#70B838';
+      r(cx, tx, ty, 16, 16, g);
+      // grass detail marks
+      r(cx, tx+3,  ty+5,  2, 3, '#58A020');
+      r(cx, tx+10, ty+11, 2, 3, '#58A020');
+    }
+
+  // == PATH (horizontal, rows 64-95 == 4 tile rows) ==
+  r(cx, 0, 64, W, 32, '#C8A870');
+  // path tiles
+  for (let tx=0; tx<W; tx+=16) r(cx, tx, 64, 1, 32, '#B89860');
+  r(cx, 0, 64, W, 1, '#B09060');
+  r(cx, 0, 95, W, 1, '#B09060');
+  // path detail
+  for (let tx=4; tx<W; tx+=24) r(cx, tx, 70, 4, 2, '#B89055');
+
+  // == PATH VERTICAL (left side for lab entrance) ==
+  r(cx, 16, 0, 32, 64, '#C8A870');
+  for (let ty=0; ty<64; ty+=16) r(cx, 16, ty, 32, 1, '#B09060');
+  r(cx, 16, 0, 1, 64, '#B09060');
+  r(cx, 47, 0, 1, 64, '#B09060');
+
+  // == BUILDING HELPER ==
+  function building(tx, ty, tw, th, roofC, wallC, doorX) {
+    // shadow
+    r(cx, tx+3, ty+th, tw, 3, '#4A8020');
+    // walls
+    r(cx, tx, ty+8, tw, th-8, wallC);
+    r(cx, tx, ty+8, tw, 1, lighten(wallC));
+    r(cx, tx+tw-1, ty+8, 1, th-8, '#00000033'.slice(0,4));
+    // roof
+    r(cx, tx, ty, tw, 10, roofC);
+    r(cx, tx, ty, tw, 2, lighten(roofC));
+    r(cx, tx, ty+8, tw, 2, '#0000001A'.slice(0,4));
+    // outline
+    r(cx, tx-1, ty, 1, th+1, '#222');
+    r(cx, tx+tw, ty, 1, th+1, '#222');
+    r(cx, tx, ty-1, tw, 1, '#222');
+    r(cx, tx, ty+th, tw+1, 1, '#222');
+    // windows
+    r(cx, tx+3, ty+12, 8, 8, '#7AB8E8');
+    r(cx, tx+3, ty+12, 8, 1, '#A0D0F8');
+    r(cx, tx+3, ty+12, 1, 8, '#A0D0F8');
+    r(cx, tx+2, ty+11, 10, 1, '#333');
+    r(cx, tx+2, ty+19, 10, 1, '#333');
+    r(cx, tx+2, ty+11, 1, 9, '#333');
+    r(cx, tx+11, ty+11, 1, 9, '#333');
+    if (tw > 24) { // second window
+      r(cx, tx+tw-12, ty+12, 8, 8, '#7AB8E8');
+      r(cx, tx+tw-12, ty+12, 8, 1, '#A0D0F8');
+      r(cx, tx+tw-12, ty+12, 1, 8, '#A0D0F8');
+      r(cx, tx+tw-13, ty+11, 10, 1, '#333');
+      r(cx, tx+tw-13, ty+19, 10, 1, '#333');
+      r(cx, tx+tw-13, ty+11, 1, 9, '#333');
+      r(cx, tx+tw-4, ty+11, 1, 9, '#333');
+    }
+    // door
+    r(cx, tx+doorX, ty+th-16, 10, 16, '#333');
+    r(cx, tx+doorX+1, ty+th-15, 8, 15, '#7A5020');
+    r(cx, tx+doorX+1, ty+th-15, 8, 1, '#9A7040');
+    r(cx, tx+doorX+4, ty+th-10, 2, 5, '#C8A060');  // door knob area
+  }
+
+  // LABORATORY (top-left)
+  building(0, 0, 48, 64, '#6878A0', '#D0C8B8', 18);
+  cx.fillStyle='#fff'; cx.font='bold 6px monospace'; cx.fillText('LAB', 14, 10);
+
+  // GYM 1 - IA (top-right, purple)
+  building(96, 0, 64, 64, '#6A20A8', '#E8D8F8', 26);
+  cx.fillStyle='#fff'; cx.font='bold 6px monospace'; cx.fillText('GYM IA ①', 100, 10);
+
+  // GYM 2 - Anticorrupción (bottom-left, red)
+  building(0, 96, 64, 48, '#A02010', '#F8E0D8', 26);
+  cx.fillStyle='#fff'; cx.font='bold 6px monospace'; cx.fillText('GYM AC ②', 4, 106);
+
+  // GYM 3 - Competencia (bottom-right, green)
+  building(96, 96, 64, 48, '#186030', '#D0F0D8', 26);
+  cx.fillStyle='#fff'; cx.font='bold 6px monospace'; cx.fillText('GYM DC ③', 100, 106);
+
+  // == TREES ==
+  function tree(tx, ty) {
+    r(cx, tx+4, ty+12, 8, 8, '#5C3817');   // trunk
+    r(cx, tx+5, ty+13, 6, 6, '#7A5030');
+    r(cx, tx, ty+4, 16, 12, '#1E7828');    // leaves mid
+    r(cx, tx+2, ty, 12, 8, '#28A038');     // leaves top
+    r(cx, tx+4, ty-2, 8, 6, '#38B848');    // peak
+    r(cx, tx+2, ty+2, 3, 3, '#48C858');    // highlight
+    r(cx, tx, ty+4, 1, 12, '#222');        // outline left
+    r(cx, tx+15, ty+4, 1, 12, '#222');
+    r(cx, tx+2, ty, 1, 6, '#222');
+    r(cx, tx+13, ty, 1, 6, '#222');
+  }
+  tree(48, 0); tree(64, 0); tree(80, 0);
+  tree(48, 16); tree(64, 16); tree(80, 16);
+  tree(48, 32); tree(48, 48);
+  tree(64, 48); tree(80, 48);
+
+  // == PLAYER on path ==
+  drawMatrix(cx, makeSprite({ h1:'#5C3317',h2:'#3B1F0A', sL:'#7090F0',sM:'#4169E1',sD:'#2A45A0', pa:'#303060',pD:'#202040' }), 56, 74);
+
+  // == NPCs ==
+  drawMatrix(cx, makeSprite({ h1:'#E87820',h2:'#A04010', sL:'#FFE040',sM:'#F0C020',sD:'#C09010', pa:'#303060',pD:'#202040' }), 80, 74);
+  drawMatrix(cx, makeSprite({ h1:'#AAAAAA',h2:'#888888', sL:'#FFFFFF',sM:'#E8E8E8',sD:'#CCCCCC', pa:'#707080',pD:'#505060' }), 32, 74);
+})();
+
+// ─── PRINCIPIOS (kept from approved v2) ──────────────────────────────────────
+(function drawCristal() {
+  const cx2 = ctx('cristal');
+  const W=56;
+  function r2(x,y,w,h,c){r(cx2,x,y,w,h,c);}
+  function p2(x,y,c){p(cx2,x,y,c);}
+  function fc(cx3,cy,rad,c){fillCircle(cx2,cx3,cy,rad,c);}
+
+  r2(17,2,22,8,'#333344'); r2(18,3,20,6,'#555566'); r2(14,9,28,3,'#333344');
+  r2(17,8,22,2,'#C8A420');
+  r2(17,1,22,1,'#111'); r2(16,2,1,7,'#111'); r2(39,2,1,7,'#111'); r2(13,9,30,1,'#111');
+  fc(28,30,18,'#111'); fc(28,30,17,'#1B4F8E'); fc(28,30,15,'#87CEEB');
+  fc(22,23,5,'#D6EEFF');
+  r2(20,28,5,5,'#111'); r2(31,28,5,5,'#111');
+  r2(21,29,3,3,'#4a8fc8'); r2(32,29,3,3,'#4a8fc8');
+  r2(21,28,2,2,'#fff'); r2(32,28,2,2,'#fff');
+  p2(22,30,'#111'); p2(33,30,'#111');
+  r2(16,33,4,2,'#FFB8C0'); r2(36,33,4,2,'#FFB8C0');
+  r2(24,36,8,1,'#111'); p2(23,35,'#111'); p2(32,35,'#111');
+  r2(42,44,8,3,'#111'); r2(43,45,6,1,'#8B5A2B');
+  r2(42,43,4,8,'#111'); r2(43,44,2,7,'#8B5A2B'); r2(44,44,1,7,'#5C3817');
+  r2(22,47,4,4,'#111'); r2(30,47,4,4,'#111');
+  r2(23,48,2,3,'#8B5A2B'); r2(31,48,2,3,'#8B5A2B');
+  r2(22,51,6,2,'#111'); r2(30,51,6,2,'#111');
+  r2(22,51,5,1,'#202040'); r2(30,51,5,1,'#202040');
+})();
+
+(function drawValor() {
+  const cx2 = ctx('valor');
+  for (let row=4; row<=52; row++) {
+    let minX=56,maxX=0;
+    if(row>=4&&row<=6){minX=16;maxX=40;}
+    if(row>=6&&row<=34){minX=12;maxX=44;}
+    if(row>=34&&row<=40){minX=Math.round(12+(row-34)*0.5);maxX=Math.round(44-(row-34)*0.5);}
+    if(row>=40&&row<=52){minX=Math.round(14+(row-40)*2.3);maxX=Math.round(42-(row-40)*2.3);}
+    if(minX<maxX){
+      r(cx2,minX,row,3,1,'#CCCCCC'); r(cx2,maxX-3,row,3,1,'#CCCCCC');
+      if(maxX-minX>6) r(cx2,minX+3,row,maxX-minX-6,1,row<28?'#3060C0':'#1E3A8A');
+      p(cx2,minX-1,row,'#111'); p(cx2,maxX,row,'#111');
+    }
+  }
+  r(cx2,15,12,26,3,'#E8B800'); r(cx2,15,20,26,3,'#E8B800'); r(cx2,15,28,26,3,'#A07800');
+  fillCircle(cx2,28,13,7,'#F5C5A3');
+  r(cx2,22,6,12,6,'#5C3317'); r(cx2,21,7,14,4,'#5C3317');
+  r(cx2,23,13,3,3,'#111'); r(cx2,31,13,3,3,'#111');
+  r(cx2,24,13,2,2,'#4080E0'); r(cx2,32,13,2,2,'#4080E0');
+  p(cx2,24,13,'#fff'); p(cx2,32,13,'#fff');
+  r(cx2,26,18,4,1,'#111');
+  // star
+  [[0,0,0,1,1,1,0,0,0],[0,0,1,1,1,1,1,0,0],[1,1,1,1,1,1,1,1,1],
+   [0,1,1,1,1,1,1,1,0],[0,0,1,1,1,1,1,0,0],[0,1,0,1,1,1,0,1,0],[1,0,0,0,1,0,0,0,1]]
+   .forEach((row,ri)=>row.forEach((v,ci)=>{ if(v) r(cx2,24+ci,33+ri,1,1,'#FFD700'); }));
+  r(cx2,6,20,8,8,'#111'); r(cx2,7,21,6,6,'#CCCCCC'); r(cx2,7,21,3,6,'#E8B800');
+  r(cx2,42,20,8,8,'#111'); r(cx2,43,21,6,6,'#CCCCCC'); r(cx2,46,21,3,6,'#E8B800');
+  r(cx2,22,50,6,5,'#111'); r(cx2,28,50,6,5,'#111');
+  r(cx2,23,51,4,4,'#CCCCCC'); r(cx2,29,51,4,4,'#CCCCCC');
+  r(cx2,23,54,5,1,'#E8B800'); r(cx2,29,54,5,1,'#E8B800');
+})();
+
+(function drawSabio() {
+  const cx2 = ctx('sabio');
+  const SA_body='#8B5E2A',SA_bodyL='#C8903A',SA_cream='#F5E8C8';
+  const SA_eyes='#FFE040',SA_glass='#225522',SA_glassL='#449944',SA_beak='#E87820';
+  fillCircle(cx2,28,36,16,'#111'); fillCircle(cx2,28,36,15,SA_body);
+  fillCircle(cx2,28,38,10,SA_cream);
+  for(let i=0;i<8;i++){const a=(i/8)*Math.PI+0.1;const bx=Math.round(28+Math.cos(a)*10);const by=Math.round(38+Math.sin(a)*8);r(cx2,bx-2,by-1,4,2,SA_bodyL);}
+  r(cx2,21,19,4,6,'#111'); r(cx2,31,19,4,6,'#111'); r(cx2,22,20,2,4,SA_body); r(cx2,32,20,2,4,SA_body);
+  fillCircle(cx2,28,30,12,'#111'); fillCircle(cx2,28,30,11,SA_body); fillCircle(cx2,28,30,8,SA_cream);
+  fillCircle(cx2,22,29,6,'#111'); fillCircle(cx2,34,29,6,'#111');
+  fillCircle(cx2,22,29,5,'#FFF8C0'); fillCircle(cx2,34,29,5,'#FFF8C0');
+  fillCircle(cx2,22,29,3,'#111'); fillCircle(cx2,34,29,3,'#111');
+  fillCircle(cx2,23,28,2,'#FF8000'); fillCircle(cx2,35,28,2,'#FF8000');
+  r(cx2,21,27,2,2,'#fff'); r(cx2,33,27,2,2,'#fff');
+  strokeCircle(cx2,22,29,7,SA_glass); strokeCircle(cx2,34,29,7,SA_glass);
+  strokeCircle(cx2,22,29,8,SA_glassL); strokeCircle(cx2,34,29,8,SA_glassL);
+  r(cx2,27,28,4,2,SA_glass); r(cx2,27,27,4,1,SA_glassL);
+  r(cx2,14,28,6,2,SA_glass); r(cx2,42,28,6,2,SA_glass);
+  r(cx2,26,34,4,1,'#111'); r(cx2,27,35,4,3,'#111'); r(cx2,27,35,3,2,SA_beak); p(cx2,28,36,SA_beak);
+  r(cx2,10,32,8,14,'#111'); r(cx2,11,33,6,12,SA_body); r(cx2,11,37,6,4,SA_bodyL);
+  r(cx2,38,32,8,14,'#111'); r(cx2,39,33,6,12,SA_body); r(cx2,39,37,6,4,SA_bodyL);
+  r(cx2,22,50,4,6,'#111'); r(cx2,26,50,4,6,'#111'); r(cx2,30,50,4,6,'#111');
+  r(cx2,23,51,2,4,SA_body); r(cx2,27,51,2,4,SA_bodyL); r(cx2,31,51,2,4,SA_body);
+  r(cx2,21,50,5,4,'#111'); r(cx2,30,50,5,4,'#111');
+  r(cx2,19,52,4,2,SA_beak); r(cx2,21,52,4,2,SA_beak); r(cx2,28,52,4,2,SA_beak); r(cx2,32,52,4,2,SA_beak);
+})();
+</script>
+</body>
+</html>
