@@ -1371,11 +1371,48 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
             <!-- Flash overlay for intro transition -->
             <div id="battle-flash"></div>
-            <!-- Sky/ground -->
-            <div style="position:absolute;top:0;left:0;right:0;height:60%;background:linear-gradient(to bottom,var(--gb-light),var(--gb-mid));"></div>
-            <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:var(--gb-mid);border-top:2px solid var(--gb-mid-dark);"></div>
-            <div style="position:absolute;top:37%;left:0;right:40%;height:2px;background:var(--gb-mid-dark);"></div>
-            <div style="position:absolute;bottom:38%;left:50%;right:0;height:2px;background:var(--gb-mid-dark);"></div>
+            <!-- ══ Pokémon-style battle arena background ══ -->
+            <svg viewBox="0 0 200 140" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;">
+              <!-- Sky gradient -->
+              <defs>
+                <linearGradient id="bsky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"  stop-color="#cfe8b0"/>
+                  <stop offset="55%" stop-color="#aed888"/>
+                  <stop offset="100%" stop-color="#8fc468"/>
+                </linearGradient>
+                <radialGradient id="bplat" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%"  stop-color="#e8f0c8"/>
+                  <stop offset="70%" stop-color="#c8dca0"/>
+                  <stop offset="100%" stop-color="#9cb878"/>
+                </radialGradient>
+              </defs>
+              <rect x="0" y="0" width="200" height="84" fill="url(#bsky)"/>
+              <!-- Distant hills -->
+              <ellipse cx="34" cy="80" rx="46" ry="16" fill="#bcd89c" opacity=".7"/>
+              <ellipse cx="150" cy="84" rx="60" ry="18" fill="#a8cc88" opacity=".6"/>
+              <!-- Clouds -->
+              <g fill="#fff" opacity=".75">
+                <ellipse cx="40" cy="20" rx="16" ry="5"/><ellipse cx="52" cy="17" rx="11" ry="4"/>
+                <ellipse cx="150" cy="14" rx="18" ry="5"/><ellipse cx="164" cy="18" rx="10" ry="4"/>
+                <ellipse cx="100" cy="28" rx="13" ry="4" opacity=".5"/>
+              </g>
+              <!-- Ground -->
+              <rect x="0" y="84" width="200" height="56" fill="#7fae5c"/>
+              <rect x="0" y="84" width="200" height="3" fill="#6f9e4c"/>
+              <!-- Grass texture tufts -->
+              <g fill="#6a9a4c" opacity=".55">
+                <rect x="14" y="98" width="3" height="6"/><rect x="30" y="118" width="3" height="6"/>
+                <rect x="60" y="104" width="3" height="6"/><rect x="86" y="124" width="3" height="6"/>
+                <rect x="118" y="100" width="3" height="6"/><rect x="146" y="118" width="3" height="6"/>
+                <rect x="176" y="104" width="3" height="6"/><rect x="6" y="126" width="3" height="6"/>
+              </g>
+              <!-- Enemy platform (top-right, perspective oval, smaller) -->
+              <ellipse cx="158" cy="60" rx="34" ry="10" fill="url(#bplat)" stroke="#7c9a5c" stroke-width="1.5"/>
+              <ellipse cx="158" cy="58" rx="28" ry="7" fill="#fff" opacity=".25"/>
+              <!-- Player platform (bottom-left, larger/closer) -->
+              <ellipse cx="46" cy="118" rx="48" ry="14" fill="url(#bplat)" stroke="#7c9a5c" stroke-width="2"/>
+              <ellipse cx="46" cy="115" rx="40" ry="10" fill="#fff" opacity=".25"/>
+            </svg>
 
             <!-- Enemy sprite: TOP-RIGHT of field -->
             <div id="enemy-sprite" style="position:absolute;top:4px;right:4px;width:66px;height:70px;">
@@ -3310,13 +3347,17 @@ function checkTallGrass(){
     grassInZone = true;
     grassSessionCases = 0;
     buildGrassQueue();
+    // Pokémon-style multi-flash transition (same rhythm as gym battle entry)
     const flash=document.getElementById('battle-flash');
     if(flash){
-      flash.style.animation='battleFlashAnim .5s steps(1)';
-      flash.style.opacity='1';
-      setTimeout(()=>{ flash.style.animation=''; flash.style.opacity='0'; }, 520);
+      flash.style.transition='none'; flash.style.opacity='0';
+      const flashTimes=[0,120,240,360,500,640];
+      flashTimes.forEach((t,i)=>{
+        setTimeout(()=>{ flash.style.opacity = (i%2===0) ? '1' : '0'; }, t);
+      });
+      sfx(440,'square',.05,.12);
     }
-    setTimeout(()=>tryShowGrassCase(), 600);
+    setTimeout(()=>tryShowGrassCase(), 760);
   } else if(grassInZone && !inZone){
     // Just exited
     grassInZone = false;
@@ -3452,7 +3493,7 @@ function checkNearGym(){
 
 function enterGymIfNear(id){
   sfxSel();
-  if(id>0&&!S.badges[id-1]){flashHeader('¡Consigue la insignia anterior primero!');return;}
+  if(id>0&&!S.badges[id-1]){flashHeader('¡Primero supera el '+GYMS[id-1].name+'!');return;}
   if(S.badges[id]){flashHeader('¡Ya tienes esta insignia!');return;}
   // Door flash: white blink before entering
   const flash=document.getElementById('battle-flash');
