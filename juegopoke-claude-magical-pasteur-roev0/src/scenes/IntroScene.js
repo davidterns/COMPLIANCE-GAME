@@ -93,7 +93,7 @@ class IntroScene extends Phaser.Scene {
           this.orbContainer.add(sel);
         }
         const lbl = this._tl(x - 20, y + 16,
-          `font:7px/1 "Courier New",Courier,monospace;color:${i===this.choiceIdx?'#FFD700':'#AAAAAA'};text-align:center;width:40px;pointer-events:none;`,
+          `font:8px/1 "Courier New",Courier,monospace;color:${i===this.choiceIdx?'#FFD700':'#AAAAAA'};text-align:center;width:40px;pointer-events:none;`,
           p.creature
         );
         this.orbDomLabels.push(lbl);
@@ -115,11 +115,11 @@ class IntroScene extends Phaser.Scene {
     });
 
     this.nameTag = this._tl(8, BOX_Y - 2,
-      'font:bold 7px/1 "Courier New",Courier,monospace;color:#fff;background:#383828;padding:2px 6px;white-space:nowrap;pointer-events:none;display:inline-block;transform:translateY(-100%);'
+      'font:bold 8px/1 "Courier New",Courier,monospace;color:#fff;background:#383828;padding:2px 6px;white-space:nowrap;pointer-events:none;display:inline-block;transform:translateY(-100%);'
     );
 
     this.dialogText = this._tl(8, BOX_Y + 8,
-      'font:8px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;'
+      'font:9px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;'
     );
 
     this.cursor = this.add.graphics();

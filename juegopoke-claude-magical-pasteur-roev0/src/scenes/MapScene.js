@@ -243,7 +243,7 @@ class MapScene extends Phaser.Scene {
       const name = GAME_CONTENT.principles[GameState.principle].creature;
       if (!this.hudPrincipleTxt) {
         this.hudPrincipleTxt = this._tl(2, 18,
-          'font:6px/1 "Courier New",Courier,monospace;color:#fff;background:#000;padding:1px 2px;pointer-events:none;'
+          'font:7px/1 "Courier New",Courier,monospace;color:#fff;background:#000;padding:1px 2px;pointer-events:none;'
         );
       }
       this.hudPrincipleTxt.textContent = name;
@@ -268,11 +268,11 @@ class MapScene extends Phaser.Scene {
     });
 
     this.dialogName = this._tl(8, BOX_Y - 2,
-      'font:bold 7px/1 "Courier New",Courier,monospace;color:#fff;background:#383828;padding:2px 6px;white-space:nowrap;pointer-events:none;display:none;transform:translateY(-100%);'
+      'font:bold 8px/1 "Courier New",Courier,monospace;color:#fff;background:#383828;padding:2px 6px;white-space:nowrap;pointer-events:none;display:none;transform:translateY(-100%);'
     );
 
     this.dialogBody = this._tl(8, BOX_Y + 8,
-      'font:8px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;display:none;'
+      'font:9px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;display:none;'
     );
 
     this.dialogCursor = this.add.graphics().setDepth(32).setVisible(false).setScrollFactor(0);

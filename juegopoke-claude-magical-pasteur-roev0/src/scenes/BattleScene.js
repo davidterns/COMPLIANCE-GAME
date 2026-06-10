@@ -137,11 +137,11 @@ class BattleScene extends Phaser.Scene {
   _createNameLabels() {
     const principle = GAME_CONTENT.principles[GameState.principle];
     this._tl(6, 4,
-      'font:7px/1 "Courier New",Courier,monospace;color:#383828;pointer-events:none;',
+      'font:8px/1 "Courier New",Courier,monospace;color:#383828;pointer-events:none;',
       this.gym.leader
     );
     this._tl(this.W - 6, 98,
-      'font:7px/1 "Courier New",Courier,monospace;color:#383828;pointer-events:none;transform:translateX(-100%);',
+      'font:8px/1 "Courier New",Courier,monospace;color:#383828;pointer-events:none;transform:translateX(-100%);',
       principle.creature
     );
   }
@@ -159,13 +159,13 @@ class BattleScene extends Phaser.Scene {
     bg.fillStyle(0x383828, 1); bg.fillRect(6, BY+6, W-8, 2); bg.fillRect(6, BY+6, 2, BH-8);
 
     this.dialogText = this._tl(8, BY + 8,
-      'font:8px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;'
+      'font:9px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;'
     );
 
     this.optionTexts = [];
     for (let i = 0; i < 3; i++) {
       const ot = this._tl(20, BY + 40 + i * 24,
-        'font:8px/1.4 "Courier New",Courier,monospace;color:#383828;width:294px;word-break:break-word;pointer-events:none;display:none;'
+        'font:9px/1.4 "Courier New",Courier,monospace;color:#383828;width:294px;word-break:break-word;pointer-events:none;display:none;'
       );
       this.optionTexts.push(ot);
     }
@@ -173,7 +173,7 @@ class BattleScene extends Phaser.Scene {
     this.optionCursor = this.add.graphics().setDepth(22).setVisible(false);
 
     this.specialBtn = this._tl(W - 6, BY + 4,
-      'font:6px/1 "Courier New",Courier,monospace;color:#4444FF;background:#DDDDF8;padding:1px 3px;cursor:pointer;pointer-events:auto;display:none;transform:translateX(-100%);'
+      'font:7px/1 "Courier New",Courier,monospace;color:#4444FF;background:#DDDDF8;padding:1px 3px;cursor:pointer;pointer-events:auto;display:none;transform:translateX(-100%);'
     );
     this.specialBtn.textContent = 'S:Esp.';
     this.specialBtn.addEventListener('click', () => this._useSpecial());

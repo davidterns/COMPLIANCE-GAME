@@ -72,12 +72,12 @@ class VictoryScene extends Phaser.Scene {
     boxG.lineStyle(1, 0xFFD700, 1); boxG.strokeRect(W/2 - 90, 90, 180, 40);
 
     this._tl(0, 101,
-      `font:9px/1 "Courier New",Courier,monospace;color:${score>=80?'#44FF44':'#FF8844'};text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);`,
+      `font:10px/1 "Courier New",Courier,monospace;color:${score>=80?'#44FF44':'#FF8844'};text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);`,
       `PUNTUACIÓN FINAL: ${score}/100`
     );
 
     this._tl(0, 117,
-      `font:7px/1 "Courier New",Courier,monospace;color:${score>=80?'#44FF44':'#FF6644'};text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);`,
+      `font:8px/1 "Courier New",Courier,monospace;color:${score>=80?'#44FF44':'#FF6644'};text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);`,
       score >= 80 ? '&#10003; CERTIFICACIÓN SUPERADA' : '&#10007; No alcanzado (80 mín.)'
     );
 
@@ -94,7 +94,7 @@ class VictoryScene extends Phaser.Scene {
     });
 
     this._tl(0, 150,
-      'font:7px/1 "Courier New",Courier,monospace;color:#AAAAFF;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
+      'font:8px/1 "Courier New",Courier,monospace;color:#AAAAFF;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
       principle.creature + ' · ' + principle.name
     );
 
@@ -102,7 +102,7 @@ class VictoryScene extends Phaser.Scene {
 
     if (!SCORMManager.isAvailable) {
       this._tl(0, 168,
-        'font:7px/1 "Courier New",Courier,monospace;color:#FF8844;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
+        'font:8px/1 "Courier New",Courier,monospace;color:#FF8844;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
         '(Modo standalone)'
       );
     }
@@ -119,11 +119,11 @@ class VictoryScene extends Phaser.Scene {
     [[4,BY+4],[W-10,BY+4],[4,H-10],[W-10,H-10]].forEach(([x,y]) => { bg.fillStyle(0x383828,1); bg.fillRect(x,y,6,6); });
 
     this.nameTag = this._tl(8, BY - 2,
-      'font:bold 7px/1 "Courier New",Courier,monospace;color:#fff;background:#383828;padding:2px 6px;white-space:nowrap;pointer-events:none;display:inline-block;transform:translateY(-100%);'
+      'font:bold 8px/1 "Courier New",Courier,monospace;color:#fff;background:#383828;padding:2px 6px;white-space:nowrap;pointer-events:none;display:inline-block;transform:translateY(-100%);'
     );
 
     this.dialogText = this._tl(8, BY + 8,
-      'font:8px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;'
+      'font:9px/1.5 "Courier New",Courier,monospace;color:#383828;width:304px;word-break:break-word;pointer-events:none;'
     );
 
     this.cursor = this.add.graphics().setDepth(22).setVisible(false);
@@ -165,11 +165,11 @@ class VictoryScene extends Phaser.Scene {
         this._showDialog(GAME_CONTENT.victory.dialogs[this.dialogIdx], GAME_CONTENT.intro.professorName);
       } else {
         this._tl(0, this.H/2 - 10,
-          'font:bold 10px/1 "Courier New",Courier,monospace;color:#FFD700;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
+          'font:bold 11px/1 "Courier New",Courier,monospace;color:#FFD700;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
           '&#161;FORMACIÓN COMPLETADA!'
         );
         this._tl(0, this.H/2 + 8,
-          'font:7px/1 "Courier New",Courier,monospace;color:#AAAAAA;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
+          'font:8px/1 "Courier New",Courier,monospace;color:#AAAAAA;text-align:center;width:320px;pointer-events:none;transform:translateY(-50%);',
           'Puedes cerrar esta ventana.'
         );
       }

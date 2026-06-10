@@ -27,27 +27,27 @@ class StartScene extends Phaser.Scene {
     box.lineStyle(1, 0xFFFFFF, 0.5); box.strokeRect(logoX-128, logoY-38, 256, 76);
 
     this._tlEls.push(TextLayer.add(0, logoY - 26,
-      'font:bold 18px/1 "Courier New",Courier,monospace;color:#FFD700;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;text-align:center;width:320px;pointer-events:none;',
+      'font:bold 20px/1 "Courier New",Courier,monospace;color:#FFD700;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;text-align:center;width:320px;pointer-events:none;',
       GAME_CONTENT.meta.title
     ));
 
     this._tlEls.push(TextLayer.add(0, logoY + 8,
-      'font:9px/1 "Courier New",Courier,monospace;color:#fff;text-align:center;width:320px;pointer-events:none;',
+      'font:10px/1 "Courier New",Courier,monospace;color:#fff;text-align:center;width:320px;pointer-events:none;',
       GAME_CONTENT.meta.subtitle
     ));
 
     this._tlEls.push(TextLayer.add(0, 155,
-      'font:9px/1 "Courier New",Courier,monospace;color:#AAFFAA;text-align:center;width:320px;pointer-events:none;animation:tlBlink 1.2s ease-in-out infinite;',
+      'font:10px/1 "Courier New",Courier,monospace;color:#AAFFAA;text-align:center;width:320px;pointer-events:none;animation:tlBlink 1.2s ease-in-out infinite;',
       'Pulsa  ENTER  para iniciar'
     ));
 
     this._tlEls.push(TextLayer.add(0, H - 32,
-      'font:7px/1.4 "Courier New",Courier,monospace;color:#888;text-align:center;width:320px;pointer-events:none;',
+      'font:8px/1.4 "Courier New",Courier,monospace;color:#888;text-align:center;width:320px;pointer-events:none;',
       '&#x2191;&#x2193;&#x2190;&#x2192; Mover &nbsp; Z/Enter: Hablar &nbsp; A/B/C: Responder'
     ));
 
     this._tlEls.push(TextLayer.add(0, H - 18,
-      `font:7px/1 "Courier New",Courier,monospace;color:${SCORMManager.isAvailable?'#44FF44':'#FF8844'};text-align:center;width:320px;pointer-events:none;`,
+      `font:8px/1 "Courier New",Courier,monospace;color:${SCORMManager.isAvailable?'#44FF44':'#FF8844'};text-align:center;width:320px;pointer-events:none;`,
       SCORMManager.isAvailable ? '&#9679; SCORM conectado' : 'Modo standalone &#8212; SCORM no conectado'
     ));
 
