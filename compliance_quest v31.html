@@ -38,11 +38,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 }
 .gameboy-logo-text{
   font-family:'Press Start 2P',monospace;
-  font-size:5px;color:#c0b0e8;letter-spacing:0;
+  font-size:6px;color:#c0b0e8;letter-spacing:0;
 }
 .gameboy-logo-dot{
   font-family:'Press Start 2P',monospace;
-  font-size:5px;color:#86BC25;
+  font-size:6px;color:#86BC25;
 }
 .screen-housing{background:linear-gradient(135deg,#3a2870,#281858);border-radius:10px 10px 32px 10px;
   padding:10px;margin-bottom:8px;box-shadow:inset 0 4px 8px rgba(0,0,0,.5);}
@@ -58,7 +58,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
 /* MAP */
 #screen-map{background:var(--gb-mid);overflow:hidden;}
-.map-header{background:var(--gb-dark);color:var(--gb-light);font-size:5.5px;padding:4px 6px;position:relative;z-index:30;
+.map-header{background:var(--gb-dark);color:var(--gb-light);font-size:7px;padding:4px 6px;position:relative;z-index:30;
   text-align:center;border-bottom:2px solid var(--gb-mid-dark);}
 .map-area{flex:1;position:relative;overflow:hidden;}
 .gym-node{position:absolute;width:80px;height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
@@ -70,7 +70,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .gym-node:active { transform: scale(.96); }
 /* Gym name tag below building */
 .gym-tag {
-  font-size:5px;color:var(--gb-dark);text-align:center;
+  font-size:6px;color:var(--gb-dark);text-align:center;
   background:rgba(200,215,150,.95);
   border:1px solid var(--gb-dark);border-top:none;
   padding:2px 4px;max-width:80px;line-height:1.5;
@@ -79,17 +79,17 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .gym-roof{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;position:absolute;top:0;left:0;}
 .gym-walls{position:absolute;bottom:0;left:4px;width:32px;height:24px;display:flex;align-items:center;justify-content:center;}
 .gym-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:8px;height:10px;}
-.gym-label{font-size:5.5px;color:var(--gb-dark);text-align:center;background:rgba(200,210,150,.9);
+.gym-label{font-size:7px;color:var(--gb-dark);text-align:center;background:rgba(200,210,150,.9);
   padding:1px 3px;border:1px solid var(--gb-dark);max-width:58px;line-height:1.4;}
 .gym-locked .gym-building{opacity:.5;}.gym-locked .gym-label{color:#666;}
 .badge-check{position:absolute;top:-4px;right:-4px;width:13px;height:13px;border-radius:50%;
-  background:gold;border:1px solid #a07800;font-size:7px;display:flex;align-items:center;justify-content:center;}
+  background:gold;border:1px solid #a07800;font-size:9px;display:flex;align-items:center;justify-content:center;}
 
 /* ── EXCLAMATION BUBBLE (Pokemon-style) ── */
 .gym-exclaim{
   display:none;position:absolute;top:-26px;left:50%;
   transform:translateX(-50%);
-  font-family:'Press Start 2P',monospace;font-size:10px;
+  font-family:'Press Start 2P',monospace;font-size:12.5px;
   color:#fff;background:#1a1a1a;border:2px solid #fff;
   border-radius:3px;padding:1px 5px;line-height:1.4;
   animation:exclaimBounce .35s ease-in-out infinite alternate;
@@ -103,7 +103,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 }
 .npc-label {
   position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
-  font-family:'Press Start 2P',monospace;font-size:4px;
+  font-family:'Press Start 2P',monospace;font-size:5px;
   color:var(--gb-dark);background:rgba(200,220,150,.92);
   border:1px solid var(--gb-dark);padding:1px 3px;
   white-space:nowrap;pointer-events:none;
@@ -111,7 +111,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .npc-exclaim {
   display:none;position:absolute;top:-22px;left:50%;
   transform:translateX(-50%);
-  font-family:'Press Start 2P',monospace;font-size:9px;
+  font-family:'Press Start 2P',monospace;font-size:11px;
   color:#fff;background:#1a1a1a;border:2px solid #fff;
   border-radius:3px;padding:1px 4px;line-height:1.4;
   animation:exclaimBounce .35s ease-in-out infinite alternate;
@@ -124,7 +124,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 /* A-button prompt near gym */
 #map-interact-prompt{
   display:none;position:absolute;z-index:26;
-  font-family:'Press Start 2P',monospace;font-size:5px;
+  font-family:'Press Start 2P',monospace;font-size:6px;
   color:#fff;background:rgba(0,0,0,.82);border:1px solid #86BC25;
   border-radius:2px;padding:2px 5px;pointer-events:none;
   white-space:nowrap;
@@ -133,7 +133,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 /* D-pad arrow buttons */
 .dpad-btn{
   display:flex;align-items:center;justify-content:center;
-  font-size:9px;color:#aaa;
+  font-size:11px;color:#aaa;
   background:transparent;border:none;cursor:pointer;
   position:absolute;z-index:5;
   transition:color .1s,background .1s;
@@ -195,11 +195,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .player-slide-in{animation:slideInFromLeft .55s ease-out forwards;}
 .battle-field{flex:1;position:relative;overflow:hidden;}
 .battle-textbox{background:var(--gb-lightest);border-top:3px solid var(--gb-dark);padding:6px 8px;
-  font-size:5.5px;color:var(--gb-dark);min-height:60px;display:flex;flex-direction:column;
+  font-size:7px;color:var(--gb-dark);min-height:60px;display:flex;flex-direction:column;
   justify-content:space-between;line-height:1.8;}
 .battle-actions{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;}
 .battle-btn{background:var(--gb-mid);border:2px solid var(--gb-dark);color:var(--gb-dark);
-  font-family:'Press Start 2P',monospace;font-size:5.5px;padding:5px 3px;cursor:pointer;
+  font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 3px;cursor:pointer;
   text-align:left;line-height:1.5;}
 .battle-btn:hover{background:var(--gb-dark);color:var(--gb-light);}
 .battle-btn.correct{background:var(--gb-dark);color:#8bff8b;}
@@ -253,7 +253,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   border-radius:2px;outline:none;writing-mode:vertical-lr;cursor:pointer;transform:rotate(180deg);}
 .vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:8px;border-radius:50%;background:#555;cursor:pointer;}
 .next-btn{background:var(--gb-dark);border:2px solid var(--gb-mid-dark);color:var(--gb-light);
-  font-family:'Press Start 2P',monospace;font-size:5px;padding:4px 10px;cursor:pointer;width:100%;margin-top:6px;}
+  font-family:'Press Start 2P',monospace;font-size:6px;padding:4px 10px;cursor:pointer;width:100%;margin-top:6px;}
 .next-btn:hover{background:var(--gb-mid-dark);}
 
 /* ── COMPLIANCE POKEDEX OVERLAY ── */
@@ -265,7 +265,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .pdx-topbar{background:#900;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:3px solid #700;flex-shrink:0;}
 .pdx-lens{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#88ccff,#0044aa);
   border:3px solid #002;box-shadow:0 0 8px #66aaff;}
-.pdx-topbar-title{font-size:7px;color:#ffeeee;flex:1;}
+.pdx-topbar-title{font-size:9px;color:#ffeeee;flex:1;}
 .pdx-lights{display:flex;gap:4px;}
 .pdx-light{width:8px;height:8px;border-radius:50%;}
 .pdx-scroll{overflow-y:auto;flex:1;padding:0;}
@@ -273,8 +273,8 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .pdx-scroll::-webkit-scrollbar-thumb{background:#444;}
 /* Section A: Badges */
 .pdx-section{background:#1a1a1a;margin:8px;border-radius:4px;padding:8px;}
-.pdx-sec-title{font-size:6px;color:var(--deloitte);border-bottom:1px solid #333;padding-bottom:4px;margin-bottom:6px;}
-.pdx-trainer-line{font-size:5px;color:#aaa;margin-bottom:8px;}
+.pdx-sec-title{font-size:7.5px;color:var(--deloitte);border-bottom:1px solid #333;padding-bottom:4px;margin-bottom:6px;}
+.pdx-trainer-line{font-size:6px;color:#aaa;margin-bottom:8px;}
 .pdx-trainer-line span{color:#fff;}
 .pdx-badge-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
 .pdx-badge-slot{background:#111;border:2px solid #333;border-radius:3px;padding:5px 4px;display:flex;align-items:center;gap:4px;}
@@ -282,11 +282,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .pdx-badge-icon{font-size:16px;opacity:.2;}
 .pdx-badge-slot.earned .pdx-badge-icon{opacity:1;}
 .pdx-badge-info{flex:1;}
-.pdx-badge-name{font-size:4px;color:#666;line-height:1.6;}
+.pdx-badge-name{font-size:5px;color:#666;line-height:1.6;}
 .pdx-badge-slot.earned .pdx-badge-name{color:#c8c800;}
-.pdx-badge-status{font-size:4px;color:#444;margin-top:1px;}
+.pdx-badge-status{font-size:5px;color:#444;margin-top:1px;}
 .pdx-badge-slot.earned .pdx-badge-status{color:#88ff88;}
-.pdx-count-line{font-size:5px;color:#888;text-align:center;margin-top:6px;}
+.pdx-count-line{font-size:6px;color:#888;text-align:center;margin-top:6px;}
 .pdx-count-line span{color:gold;}
 /* Section B: Policies */
 .pdx-policy-list{display:flex;flex-direction:column;gap:5px;}
@@ -296,23 +296,23 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .pdx-policy-item.locked{opacity:.35;cursor:default;}
 .pdx-policy-icon{font-size:14px;}
 .pdx-policy-info{flex:1;}
-.pdx-policy-name{font-size:6px;color:#c8c800;line-height:1.8;}
+.pdx-policy-name{font-size:7.5px;color:#c8c800;line-height:1.8;}
 .pdx-policy-item.locked .pdx-policy-name{color:#555;}
-.pdx-policy-sub{font-size:5px;color:#666;margin-top:2px;}
-.pdx-empty{font-size:4px;color:#555;text-align:center;padding:8px;}
+.pdx-policy-sub{font-size:6px;color:#666;margin-top:2px;}
+.pdx-empty{font-size:5px;color:#555;text-align:center;padding:8px;}
 .pdx-close{background:#700;border:2px solid #500;color:#ff9999;font-family:'Press Start 2P',monospace;
-  font-size:5px;padding:6px;cursor:pointer;width:100%;flex-shrink:0;}
+  font-size:6px;padding:6px;cursor:pointer;width:100%;flex-shrink:0;}
 .pdx-close:hover{background:#500;}
 /* Policy popup */
 #policy-popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;
   align-items:center;justify-content:center;padding:15px;}
 .pp-box{background:#1a1a1a;border:3px solid var(--deloitte);border-radius:6px;
   padding:14px;max-width:310px;width:100%;font-family:'Press Start 2P',monospace;}
-.pp-title{font-size:7px;color:var(--deloitte);margin-bottom:8px;line-height:1.8;}
+.pp-title{font-size:9px;color:var(--deloitte);margin-bottom:8px;line-height:1.8;}
 .pp-icon{font-size:28px;text-align:center;margin-bottom:8px;}
-.pp-desc{font-size:6.5px;color:#ccc;line-height:2.1;}
+.pp-desc{font-size:8px;color:#ccc;line-height:2.1;}
 .pp-close{background:var(--deloitte-dark);border:2px solid var(--deloitte);color:#fff;
-  font-family:'Press Start 2P',monospace;font-size:5px;padding:5px;cursor:pointer;width:100%;margin-top:10px;}
+  font-family:'Press Start 2P',monospace;font-size:6px;padding:5px;cursor:pointer;width:100%;margin-top:10px;}
 
 /* Trainer card overlay (kept minimal, hidden from main flow) */
 #trainer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;}
@@ -361,11 +361,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             <!-- Deloitte green dot logo -->
             <div style="display:flex;gap:4px;align-items:center;margin-bottom:2px;">
               <div style="width:8px;height:8px;border-radius:50%;background:#86BC25;box-shadow:0 0 6px #86BC25;"></div>
-              <div style="font-size:5px;color:#86BC25;letter-spacing:1px;">DELOITTE</div>
+              <div style="font-size:6px;color:#86BC25;letter-spacing:1px;">DELOITTE</div>
             </div>
-            <div style="font-size:7px;color:var(--gb-lightest);text-align:center;line-height:2;">★ COMPLIANCE ★</div>
+            <div style="font-size:9px;color:var(--gb-lightest);text-align:center;line-height:2;">★ COMPLIANCE ★</div>
             <div style="font-size:14px;color:var(--gb-light);text-shadow:2px 2px 0 var(--gb-mid-dark);">QUEST</div>
-            <div style="font-size:4px;color:var(--gb-mid);text-align:center;margin-top:1px;">La Aventura del Cumplimiento</div>
+            <div style="font-size:5px;color:var(--gb-mid);text-align:center;margin-top:1px;">La Aventura del Cumplimiento</div>
             <!-- Hero trainer front sprite – green suit + DELOITTE cap -->
             <svg viewBox="0 0 12 16" width="48" height="64" style="image-rendering:pixelated;margin:3px 0;">
               <!-- Cap – Deloitte green with stripe and dot -->
@@ -409,8 +409,8 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
               <rect x="2" y="15" width="3" height="1" fill="#282828"/>
               <rect x="7" y="15" width="3" height="1" fill="#282828"/>
             </svg>
-            <div style="font-size:5px;color:var(--gb-mid);animation:blink 1s step-end infinite;">PULSA A PARA EMPEZAR</div>
-            <div style="font-size:4px;color:var(--gb-mid-dark);margin-top:3px;">© DELOITTE COMPLIANCE DEPT.</div>
+            <div style="font-size:6px;color:var(--gb-mid);animation:blink 1s step-end infinite;">PULSA A PARA EMPEZAR</div>
+            <div style="font-size:5px;color:var(--gb-mid-dark);margin-top:3px;">© DELOITTE COMPLIANCE DEPT.</div>
           </div>
         </div>
 
@@ -419,9 +419,9 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
           <div style="background:var(--gb-dark);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:12px;">
             <div style="display:flex;gap:4px;align-items:center;">
               <div style="width:8px;height:8px;border-radius:50%;background:#86BC25;box-shadow:0 0 6px #86BC25;"></div>
-              <div style="font-size:5px;color:#86BC25;">DELOITTE</div>
+              <div style="font-size:6px;color:#86BC25;">DELOITTE</div>
             </div>
-            <div style="font-size:5px;color:var(--gb-light);text-align:center;line-height:2.2;">¡Hola! Soy el Prof. LEX.<br>Bienvenido a<br>COMPLIANCE QUEST.<br>¿Cuál es tu nombre?</div>
+            <div style="font-size:6px;color:var(--gb-light);text-align:center;line-height:2.2;">¡Hola! Soy el Prof. LEX.<br>Bienvenido a<br>COMPLIANCE QUEST.<br>¿Cuál es tu nombre?</div>
             <!-- Visible styled input -->
             <input id="name-input"
               type="text"
@@ -430,7 +430,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
               autocomplete="off"
               style="
                 font-family:'Press Start 2P',monospace;
-                font-size:7px;
+                font-size:9px;
                 color:var(--gb-lightest);
                 background:var(--gb-mid-dark);
                 border:2px solid var(--gb-light);
@@ -446,12 +446,12 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
               border:2px solid var(--gb-dark);
               color:var(--gb-dark);
               font-family:'Press Start 2P',monospace;
-              font-size:5px;
+              font-size:6px;
               padding:5px 12px;
               cursor:pointer;
               margin-top:2px;
             ">▶ CONFIRMAR</button>
-            <div style="font-size:4px;color:var(--gb-mid);text-align:center;line-height:2;">O pulsa INTRO / botón START</div>
+            <div style="font-size:5px;color:var(--gb-mid);text-align:center;line-height:2;">O pulsa INTRO / botón START</div>
           </div>
         </div>
 
@@ -475,18 +475,18 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
                 <rect x="6" y="10" width="2" height="5" fill="#86BC25"/>
               </svg>
               <div style="display:flex;flex-direction:column;gap:1px;">
-                <div style="font-size:7px;color:#0a0a0a;letter-spacing:.5px;font-family:'Press Start 2P',monospace;">Prof. LEX</div>
-                <div style="font-size:4.5px;color:#1a4a00;font-family:'Press Start 2P',monospace;">COMPLIANCE QUEST</div>
+                <div style="font-size:9px;color:#0a0a0a;letter-spacing:.5px;font-family:'Press Start 2P',monospace;">Prof. LEX</div>
+                <div style="font-size:5.5px;color:#1a4a00;font-family:'Press Start 2P',monospace;">COMPLIANCE QUEST</div>
               </div>
             </div>
             <!-- Text fills full width, zero horizontal padding -->
             <div style="flex:1;padding:6px 0 4px 0;overflow-y:auto;overflow-x:hidden;width:100%;">
-              <div id="intro-text" style="font-size:6px;color:var(--gb-lightest);line-height:2.3;padding:0 4px;box-sizing:border-box;width:100%;"></div>
+              <div id="intro-text" style="font-size:7.5px;color:var(--gb-lightest);line-height:2.3;padding:0 4px;box-sizing:border-box;width:100%;"></div>
             </div>
             <!-- Bottom bar -->
             <div style="background:var(--gb-mid-dark);padding:3px 8px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
-              <div id="intro-prompt" style="font-size:5px;color:var(--gb-light);animation:blink 1s step-end infinite;display:none;">▶ PULSA A / ENTER</div>
-              <div id="intro-skip" style="font-size:4px;color:var(--gb-mid);cursor:pointer;" onclick="skipIntro()">SALTAR ▶▶</div>
+              <div id="intro-prompt" style="font-size:6px;color:var(--gb-light);animation:blink 1s step-end infinite;display:none;">▶ PULSA A / ENTER</div>
+              <div id="intro-skip" style="font-size:5px;color:var(--gb-mid);cursor:pointer;" onclick="skipIntro()">SALTAR ▶▶</div>
             </div>
           </div>
         </div>
@@ -1341,7 +1341,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
                 <rect x="1" y="10" width="8" height="1" fill="#888"/>
                 <rect x="1" y="12" width="6" height="1" fill="#888"/>
               </svg>
-              <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:4px;color:#c00;background:#fff;padding:1px 2px;border:1px solid #c00;white-space:nowrap;font-family:'Press Start 2P',monospace;animation:blink .8s step-end infinite;">📰</div>
+              <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:5px;color:#c00;background:#fff;padding:1px 2px;border:1px solid #c00;white-space:nowrap;font-family:'Press Start 2P',monospace;animation:blink .8s step-end infinite;">📰</div>
             </div>
 
             <!-- Badges bar -->
@@ -1359,7 +1359,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             <div id="enemy-speech" style="display:none;position:absolute;top:4px;right:78px;
               max-width:140px;background:var(--gb-lightest);border:2px solid var(--gb-dark);
               border-radius:4px 4px 0 4px;padding:4px 6px;z-index:20;
-              font-family:'Press Start 2P',monospace;font-size:5px;color:var(--gb-dark);
+              font-family:'Press Start 2P',monospace;font-size:6px;color:var(--gb-dark);
               line-height:2;box-shadow:2px 2px 0 var(--gb-dark);">
               <!-- Tail pointing right toward enemy -->
               <div style="position:absolute;right:-8px;top:8px;width:0;height:0;
@@ -1595,18 +1595,18 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 
             <!-- Enemy HP box: TOP-RIGHT (opposite from enemy sprite which is top-left) -->
             <div id="enemy-hpbox">
-              <div style="font-size:5px;color:var(--gb-dark);" id="enemy-name-disp">LÍDER</div>
-              <div style="font-size:4px;color:var(--gb-dark);margin:2px 0;">PV</div>
+              <div style="font-size:6px;color:var(--gb-dark);" id="enemy-name-disp">LÍDER</div>
+              <div style="font-size:5px;color:var(--gb-dark);margin:2px 0;">PV</div>
               <div class="hp-bar-outer"><div id="enemy-hp-bar" class="hp-bar-inner" style="width:100%;background:var(--hp-green);"></div></div>
-              <div style="font-size:4px;color:var(--gb-dark);margin-top:2px;" id="enemy-hp-text">10/10</div>
+              <div style="font-size:5px;color:var(--gb-dark);margin-top:2px;" id="enemy-hp-text">10/10</div>
             </div>
 
             <!-- Player HP box: BOTTOM-LEFT (opposite from player sprite which is bottom-right) -->
             <div id="player-hpbox">
-              <div style="font-size:5px;color:var(--gb-dark);" id="player-name-disp">LÍDER ÉTICO</div>
-              <div style="font-size:4px;color:var(--gb-dark);margin:2px 0;">PV</div>
+              <div style="font-size:6px;color:var(--gb-dark);" id="player-name-disp">LÍDER ÉTICO</div>
+              <div style="font-size:5px;color:var(--gb-dark);margin:2px 0;">PV</div>
               <div class="hp-bar-outer"><div id="player-hp-bar" class="hp-bar-inner" style="width:100%;background:var(--hp-green);"></div></div>
-              <div style="font-size:4px;color:var(--gb-dark);margin-top:2px;" id="player-hp-text">10/10</div>
+              <div style="font-size:5px;color:var(--gb-dark);margin-top:2px;" id="player-hp-text">10/10</div>
             </div>
           </div>
           <div class="battle-textbox" id="battle-textbox">
@@ -1616,7 +1616,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
           <!-- Explanation box: shown only on wrong answer -->
           <div id="explanation-box" style="display:none;background:#0d0d1a;
             border-top:2px solid #c84000;border-left:3px solid #86BC25;
-            padding:5px 8px 6px 9px;font-family:'Press Start 2P',monospace;font-size:4.5px;
+            padding:5px 8px 6px 9px;font-family:'Press Start 2P',monospace;font-size:5.5px;
             color:#e8e0c8;line-height:2;max-height:70px;overflow-y:auto;">
             <div id="explanation-text"></div>
           </div>
@@ -1626,14 +1626,14 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
         <!-- BADGE EARNED -->
         <div class="game-screen" id="screen-badge">
           <div style="background:var(--gb-dark);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:10px;overflow:hidden;">
-            <div style="display:flex;gap:4px;align-items:center;"><div style="width:6px;height:6px;border-radius:50%;background:#86BC25;"></div><div style="font-size:4px;color:#86BC25;">DELOITTE COMPLIANCE</div></div>
-            <div style="font-size:5px;color:var(--gb-light);text-align:center;line-height:2;" id="badge-title">¡FELICIDADES!</div>
+            <div style="display:flex;gap:4px;align-items:center;"><div style="width:6px;height:6px;border-radius:50%;background:#86BC25;"></div><div style="font-size:5px;color:#86BC25;">DELOITTE COMPLIANCE</div></div>
+            <div style="font-size:6px;color:var(--gb-light);text-align:center;line-height:2;" id="badge-title">¡FELICIDADES!</div>
             <div id="badge-icon" style="font-size:30px;animation:badgeSpin 2s linear infinite;"></div>
-            <div id="badge-name" style="font-size:6px;color:gold;animation:victoryPulse 1.5s ease-in-out infinite;text-align:center;line-height:1.8;"></div>
+            <div id="badge-name" style="font-size:7.5px;color:gold;animation:victoryPulse 1.5s ease-in-out infinite;text-align:center;line-height:1.8;"></div>
             <div style="background:var(--gb-mid-dark);border:1px solid #86BC25;padding:5px 6px;width:100%;border-radius:2px;">
-              <div style="font-size:6px;color:var(--gb-lightest);text-align:center;line-height:2;" id="badge-statement"></div>
+              <div style="font-size:7.5px;color:var(--gb-lightest);text-align:center;line-height:2;" id="badge-statement"></div>
             </div>
-            <button onclick="showGearScreen()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px 10px;cursor:pointer;width:100%;margin-top:6px;">¡VER RECOMPENSA! ▶</button>
+            <button onclick="showGearScreen()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;margin-top:6px;">¡VER RECOMPENSA! ▶</button>
           </div>
         </div>
 
@@ -1643,34 +1643,34 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             <!-- Header bar -->
             <div style="background:#86BC25;padding:4px 8px;display:flex;align-items:center;gap:5px;flex-shrink:0;">
               <div style="width:7px;height:7px;border-radius:50%;background:#fff;animation:blink .8s step-end infinite;"></div>
-              <div style="font-size:5px;color:#0a0a0a;letter-spacing:.5px;">¡NUEVO ACCESORIO!</div>
+              <div style="font-size:6px;color:#0a0a0a;letter-spacing:.5px;">¡NUEVO ACCESORIO!</div>
             </div>
             <!-- Gear name + emoji -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 8px 4px;flex-shrink:0;">
               <div id="gear-emoji" style="font-size:28px;animation:badgeSpin 2s linear infinite;"></div>
-              <div id="gear-name" style="font-size:6px;color:#ffd700;text-align:center;line-height:1.8;text-shadow:0 0 6px #ffd700;"></div>
+              <div id="gear-name" style="font-size:7.5px;color:#ffd700;text-align:center;line-height:1.8;text-shadow:0 0 6px #ffd700;"></div>
             </div>
             <!-- BEFORE → AFTER comparison (bigger sprites) -->
             <div style="display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 8px;background:#0a180a;border-top:1px solid #1a3a1a;border-bottom:1px solid #1a3a1a;flex-shrink:0;">
               <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                <div style="font-size:4px;color:#666;">ANTES</div>
+                <div style="font-size:5px;color:#666;">ANTES</div>
                 <div id="gear-player-before" style="width:48px;height:64px;display:flex;align-items:center;justify-content:center;background:#0f2a0f;border:1px solid #1a3a1a;padding:2px;"></div>
               </div>
               <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
                 <div style="font-size:14px;animation:blink .6s step-end infinite;color:#86BC25;">→</div>
-                <div id="gear-arrow-label" style="font-size:4px;color:#86BC25;text-align:center;">+</div>
+                <div id="gear-arrow-label" style="font-size:5px;color:#86BC25;text-align:center;">+</div>
               </div>
               <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                <div style="font-size:4px;color:#86BC25;font-weight:bold;">AHORA</div>
+                <div style="font-size:5px;color:#86BC25;font-weight:bold;">AHORA</div>
                 <div id="gear-player-after" style="width:48px;height:64px;display:flex;align-items:center;justify-content:center;background:#0a2a0a;border:2px solid #86BC25;padding:2px;box-shadow:0 0 6px rgba(134,188,37,.4);"></div>
               </div>
             </div>
             <!-- Description -->
             <div style="flex:1;padding:5px 10px;overflow-y:auto;">
-              <div id="gear-desc" style="font-size:6px;color:var(--gb-lightest);text-align:center;line-height:2;"></div>
-              <div id="gear-detail" style="font-size:5.5px;color:var(--gb-mid);text-align:center;line-height:2;margin-top:3px;border-top:1px solid #1a3a1a;padding-top:3px;"></div>
+              <div id="gear-desc" style="font-size:7.5px;color:var(--gb-lightest);text-align:center;line-height:2;"></div>
+              <div id="gear-detail" style="font-size:7px;color:var(--gb-mid);text-align:center;line-height:2;margin-top:3px;border-top:1px solid #1a3a1a;padding-top:3px;"></div>
             </div>
-            <button onclick="onBadgeContinue()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px 10px;cursor:pointer;width:100%;flex-shrink:0;">CONTINUAR AL MAPA ▶</button>
+            <button onclick="onBadgeContinue()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;flex-shrink:0;">CONTINUAR AL MAPA ▶</button>
           </div>
         </div>
 
@@ -1680,11 +1680,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
           <div style="background:#f5f0d8;flex:1;display:flex;flex-direction:column;overflow:hidden;">
             <!-- Masthead -->
             <div style="background:#1a1a1a;padding:4px 8px;text-align:center;flex-shrink:0;">
-              <div style="font-family:'Press Start 2P',monospace;font-size:5.5px;color:#f5f0d8;letter-spacing:1px;">THE COMPLIANCE GAZETTE</div>
-              <div style="font-size:8px;color:#888;font-family:serif;">Deloitte · Edición Especial</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#f5f0d8;letter-spacing:1px;">THE COMPLIANCE GAZETTE</div>
+              <div style="font-size:10px;color:#888;font-family:serif;">Deloitte · Edición Especial</div>
             </div>
             <!-- Date -->
-            <div style="background:#e8e0b8;border-bottom:1px solid #bbb;padding:2px 8px;display:flex;justify-content:space-between;font-size:8px;color:#555;flex-shrink:0;">
+            <div style="background:#e8e0b8;border-bottom:1px solid #bbb;padding:2px 8px;display:flex;justify-content:space-between;font-size:10px;color:#555;flex-shrink:0;">
               <span id="news-vol">Vol. I</span><span id="news-date2"></span>
             </div>
             <!-- Scrollable content -->
@@ -1692,24 +1692,24 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
               <!-- Headline -->
               <div style="border-bottom:3px double #1a1a1a;padding-bottom:5px;margin-bottom:5px;">
                 <div id="news-headline" style="font-size:13px;font-weight:bold;color:#1a1a1a;line-height:1.3;"></div>
-                <div id="news-sub" style="font-size:9px;color:#555;margin-top:3px;font-style:italic;"></div>
+                <div id="news-sub" style="font-size:11px;color:#555;margin-top:3px;font-style:italic;"></div>
               </div>
-              <div style="font-size:8px;color:#777;margin-bottom:5px;border-bottom:1px solid #ccc;padding-bottom:3px;">Por la Redacción de Cumplimiento Normativo</div>
+              <div style="font-size:10px;color:#777;margin-bottom:5px;border-bottom:1px solid #ccc;padding-bottom:3px;">Por la Redacción de Cumplimiento Normativo</div>
               <!-- Body -->
-              <div id="news-body" style="font-size:10px;color:#1a1a1a;line-height:1.7;text-align:justify;"></div>
+              <div id="news-body" style="font-size:12.5px;color:#1a1a1a;line-height:1.7;text-align:justify;"></div>
               <!-- Statement box -->
-              <div id="news-stmt" style="margin-top:8px;background:#1a1a1a;padding:8px 10px;border-left:3px solid #c8a000;font-size:9px;color:#ffd700;font-style:italic;line-height:1.6;font-family:Georgia,serif;"></div>
+              <div id="news-stmt" style="margin-top:8px;background:#1a1a1a;padding:8px 10px;border-left:3px solid #c8a000;font-size:11px;color:#ffd700;font-style:italic;line-height:1.6;font-family:Georgia,serif;"></div>
             </div>
-            <button onclick="onNewsContinue()" style="background:#1a1a1a;border:none;border-top:2px solid #555;color:#f5f0d8;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px;cursor:pointer;width:100%;flex-shrink:0;">CONTINUAR ▶</button>
+            <button onclick="onNewsContinue()" style="background:#1a1a1a;border:none;border-top:2px solid #555;color:#f5f0d8;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px;cursor:pointer;width:100%;flex-shrink:0;">CONTINUAR ▶</button>
           </div>
         </div>
 
         <div class="game-screen" id="screen-gameover">
           <div style="background:var(--gb-dark);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;">
-            <div style="font-size:10px;color:#c80000;text-shadow:2px 2px 0 #600000;text-align:center;line-height:1.6;">GAME<br>OVER</div>
-            <div id="gameover-msg" style="font-size:5px;color:var(--gb-mid);text-align:center;line-height:2.2;"></div>
-            <div style="font-size:4px;color:#556655;text-align:center;line-height:2;">Necesitas<br>≥ 4/5 correctas<br>para superarlo.</div>
-            <button onclick="showMap()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px 10px;cursor:pointer;width:100%;">VOLVER AL MAPA ▶</button>
+            <div style="font-size:12.5px;color:#c80000;text-shadow:2px 2px 0 #600000;text-align:center;line-height:1.6;">GAME<br>OVER</div>
+            <div id="gameover-msg" style="font-size:6px;color:var(--gb-mid);text-align:center;line-height:2.2;"></div>
+            <div style="font-size:5px;color:#556655;text-align:center;line-height:2;">Necesitas<br>≥ 4/5 correctas<br>para superarlo.</div>
+            <button onclick="showMap()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;">VOLVER AL MAPA ▶</button>
           </div>
         </div>
 
@@ -1719,7 +1719,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             <!-- Header -->
             <div style="background:#86BC25;padding:4px 8px;display:flex;align-items:center;gap:5px;flex-shrink:0;">
               <div style="width:7px;height:7px;border-radius:50%;background:#fff;"></div>
-              <div style="font-size:4.5px;color:#0a0a0a;">★ COMPLIANCE MASTER ★</div>
+              <div style="font-size:5.5px;color:#0a0a0a;">★ COMPLIANCE MASTER ★</div>
             </div>
             <!-- Prof LEX + Integrimon -->
             <div style="display:flex;gap:8px;padding:5px 8px;flex-shrink:0;align-items:center;">
@@ -1769,15 +1769,15 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
                 <rect x="8" y="4" width="2" height="2" fill="#86BC25"/>
                 <rect x="4" y="1" width="2" height="1" fill="#ffd700" opacity=".8"/>
               </svg>
-              <div style="font-size:4.5px;color:#86BC25;">¡INTEGRIMON<br>te acompaña!</div>
+              <div style="font-size:5.5px;color:#86BC25;">¡INTEGRIMON<br>te acompaña!</div>
             </div>
             <!-- Lex final message -->
             <div style="flex:1;padding:4px 8px;overflow-y:auto;">
-              <div id="win-lex-text" style="font-size:4.5px;color:var(--gb-lightest);line-height:2.1;"></div>
+              <div id="win-lex-text" style="font-size:5.5px;color:var(--gb-lightest);line-height:2.1;"></div>
             </div>
             <!-- Badges -->
             <div id="win-badges" style="display:flex;gap:3px;justify-content:center;padding:3px;flex-shrink:0;font-size:14px;"></div>
-            <button onclick="showMapAfterWin()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px 10px;cursor:pointer;width:100%;flex-shrink:0;">IR AL MAPA ▶ (con Integrimon)</button>
+            <button onclick="showMapAfterWin()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;flex-shrink:0;">IR AL MAPA ▶ (con Integrimon)</button>
           </div>
         </div>
 
@@ -1821,13 +1821,13 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
       <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
         <button onclick="showPokedex()"
           style="background:linear-gradient(135deg,#86BC25,#5a8010);border:1px solid #3a5a08;
-          border-radius:4px;color:#fff;font-family:'Press Start 2P',monospace;font-size:5px;
+          border-radius:4px;color:#fff;font-family:'Press Start 2P',monospace;font-size:6px;
           height:18px;cursor:pointer;width:76%;padding:0 3px;box-shadow:0 2px 0 #2a4006;display:block;margin:0 auto;">
           📋 COMPLIANCE POKÉDEX
         </button>
         <button onclick="showNewsInventory()"
           style="background:linear-gradient(135deg,#4a7010,#2e4808);border:1px solid #1e3004;
-          border-radius:4px;color:#c8e890;font-family:'Press Start 2P',monospace;font-size:5px;
+          border-radius:4px;color:#c8e890;font-family:'Press Start 2P',monospace;font-size:6px;
           height:18px;cursor:pointer;width:76%;padding:0 3px;box-shadow:0 2px 0 #1a2804;display:block;margin:0 auto;">
           📰 COMPLIANCE NEWS
         </button>
@@ -1839,17 +1839,17 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
           <button onclick="handleB()"
             style="width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;
             background:radial-gradient(circle at 40% 35%,#cc3366,#881144);
-            color:white;font-family:'Press Start 2P',monospace;font-size:5px;
+            color:white;font-family:'Press Start 2P',monospace;font-size:6px;
             box-shadow:0 3px 0 #440011;">B</button>
-          <span style="font-size:3px;color:#6a6a5a;">B</span>
+          <span style="font-size:4px;color:#6a6a5a;">B</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
           <button onclick="handleA()"
             style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;
             background:radial-gradient(circle at 40% 35%,#cc3366,#881144);
-            color:white;font-family:'Press Start 2P',monospace;font-size:6px;
+            color:white;font-family:'Press Start 2P',monospace;font-size:7.5px;
             box-shadow:0 3px 0 #440011;">A</button>
-          <span style="font-size:3px;color:#6a6a5a;">A</span>
+          <span style="font-size:4px;color:#6a6a5a;">A</span>
         </div>
       </div>
 
@@ -1864,18 +1864,18 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
     <div id="npc-overlay-header" style="background:#305820;padding:5px 10px;display:flex;align-items:center;gap:8px;">
       <div id="npc-overlay-sprite" style="width:24px;height:32px;flex-shrink:0;"></div>
       <div>
-        <div id="npc-overlay-name" style="font-size:6px;color:#c8e890;"></div>
-        <div style="font-size:4px;color:#86BC25;">Consejo de Compliance</div>
+        <div id="npc-overlay-name" style="font-size:7.5px;color:#c8e890;"></div>
+        <div style="font-size:5px;color:#86BC25;">Consejo de Compliance</div>
       </div>
-      <div id="npc-overlay-pages" style="margin-left:auto;font-size:4px;color:#86BC25;"></div>
+      <div id="npc-overlay-pages" style="margin-left:auto;font-size:5px;color:#86BC25;"></div>
     </div>
     <div style="padding:10px 12px;min-height:64px;">
-      <div id="npc-overlay-text" style="font-size:6px;color:var(--gb-lightest);line-height:2.1;"></div>
+      <div id="npc-overlay-text" style="font-size:7.5px;color:var(--gb-lightest);line-height:2.1;"></div>
     </div>
     <div style="background:#0f2a0f;padding:4px 10px;display:flex;justify-content:flex-end;align-items:center;">
-      <div style="font-size:4px;color:#86BC25;animation:blink 1s step-end infinite;">▶ A / ENTER</div>
+      <div style="font-size:5px;color:#86BC25;animation:blink 1s step-end infinite;">▶ A / ENTER</div>
     </div>
-    <button onclick="closeNpcOverlay()" style="background:#0a0a0a;border:none;border-top:1px solid #333;color:#666;font-family:'Press Start 2P',monospace;font-size:4px;padding:4px;cursor:pointer;width:100%;">[ CERRAR ]</button>
+    <button onclick="closeNpcOverlay()" style="background:#0a0a0a;border:none;border-top:1px solid #333;color:#666;font-family:'Press Start 2P',monospace;font-size:5px;padding:4px;cursor:pointer;width:100%;">[ CERRAR ]</button>
   </div>
 </div>
 
@@ -1933,22 +1933,22 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
         <rect x="18" y="24" width="1" height="3" fill="#f0c878"/>
       </svg>
       <div>
-        <div style="font-size:6px;color:#0a0a0a;">Prof. LEX</div>
-        <div style="font-size:4px;color:#1a4a1a;" id="lex-topic-title">Modelo de Compliance</div>
+        <div style="font-size:7.5px;color:#0a0a0a;">Prof. LEX</div>
+        <div style="font-size:5px;color:#1a4a1a;" id="lex-topic-title">Modelo de Compliance</div>
       </div>
-      <div style="margin-left:auto;font-size:5px;color:#0a0a0a;" id="lex-page-indicator">1/6</div>
+      <div style="margin-left:auto;font-size:6px;color:#0a0a0a;" id="lex-page-indicator">1/6</div>
     </div>
     <!-- Text area -->
     <div style="padding:10px 12px;min-height:80px;">
-      <div id="lex-text" style="font-size:6.5px;color:var(--gb-lightest);line-height:2;"></div>
+      <div id="lex-text" style="font-size:8px;color:var(--gb-lightest);line-height:2;"></div>
     </div>
     <!-- Footer -->
     <div style="background:#0f2a0f;padding:5px 10px;display:flex;justify-content:space-between;align-items:center;">
-      <button onclick="lexPrev()" id="lex-prev-btn" style="background:#1a4a1a;border:1px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:4px;padding:3px 6px;cursor:pointer;">◀ PREV</button>
-      <div style="font-size:4px;color:#86BC25;animation:blink 1s step-end infinite;">A / ENTER ▶</div>
-      <button onclick="lexNext()" style="background:#1a4a1a;border:1px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:4px;padding:3px 6px;cursor:pointer;">NEXT ▶</button>
+      <button onclick="lexPrev()" id="lex-prev-btn" style="background:#1a4a1a;border:1px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:3px 6px;cursor:pointer;">◀ PREV</button>
+      <div style="font-size:5px;color:#86BC25;animation:blink 1s step-end infinite;">A / ENTER ▶</div>
+      <button onclick="lexNext()" style="background:#1a4a1a;border:1px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:3px 6px;cursor:pointer;">NEXT ▶</button>
     </div>
-    <button onclick="closeLex()" style="background:#0a0a0a;border:none;border-top:1px solid #333;color:#666;font-family:'Press Start 2P',monospace;font-size:4px;padding:4px;cursor:pointer;width:100%;">[ CERRAR ]</button>
+    <button onclick="closeLex()" style="background:#0a0a0a;border:none;border-top:1px solid #333;color:#666;font-family:'Press Start 2P',monospace;font-size:5px;padding:4px;cursor:pointer;width:100%;">[ CERRAR ]</button>
   </div>
 </div>
 
@@ -1957,11 +1957,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   <div style="background:#f5f0d8;border:3px solid #1a1a1a;max-width:350px;width:100%;font-family:serif;max-height:92vh;overflow-y:auto;box-shadow:0 0 0 1px #aaa,4px 4px 0 #555;">
     <!-- Masthead -->
     <div style="background:#1a1a1a;padding:6px 10px;text-align:center;border-bottom:2px solid #333;">
-      <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#f5f0d8;letter-spacing:1px;">THE COMPLIANCE GAZETTE</div>
-      <div style="font-size:8px;color:#aaa;margin-top:2px;font-family:serif;">Edición Especial · Deloitte</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#f5f0d8;letter-spacing:1px;">THE COMPLIANCE GAZETTE</div>
+      <div style="font-size:10px;color:#aaa;margin-top:2px;font-family:serif;">Edición Especial · Deloitte</div>
     </div>
     <!-- Date line -->
-    <div style="background:#e8e0b8;border-bottom:1px solid #bbb;padding:3px 10px;display:flex;justify-content:space-between;font-size:9px;color:#555;">
+    <div style="background:#e8e0b8;border-bottom:1px solid #bbb;padding:3px 10px;display:flex;justify-content:space-between;font-size:11px;color:#555;">
       <span>Vol. I · Nº 1</span><span id="news-date">Hoy</span>
     </div>
     <!-- Main headline -->
@@ -1969,16 +1969,16 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
       <div style="font-size:16px;font-weight:bold;color:#1a1a1a;line-height:1.3;font-family:Georgia,serif;">
         Regalos corporativos que cruzaron la línea
       </div>
-      <div style="font-size:10px;color:#555;margin-top:4px;font-style:italic;">
+      <div style="font-size:12.5px;color:#555;margin-top:4px;font-style:italic;">
         Un alto directivo acepta atenciones de un proveedor y desencadena una crisis de reputación
       </div>
     </div>
     <!-- Byline -->
-    <div style="padding:4px 12px;border-bottom:1px solid #ccc;font-size:9px;color:#777;">
+    <div style="padding:4px 12px;border-bottom:1px solid #ccc;font-size:11px;color:#777;">
       Por la Redacción de Cumplimiento Normativo
     </div>
     <!-- Body article -->
-    <div style="padding:10px 12px;font-size:11px;color:#1a1a1a;line-height:1.6;text-align:justify;font-family:Georgia,serif;">
+    <div style="padding:10px 12px;font-size:14px;color:#1a1a1a;line-height:1.6;text-align:justify;font-family:Georgia,serif;">
       <p style="margin-bottom:8px;"><strong>Madrid.</strong> La semana pasada trascendió que D. Rodrigo Expósito, Director de Compras de <em>Indupar S.A.</em>, aceptó a lo largo de dos años más de 18.000 € en atenciones de un proveedor estratégico: entradas a eventos deportivos de lujo, viajes de fin de semana para él y su familia, y cenas en restaurantes de alta gama. En ningún momento declaró estas ventajas a su equipo de Compliance ni solicitó autorización para aceptarlas.</p>
       <p style="margin-bottom:8px;">La irregularidad afloró durante una auditoría interna rutinaria. La investigación reveló que, paralelamente, el Sr. Expósito había adjudicado varios contratos al mismo proveedor por importes significativamente superiores a los ofertados por competidores. El impacto económico estimado para la compañía supera los 400.000 €.</p>
       <p style="margin-bottom:8px;">Las consecuencias no se hicieron esperar: el directivo fue despedido con causa justificada y enfrenta acciones legales por parte de la empresa. El proveedor fue inhabilitado. Pero el daño más difícil de reparar es el reputacional: varios clientes institucionales han solicitado explicaciones formales y al menos dos han revisado a la baja su relación comercial con <em>Indupar S.A.</em></p>
@@ -1986,13 +1986,13 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
     </div>
     <!-- Statement box -->
     <div style="margin:8px 12px 12px;background:#1a1a1a;padding:10px 12px;border-left:4px solid #c8a000;">
-      <div style="font-size:9px;color:#ffd700;font-style:italic;line-height:1.6;font-family:Georgia,serif;">
+      <div style="font-size:11px;color:#ffd700;font-style:italic;line-height:1.6;font-family:Georgia,serif;">
         "Un pequeño incentivo puede convertirse en un gran problema. La transparencia es la mejor defensa frente a la corrupción: no te quedes con la duda y consulta al Líder Ético de Deloitte."
       </div>
     </div>
     <!-- Close button -->
     <div style="padding:8px;border-top:2px solid #1a1a1a;text-align:center;background:#e8e0b8;">
-      <button onclick="closeNewspaper()" style="background:#1a1a1a;border:2px solid #555;color:#f5f0d8;font-family:'Press Start 2P',monospace;font-size:5px;padding:5px 14px;cursor:pointer;">[ CERRAR ]</button>
+      <button onclick="closeNewspaper()" style="background:#1a1a1a;border:2px solid #555;color:#f5f0d8;font-family:'Press Start 2P',monospace;font-size:6px;padding:5px 14px;cursor:pointer;">[ CERRAR ]</button>
     </div>
   </div>
 </div>
@@ -2003,12 +2003,12 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
     <!-- Header -->
     <div style="background:#3a5010;padding:6px 10px;display:flex;align-items:center;gap:6px;flex-shrink:0;">
       <div style="font-size:14px;">📰</div>
-      <div style="font-size:5.5px;color:#d8f0a0;flex:1;">COMPLIANCE NEWS</div>
-      <div style="font-size:4px;color:#8ab040;">Portadas desbloqueadas</div>
+      <div style="font-size:7px;color:#d8f0a0;flex:1;">COMPLIANCE NEWS</div>
+      <div style="font-size:5px;color:#8ab040;">Portadas desbloqueadas</div>
     </div>
     <!-- Grid of 5 newspaper covers -->
     <div id="news-inv-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:10px;overflow-y:auto;flex:1;"></div>
-    <button onclick="hideNewsInventory()" style="background:#2a3808;border:none;border-top:2px solid #3a5010;color:#d8f0a0;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px;cursor:pointer;flex-shrink:0;">[ CERRAR ]</button>
+    <button onclick="hideNewsInventory()" style="background:#2a3808;border:none;border-top:2px solid #3a5010;color:#d8f0a0;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px;cursor:pointer;flex-shrink:0;">[ CERRAR ]</button>
   </div>
 </div>
 
@@ -2040,7 +2040,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
       <!-- SECTION C: ACCESSORIES -->
       <div class="pdx-section">
         <div class="pdx-sec-title">③ ACCESORIOS DEL PERSONAJE</div>
-        <div style="font-size:4px;color:#666;margin-bottom:6px;line-height:1.8;">Se desbloquean al superar cada gimnasio</div>
+        <div style="font-size:5px;color:#666;margin-bottom:6px;line-height:1.8;">Se desbloquean al superar cada gimnasio</div>
         <div id="pdx-gear-list" style="display:flex;flex-direction:column;gap:6px;"></div>
       </div>
     </div>
@@ -2055,23 +2055,23 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
     <div style="background:#86BC25;padding:6px 10px;display:flex;align-items:center;gap:6px;flex-shrink:0;">
       <div id="acc-popup-emoji" style="font-size:18px;"></div>
       <div style="flex:1;">
-        <div id="acc-popup-name" style="font-size:6px;color:#0a0a0a;line-height:1.5;"></div>
-        <div id="acc-popup-gym" style="font-size:4px;color:#1a4a1a;margin-top:1px;"></div>
+        <div id="acc-popup-name" style="font-size:7.5px;color:#0a0a0a;line-height:1.5;"></div>
+        <div id="acc-popup-gym" style="font-size:5px;color:#1a4a1a;margin-top:1px;"></div>
       </div>
     </div>
     <!-- Player preview -->
     <div style="display:flex;justify-content:center;align-items:center;gap:10px;padding:8px 10px;background:#0f1f0f;border-bottom:1px solid #1a3a1a;flex-shrink:0;">
       <div id="acc-popup-player" style="width:48px;height:64px;display:flex;align-items:center;justify-content:center;"></div>
       <div style="flex:1;">
-        <div id="acc-popup-detail" style="font-size:6px;color:#86BC25;line-height:2;"></div>
+        <div id="acc-popup-detail" style="font-size:7.5px;color:#86BC25;line-height:2;"></div>
       </div>
     </div>
     <!-- Compliance link text -->
     <div style="flex:1;overflow-y:auto;padding:8px 10px;">
-      <div style="font-size:5.5px;color:#86BC25;margin-bottom:5px;border-bottom:1px solid #1a3a1a;padding-bottom:3px;">🔗 VÍNCULO CON COMPLIANCE</div>
-      <div id="acc-popup-link" style="font-size:6px;color:#c8e8c0;line-height:2;"></div>
+      <div style="font-size:7px;color:#86BC25;margin-bottom:5px;border-bottom:1px solid #1a3a1a;padding-bottom:3px;">🔗 VÍNCULO CON COMPLIANCE</div>
+      <div id="acc-popup-link" style="font-size:7.5px;color:#c8e8c0;line-height:2;"></div>
     </div>
-    <button onclick="hideAccPopup()" style="background:#0a3a0a;border:none;border-top:2px solid #1a4a1a;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:5px;padding:6px;cursor:pointer;flex-shrink:0;">[ CERRAR ]</button>
+    <button onclick="hideAccPopup()" style="background:#0a3a0a;border:none;border-top:2px solid #1a4a1a;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px;cursor:pointer;flex-shrink:0;">[ CERRAR ]</button>
   </div>
 </div>
 
@@ -3172,7 +3172,7 @@ function updateMap(){
     bc.innerHTML='';
     S.badges.forEach((b,i)=>{
       const d=document.createElement('div');
-      d.style.cssText='width:16px;height:16px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);display:flex;align-items:center;justify-content:center;font-size:10px;';
+      d.style.cssText='width:16px;height:16px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);display:flex;align-items:center;justify-content:center;font-size:12.5px;';
       d.textContent=b?GYMS[i].badgeEmoji:'·';
       if(!b)d.style.color='var(--gb-mid-dark)';
       bc.appendChild(d);
@@ -4056,8 +4056,8 @@ function showNewsInventory(){
       'display:flex;flex-direction:column;align-items:center;gap:4px;'+(earned?'':'opacity:.4;');
     item.innerHTML =
       '<div style="font-size:22px;">'+(earned?'📰':'📄')+'</div>'+
-      '<div style="font-size:3.5px;color:'+(earned?'#d8f0a0':'#555')+';text-align:center;line-height:1.6;">'+gymLabels[i]+'</div>'+
-      '<div style="font-size:3px;color:'+(earned?'#8ab040':'#444')+';">'+(earned?'VER ▶':'Bloqueado')+'</div>';
+      '<div style="font-size:4.5px;color:'+(earned?'#d8f0a0':'#555')+';text-align:center;line-height:1.6;">'+gymLabels[i]+'</div>'+
+      '<div style="font-size:4px;color:'+(earned?'#8ab040':'#444')+';">'+(earned?'VER ▶':'Bloqueado')+'</div>';
     if(earned){
       item.onclick = ()=>{ hideNewsInventory(); openNewsFromInventory(i); };
     }
@@ -4154,12 +4154,12 @@ function showPokedex(){
       ';border-radius:3px;padding:5px 6px;display:flex;align-items:center;gap:6px;'+
       (earned?'cursor:pointer;':'opacity:.35;cursor:default;');
     const svgPreview = earned ? getPlayerSVG(i+1,22,30,false) : getPlayerSVG(0,22,30,false);
-    const hint = earned ? '<div style="font-size:3px;color:#86BC25;margin-top:3px;">▶ Toca para saber más</div>' : '';
+    const hint = earned ? '<div style="font-size:4px;color:#86BC25;margin-top:3px;">▶ Toca para saber más</div>' : '';
     item.innerHTML=`
       <div style="flex-shrink:0;">${svgPreview}</div>
       <div style="flex:1;">
-        <div style="font-size:4px;color:${earned?'#ffd700':'#555'};line-height:1.6;">${acc.emoji} ${acc.name}</div>
-        <div style="font-size:5.5px;color:${earned?'#aaa':'#444'};margin-top:2px;line-height:1.8;">${earned?acc.detail:'Supera el gimnasio para desbloquear'}</div>
+        <div style="font-size:5px;color:${earned?'#ffd700':'#555'};line-height:1.6;">${acc.emoji} ${acc.name}</div>
+        <div style="font-size:7px;color:${earned?'#aaa':'#444'};margin-top:2px;line-height:1.8;">${earned?acc.detail:'Supera el gimnasio para desbloquear'}</div>
         ${hint}
       </div>
     `;
@@ -4303,13 +4303,13 @@ document.addEventListener('keyup',e=>{
     <!-- Header -->
     <div style="background:#1e5010;padding:5px 10px;display:flex;align-items:center;gap:6px;flex-shrink:0;">
       <div style="font-size:14px;">🌿</div>
-      <div id="grass-title" style="font-size:5.5px;color:#a8e040;flex:1;"></div>
+      <div id="grass-title" style="font-size:7px;color:#a8e040;flex:1;"></div>
     </div>
     <!-- Question -->
     <div style="padding:10px;flex:1;overflow-y:auto;">
-      <div id="grass-q" style="font-size:5.5px;color:#c8e8a0;line-height:2.2;margin-bottom:10px;"></div>
+      <div id="grass-q" style="font-size:7px;color:#c8e8a0;line-height:2.2;margin-bottom:10px;"></div>
       <div id="grass-answers" style="display:flex;flex-direction:column;gap:4px;"></div>
-      <div id="grass-exp" style="font-size:4.5px;line-height:2;margin-top:8px;min-height:20px;"></div>
+      <div id="grass-exp" style="font-size:5.5px;line-height:2;margin-top:8px;min-height:20px;"></div>
     </div>
   </div>
 </div>
