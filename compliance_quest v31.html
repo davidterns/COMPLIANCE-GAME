@@ -90,10 +90,11 @@ body.fullscreen-mode .game-controls>div{align-items:flex-end;}
   color:var(--gb-light);font-family:'Press Start 2P',monospace;font-size:7px;cursor:pointer;padding:0;white-space:nowrap;}
 .map-header-btn:hover{color:#fff;}
 body.fullscreen-mode .map-header-actions{display:flex;gap:10px;}
-body.fullscreen-mode .map-header-title{text-align:center;}
+body.fullscreen-mode .map-header{justify-content:center;gap:24px;}
+body.fullscreen-mode .map-header-title{flex:none;text-align:center;}
 body.fullscreen-mode .map-header-title,
 body.fullscreen-mode .map-header-btn{font-size:5px;}
-body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
+body.fullscreen-mode .game-controls .hud-green-buttons{display:none!important;}
 .map-area{flex:1;position:relative;overflow:hidden;}
 .gym-node{position:absolute;width:80px;height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .gym-building{width:40px;height:36px;position:relative;transition:transform .15s;}
@@ -1806,17 +1807,17 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
       <div style="display:flex;gap:6px;align-items:flex-end;flex-shrink:0;">
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
           <button onclick="handleB()"
-            style="width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;
+            style="width:27px;height:27px;border-radius:50%;border:none;cursor:pointer;
             background:radial-gradient(circle at 40% 35%,#cc3366,#881144);
-            color:white;font-family:'Press Start 2P',monospace;font-size:6px;
+            color:white;font-family:'Press Start 2P',monospace;font-size:7px;
             box-shadow:0 3px 0 #440011;">B</button>
           <span style="font-size:4px;color:#6a6a5a;">B</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
           <button onclick="handleA()"
-            style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;
+            style="width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
             background:radial-gradient(circle at 40% 35%,#cc3366,#881144);
-            color:white;font-family:'Press Start 2P',monospace;font-size:7.5px;
+            color:white;font-family:'Press Start 2P',monospace;font-size:9px;
             box-shadow:0 3px 0 #440011;">A</button>
           <span style="font-size:4px;color:#6a6a5a;">A</span>
         </div>
