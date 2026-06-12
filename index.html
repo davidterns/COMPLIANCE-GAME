@@ -102,11 +102,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   z-index:15;cursor:pointer;
 }
 .npc-label {
-  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);
   font-family:'Press Start 2P',monospace;font-size:5px;
   color:var(--gb-dark);background:rgba(200,220,150,.92);
   border:1px solid var(--gb-dark);padding:1px 3px;
-  white-space:nowrap;pointer-events:none;
+  white-space:nowrap;pointer-events:none;text-align:center;
 }
 .npc-exclaim {
   display:none;position:absolute;top:-22px;left:50%;
@@ -213,7 +213,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
    (label sits UNDER the player sprite; player bottom edge = 28px+92px above bottom = field bottom minus label) */
 #enemy-hpbox{
   position:absolute;
-  top:76px;           /* just below enemy sprite (top:4 + h:70 + 2px gap) */
+  top:64px;           /* raised slightly so it doesn't crowd the question textbox below */
   right:4px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
@@ -223,7 +223,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 }
 #player-hpbox{
   position:absolute;
-  bottom:2px;         /* sits at the very bottom of the field, BELOW player sprite */
+  bottom:8px;         /* gap above the question textbox to avoid overlap/clipping */
   left:6px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
@@ -1137,23 +1137,23 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
 
             <!-- NPC 1: MARINA – Empleada -->
-            <div id="map-npc-1" class="map-npc" style="left:472px;top:256px;" onclick="npcInteract(1)">
+            <div id="map-npc-1" class="map-npc" style="left:476px;top:128px;" onclick="npcInteract(1)">
               <div id="npc-exclaim-1" class="npc-exclaim">?</div>
-              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABpklEQVR4nH1TIXLDMBBcdwoM3ScIJixhDRRsmb8QmDCHJWUOk5lonlCzForFZQ5TWPyEhKXsCjSnWrLbm9FYPt3urPZOwEikmaA0E7RS77RS737P+TFMMkYyX0jM5AsA4FBusNwpf34yn2gbg+9bF2AfxkgYAADLncKh3AS5+UIiVpbERFzI0TYGf+X6qgJFcWHbGNwbjXujg9y/sZWSyH5Qmong21/x2VZKf71Q0bXz23ujkUxffz2YvuLe6NFaAHgEnDdV2wFvNWyZD4pisC1z7N5qVG2HNBP0fesSbxYbXcwFlvkMACBmIuDpTo7oUJ9QtW7Phid9Ej7YSklMFsehPmFvTBJjvBo+UEoTEZG1lrZSBstaS0RESmmKccEcKaWpeAbOT25mJpMJ1lUNANBFjvP57PJXg+oL2GzWg5fh2n/UdNEFpZkgVtYPpTSlmaCLLoiOOmh/wiTsyXTnFPAk85vj58EDacs88MxLY/aq7QYkHH2yYu46ujdmeD0mtNZ6+WwoX5ubMAqOwneHfen7Za0lAAOiMVkEAFI6D4xxnsX/MfYHwatQmRwKHIwAAAAASUVORK5CYII=" width="36" height="36" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;" alt="Marina"/>
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABpklEQVR4nH1TIXLDMBBcdwoM3ScIJixhDRRsmb8QmDCHJWUOk5lonlCzForFZQ5TWPyEhKXsCjSnWrLbm9FYPt3urPZOwEikmaA0E7RS77RS737P+TFMMkYyX0jM5AsA4FBusNwpf34yn2gbg+9bF2AfxkgYAADLncKh3AS5+UIiVpbERFzI0TYGf+X6qgJFcWHbGNwbjXujg9y/sZWSyH5Qmong21/x2VZKf71Q0bXz23ujkUxffz2YvuLe6NFaAHgEnDdV2wFvNWyZD4pisC1z7N5qVG2HNBP0fesSbxYbXcwFlvkMACBmIuDpTo7oUJ9QtW7Phid9Ej7YSklMFsehPmFvTBJjvBo+UEoTEZG1lrZSBstaS0RESmmKccEcKaWpeAbOT25mJpMJ1lUNANBFjvP57PJXg+oL2GzWg5fh2n/UdNEFpZkgVtYPpTSlmaCLLoiOOmh/wiTsyXTnFPAk85vj58EDacs88MxLY/aq7QYkHH2yYu46ujdmeD0mtNZ6+WwoX5ubMAqOwneHfen7Za0lAAOiMVkEAFI6D4xxnsX/MfYHwatQmRwKHIwAAAAASUVORK5CYII=" width="31" height="31" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;transform:translateX(-4px);" alt="Marina"/>
               <div class="npc-label">MARINA</div>
             </div>
 
             <!-- NPC 2: ROBERTO – Empleado nuevo -->
-            <div id="map-npc-2" class="map-npc" style="left:152px;top:320px;" onclick="npcInteract(2)">
+            <div id="map-npc-2" class="map-npc" style="left:120px;top:320px;" onclick="npcInteract(2)">
               <div id="npc-exclaim-2" class="npc-exclaim">?</div>
-              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAABwElEQVR4nI2ToXbiQBSGv+FUVNJHYN3giCurduqoYx+ButaBS1Zt6qgDl9h14JCkalOXOHDMI1CJuyvoTDPA7tn/nJzcM/nnu/9kZhQfGrYRANPV9HWHcmspNltMVwMEYwDLd5Sbq04BTn3doalya319CvK0SyBnvjT21yROpqt5zKZBkvnDxAOcHKjlAItyhXs/laEZ4KncBp5m89byHaUjA/uPNe8tslmhuvceoLr3yGYVeHRkfJIrgOeiUIBM0zG2tnR6EJtPsKttbZmmY5IfSzcHgJYr6utbJsmL757+HF6sJ8kL9fXt2XIZDGIREcmytQzbyKyvZTcbB8+sr2XYRrJsLSIig0HsN+PKJ6mP0Rf747fvNypotNgLj0CeF957lqKqdlJVO99JRHwKpyxbe18zTat3eINyTlWF9LtEkS9r8mXNXXKSavIA5Zze4e3zx9raYn89AzAaGfK8oHqFQ1xwiI91nheMRsaDbGNJCiA2RgC2VUFS7Oj1Otx8VUTfjqbqFfa/hbq2pOYLOjrC3Daf3Z3/VfPu+HOiI8M0HQdGHRnf1WmajgNAkMSlaYLc4Tsd+yfEgU4jXxpr6g+/Sh4CCQfXQQAAAABJRU5ErkJggg==" width="34" height="36" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;" alt="Roberto"/>
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAABwElEQVR4nI2ToXbiQBSGv+FUVNJHYN3giCurduqoYx+ButaBS1Zt6qgDl9h14JCkalOXOHDMI1CJuyvoTDPA7tn/nJzcM/nnu/9kZhQfGrYRANPV9HWHcmspNltMVwMEYwDLd5Sbq04BTn3doalya319CvK0SyBnvjT21yROpqt5zKZBkvnDxAOcHKjlAItyhXs/laEZ4KncBp5m89byHaUjA/uPNe8tslmhuvceoLr3yGYVeHRkfJIrgOeiUIBM0zG2tnR6EJtPsKttbZmmY5IfSzcHgJYr6utbJsmL757+HF6sJ8kL9fXt2XIZDGIREcmytQzbyKyvZTcbB8+sr2XYRrJsLSIig0HsN+PKJ6mP0Rf747fvNypotNgLj0CeF957lqKqdlJVO99JRHwKpyxbe18zTat3eINyTlWF9LtEkS9r8mXNXXKSavIA5Zze4e3zx9raYn89AzAaGfK8oHqFQ1xwiI91nheMRsaDbGNJCiA2RgC2VUFS7Oj1Otx8VUTfjqbqFfa/hbq2pOYLOjrC3Daf3Z3/VfPu+HOiI8M0HQdGHRnf1WmajgNAkMSlaYLc4Tsd+yfEgU4jXxpr6g+/Sh4CCQfXQQAAAABJRU5ErkJggg==" width="29" height="31" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;" alt="Roberto"/>
               <div class="npc-label">ROBERTO</div>
             </div>
 
             <!-- NPC 3: ELENA – Directora senior -->
-            <div id="map-npc-3" class="map-npc" style="left:120px;top:72px;" onclick="npcInteract(3)">
+            <div id="map-npc-3" class="map-npc" style="left:480px;top:340px;" onclick="npcInteract(3)">
               <div id="npc-exclaim-3" class="npc-exclaim">?</div>
-              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAYAAAA/mJfHAAABqklEQVR4nIWSLXejUBCGH/ZUILuO1CEjQbKO/oPKSIgjLnWp3FVbHHEBGRkX2TiQ4FIX3CaulbhZQS8LBLJzDoeZOzPvvPOhMSKBo8vS08fcAIRJxTqrtJtBgaOLHE2RoymBo0vg6HLa3Mtpc9/Ybb/K+zYGWGYfjb70dMKkIkwq2mzbMQB3txgu5mei36/w3SRy/r1H05LF/Jn/jYGV64oc93UraSRy3A9/afTV7l5WrivjbX6UHfNlEQ7q/djOJtQG462N/2QBYFom2o8FkkZ1wpdeFjVIvCvwZzlhUg0z+6wy4l0BQFmUDRBwBfRZZePMlK4YAg1LJaqQYjQI1gedZVMcyXl5fOz4f769kWk2W+cd4Pbh+kwkxZIUS5ScoqWcomVjK7/PREaBVq57ldCX/rs6Da0P1GwxeGWuPaBbBivT7hT8VeZUxYWN/KFcPzdzvOpVVbkc3vEwANhaYNkTAIr8zKyePwkXDHdaFzgctNHB+UzEw8B8qlmVu7yjK7CYc4MxeGdDQO2/evcwaC/gJrMccCwDy56wjuveAt+iyM9kxQUbOsz+AsiRMfWqPqkBAAAAAElFTkSuQmCC" width="40" height="36" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;" alt="Elena"/>
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAYAAAA/mJfHAAABqklEQVR4nIWSLXejUBCGH/ZUILuO1CEjQbKO/oPKSIgjLnWp3FVbHHEBGRkX2TiQ4FIX3CaulbhZQS8LBLJzDoeZOzPvvPOhMSKBo8vS08fcAIRJxTqrtJtBgaOLHE2RoymBo0vg6HLa3Mtpc9/Ybb/K+zYGWGYfjb70dMKkIkwq2mzbMQB3txgu5mei36/w3SRy/r1H05LF/Jn/jYGV64oc93UraSRy3A9/afTV7l5WrivjbX6UHfNlEQ7q/djOJtQG462N/2QBYFom2o8FkkZ1wpdeFjVIvCvwZzlhUg0z+6wy4l0BQFmUDRBwBfRZZePMlK4YAg1LJaqQYjQI1gedZVMcyXl5fOz4f769kWk2W+cd4Pbh+kwkxZIUS5ScoqWcomVjK7/PREaBVq57ldCX/rs6Da0P1GwxeGWuPaBbBivT7hT8VeZUxYWN/KFcPzdzvOpVVbkc3vEwANhaYNkTAIr8zKyePwkXDHdaFzgctNHB+UzEw8B8qlmVu7yjK7CYc4MxeGdDQO2/evcwaC/gJrMccCwDy56wjuveAt+iyM9kxQUbOsz+AsiRMfWqPqkBAAAAAElFTkSuQmCC" width="34" height="31" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;transform:translateX(-5px);" alt="Elena"/>
               <div class="npc-label">ELENA</div>
             </div>
 
@@ -1329,7 +1329,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
 
             <!-- Player sprite: BOTTOM-LEFT of field -->
-            <div id="player-sprite" style="position:absolute;bottom:26px;left:6px;width:62px;height:76px;">
+            <div id="player-sprite" style="position:absolute;bottom:26px;left:6px;width:66px;height:70px;">
               <svg viewBox="0 0 38 56" width="76" height="92" style="image-rendering:pixelated;">
                 <!-- ══ DELOITTE LÍDER ÉTICO ══ -->
 
@@ -1902,6 +1902,10 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
       <div class="pdx-section">
         <div class="pdx-sec-title">③ ACCESORIOS DEL PERSONAJE</div>
         <div style="font-size:5px;color:#666;margin-bottom:6px;line-height:1.8;">Se desbloquean al superar cada gimnasio</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;background:#111;border:2px solid #333;border-radius:3px;padding:6px;margin-bottom:6px;">
+          <div id="pdx-avatar"></div>
+          <div id="pdx-avatar-companion" style="font-size:20px;"></div>
+        </div>
         <div id="pdx-gear-list" style="display:flex;flex-direction:column;gap:6px;"></div>
       </div>
     </div>
@@ -2142,7 +2146,7 @@ const NPC_DATA = [
            'Es confidencial y anónimo.\nPuedes reportar conductas\ncontrarias a la ética.',
            'La empresa protege al\ndenunciante de represalias.',
            '¡Hablar no es delatar!\nEs proteger a todos\ny a la empresa.'] },
-  { id:2, name:'ROBERTO', x:152, y:320,
+  { id:2, name:'ROBERTO', x:120, y:320,
     lines:['¡Soy nuevo en la empresa!\nEstoy aprendiendo sobre\nCompliance.',
            '¿Sabías que el Código de\nConducta me obliga desde\nel primer día?',
            'Cada empleado es parte\ndel sistema de Compliance.\n¡Incluido yo!',
@@ -2522,7 +2526,7 @@ const PLAYER_IMG = {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAClUlEQVR4nIWUT0gUURzHPxOyLbJBwiJrhAx6GcTDsGZIbLn9u3SIQRRJwgbr4NE9+IdAISUwKPK4QciUBnsQm5MECW7eVmhbMHQJjQ0Kt2URWTyYh16H3Rl2dmfoBw/mvd/vfd73936/NxIuphMSbuuWGeQlL1+DG0wnhKyprhtyZgZAeEHPuC16wQCOTIPt4QvohMTp9m5dJg6Fljov88fjzE1cYbpvEfrgaddtT4WiMgA7rTqYZXOrIwCMXO3hTaDNobL6HoROCC+FR6ZRB1z91UYylebB8XebYyvs0fpZa5EwyLsCq226b5EXb/+6+hwKm1taALhzUM6iWq2l8Lym22sbviJPTn86qm1NbFi1WWAve7W1xtnLYQfQqrJUOCjvtsCbk4PIqkzrvWdsTg4CoIwtkF0YA8BwKRw4+1CqgB0BFkxWZaaiUWRVxjAzfGwtuQLdul1cn71Fae8QgHfhaw6nYWZI3WhgY2adP1tpz5Rt2MDKkD0p7R2ivb/EfKwTTVPpGg7zOZmmPa+4qqtNGYClTmc7zMc6ATDNDG13FQZWhtjPZunR+olEIv8HfphKsLSeprR3SIOUQKt618WdAsWdgqc6h7UrimhXFEH5Dq2nKJTeZfu7azgsAHEyWo7r9jWKWblDzModdn9JFmw/m3U9SOldtr+zn+4DcDKq4I9n6fY1EvEFAGgKBpnJ7UiSBUuiOkCypiKbBmNGEoAFPerw5zSd32tfuPj4IcXnrzHI0xQMAiBMM2P/bXKaLnKabqdpmhl71Mb+uNkvAGKBZpF6NCNigWZht00SlSgZ4Y/HCYX8JFE5Mg1HUWpjfePjxFKbQifESfUdVk6u21iB1Ta/HRvY/8a53a8AJBJxXh4XpH8VVw6l3XzrLwAAAABJRU5ErkJggg==',
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAACLklEQVR4nH2UP2gUQRSHvz2uEKur5M4iLB7IFEGWi8WhYE6xCBYyHAnBIMdiZXk2Jk0kmEYLIWWqsCQRUkSdSgIKOVNpoSwIckWE67IECeEKSeVY3O6yf2b3wcLOmzff/N7Me2ORMZe6zvqS5hFYZfPVLMylji0dY/BI+QC6DFrJOopgAOfK42fvamkWscJIXZFd2txk/fktVrtb0AXknFFpBdDhB8Rp5WCRrb9/AsCanDMqjXbQLnWKFJ4rLwd8N77BmjrIXVIF0G05z8eGhUdgBCZttbvFm+1/hfOxwiuNBgAPTiZZJNVGCmvSjX0egbGErCQsaRG4yIpKpwpYpyeT1RH4aHkR27GZevSao+VFAER/g+FGfwJTPgzMxxPVoRWCU5MRzHZsVjodbMfGUz6fpsbM9FrGFLKy9d2X9xkfnwHwtnUnnWZYUt/uVTl88dm0PtV6emF/KR6Mj8+QH27y6tk0AFI6zPRafN/+ger7HOKUpgzAznS6HIZfHsf/SvlceyhY2F9CSoe2nIdEQ5gUcrCyx05dcPvvZarWHnA9Ffzn16lRldGaQmgmZxi1ohazu1rM7sbj8CL0xVMR+5pC6HBtHmb6ImgSnAQmwQBWUwj9ezhkkDlkWzrYYYf0vQEAnVoNGT5vI+kyUj4i+Mqw3qaDT1MIALRSfvzijKSrR9JN7a6UH8dkY8P9U36tlK8HOBrQQXChAT3ASQal4GWxVmKH3EWF6eWKvyz2P8arGoBm8T4jAAAAAElFTkSuQmCC'
   ],
-  battle: 'data:image/png;base64,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',
+  battle: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAACTklEQVR4nLWWv2sUQRTHvy/EaivNWKwhV6UScRvBQrA5UhqrgyvSnX+Af4qdjekshFTmsAoHIWB3zSpYpTLEK3Zzqa6yeBabN8zvnVX8wrBzs2/eZ96bnTdHyBcHxmjA/OwJDACbT8+8F8V0ORjsGTIzExGlQBFwFnTLWwERAHA9K1HPSlyeXQOAfv6r3FVxPSuDhvsHu7g8u8b+wW7wfTFdgplBRGRkyZMZYRQGQMNSkQokBnOBSZkRJqDsNH9RpnEqwpSefvgVHJeAzbHtkGF1vNL9vkWEYEZGvdRaA0opXry+lwSMP//2xpovTzpnz8+jIJEXYchhSs3FER6+/Ijm4gjAeZ95/kfTq/svpJcsABawbdvBtdEUr06AyNcp8lLati2UUr3OuxTCSGeeYhElV8k/3oadPX6X8pkEAgAvqiL4YlxvLPAdqBeWMvAiDMEFnAOKGebcffaErmBng63SNuDuw83pHh68+mk7C5QyV9axcO8+9ymwelZi5/AK6/nIgjEzYG+HV8jlWOjCrZ3CviGK6TJaVw2YpLgjd+eysyknDID0OZSCLROJCLUTeR9MpJRC8/190H67YzC+vXmkHbiLANK3xno+svazaRrtR6Lk1QmonLD+sxRzKFDzvbmQm9M93TehEjkRaSiVk/7iHVtI6Fyu5yPdRMwMKifA7VcA3Vc6qGBXxyssqgLjegNmxs7hVdJeUitlb4vdHc+QwOTcuVD5bZxLafbBB8IpNPdMUnlX1rz5hrIy5/7r0m1RFfop/aiTv8jaf9Mf764TZS8CwVUAAAAASUVORK5CYII=',
 };
 
 function getPlayerSVG(level, w=24, h=32, forMap=true){
@@ -2553,7 +2557,7 @@ function getPlayerSVG(level, w=24, h=32, forMap=true){
     +`</div>`;
 }
 
-function getBattlePlayerImg(w=62, h=76){
+function getBattlePlayerImg(w=66, h=70){
   return `<div style="position:relative;width:${w}px;height:${h}px;">`
     +`<img src="${PLAYER_IMG.battle}" width="${w}" height="${h}" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;" alt="player"/>`
     +`</div>`;
@@ -2992,7 +2996,7 @@ function startBattle(gymId){
   document.getElementById('enemy-name-disp').textContent=gym.leader;
   document.getElementById('player-name-disp').textContent='LÍDER ÉTICO '+S.name;
   // Player battle sprite is always the same character (no visual progression)
-  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(62, 76);
+  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(66, 70);
   es.style.transform='translateX(130px)'; es.style.opacity='0'; es.style.transition='none';
   ps.style.transform='translateX(-130px)'; ps.style.opacity='0'; ps.style.transition='none';
   const ehp=document.getElementById('enemy-hpbox');
@@ -3562,6 +3566,163 @@ function lexPrev(){
 
 // Check if player is near Prof. LEX
 // ================================================
+// POKEDEX AVATAR — pixel-art oficinista that gets equipped
+// with each accessory as gym badges are earned
+// ================================================
+function getAvatarSVG(){
+  const b = S.badges;
+  const skin='#f5c878', skinShadow='#dba562';
+  const hairColor='#3a2010', hairShadow='#241308';
+  const torsoMain = b[0] ? '#1e3a5f' : '#eef0f2';
+  const torsoShadow = b[0] ? '#16304a' : '#d2d6da';
+  const pantsMain='#4a4f57', pantsShadow='#383c42';
+  const shoeMain='#1c1c1c', shoeHi='#3a3a3a';
+
+  let svg = '<svg viewBox="0 0 24 32" width="96" height="128" style="image-rendering:pixelated;">';
+
+  // sombra en el suelo
+  svg += `<ellipse cx="12" cy="31.5" rx="6.5" ry="1" fill="#000" opacity="0.35"/>`;
+
+  // capa del cumplimiento (gimnasio 3) — detrás del cuerpo
+  if(b[3]){
+    svg += `<polygon points="5,11 19,11 21,30 3,30" fill="#c0392b"/>`;
+    svg += `<polygon points="12,11 19,11 21,30 13,30" fill="#a8332a"/>`;
+    svg += `<polygon points="5,11 19,11 19,13 5,13" fill="#d4af37"/>`;
+    // emblema en la espalda
+    svg += `<circle cx="12" cy="18" r="1.3" fill="#86BC25"/>`;
+    svg += `<circle cx="12" cy="18" r="1.3" fill="none" stroke="#d4af37" stroke-width="0.3"/>`;
+  }
+
+  // zapatos
+  svg += `<rect x="8" y="29" width="4" height="3" fill="${shoeMain}"/>`;
+  svg += `<rect x="12" y="29" width="4" height="3" fill="${shoeMain}"/>`;
+  svg += `<rect x="8" y="29" width="4" height="1" fill="${shoeHi}"/>`;
+  svg += `<rect x="12" y="29" width="4" height="1" fill="${shoeHi}"/>`;
+  // cordones
+  svg += `<rect x="9" y="29.7" width="2" height="0.4" fill="#888"/>`;
+  svg += `<rect x="13" y="29.7" width="2" height="0.4" fill="#888"/>`;
+  // suelas
+  svg += `<rect x="8" y="31.5" width="4" height="0.6" fill="#000"/>`;
+  svg += `<rect x="12" y="31.5" width="4" height="0.6" fill="#000"/>`;
+
+  // piernas
+  svg += `<rect x="8" y="22" width="4" height="7" fill="${pantsMain}"/>`;
+  svg += `<rect x="12" y="22" width="4" height="7" fill="${pantsShadow}"/>`;
+  // pliegue/raya del pantalón
+  svg += `<rect x="9.8" y="22" width="0.4" height="7" fill="${pantsShadow}"/>`;
+  svg += `<rect x="13.8" y="22" width="0.4" height="7" fill="#2e323a"/>`;
+  // bolsillos
+  svg += `<rect x="8" y="22" width="1.5" height="2" fill="${pantsShadow}" opacity="0.6"/>`;
+  svg += `<rect x="14.5" y="22" width="1.5" height="2" fill="#2e323a" opacity="0.6"/>`;
+  // cinturón
+  svg += `<rect x="6" y="21" width="12" height="1" fill="#2a2a2a"/>`;
+  svg += `<rect x="11" y="21" width="2" height="1" fill="#d4af37"/>`;
+
+  // brazos
+  svg += `<rect x="4" y="11" width="2" height="8" fill="${torsoMain}"/>`;
+  svg += `<rect x="18" y="11" width="2" height="8" fill="${torsoShadow}"/>`;
+  // manos
+  svg += `<rect x="4" y="19" width="2" height="2" fill="${skin}"/>`;
+  svg += `<rect x="18" y="19" width="2" height="2" fill="${skin}"/>`;
+
+  // torso
+  svg += `<rect x="6" y="11" width="12" height="10" fill="${torsoMain}"/>`;
+  svg += `<rect x="14" y="11" width="4" height="10" fill="${torsoShadow}"/>`;
+
+  if(b[0]){
+    // solapas de la chaqueta (Traje Azul Corporativo)
+    svg += `<polygon points="9,11 11,11 11,16 9,14" fill="#2d4f7a"/>`;
+    svg += `<polygon points="15,11 13,11 13,16 15,14" fill="#16304a"/>`;
+    // pañuelo de bolsillo
+    svg += `<polygon points="9.3,13 10.3,13 9.8,14" fill="#fff"/>`;
+    // corbata verde Deloitte + pin dorado
+    svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#86BC25"/>`;
+    svg += `<rect x="9" y="14" width="1" height="1" fill="#d4af37"/>`;
+    // gemelos dorados
+    svg += `<rect x="4" y="19" width="1" height="1" fill="#d4af37"/>`;
+    svg += `<rect x="19" y="19" width="1" height="1" fill="#d4af37"/>`;
+  } else {
+    // cuello de camisa + corbata roja sencilla
+    svg += `<polygon points="9,11 11,11 11,14 9,13" fill="#fff"/>`;
+    svg += `<polygon points="15,11 13,11 13,14 15,13" fill="#dcdfe2"/>`;
+    svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#cc3333"/>`;
+    // botones de la camisa
+    svg += `<rect x="11.3" y="14.5" width="0.5" height="0.5" fill="#cfd2d6"/>`;
+    svg += `<rect x="11.3" y="16.5" width="0.5" height="0.5" fill="#cfd2d6"/>`;
+  }
+
+  // cuello
+  svg += `<rect x="10" y="10" width="4" height="1" fill="${skin}"/>`;
+
+  // cara
+  svg += `<rect x="8" y="4" width="8" height="6" fill="${skin}"/>`;
+  svg += `<rect x="14" y="4" width="2" height="6" fill="${skinShadow}"/>`;
+  // cejas
+  svg += `<rect x="9.7" y="6.3" width="1.3" height="0.4" fill="${hairShadow}"/>`;
+  svg += `<rect x="13" y="6.3" width="1.3" height="0.4" fill="${hairShadow}"/>`;
+  // ojos
+  svg += `<rect x="10" y="7" width="1" height="1" fill="#222"/>`;
+  svg += `<rect x="13" y="7" width="1" height="1" fill="#222"/>`;
+  // boca
+  svg += `<rect x="10.7" y="9" width="2.3" height="0.4" fill="#a8633b"/>`;
+
+  // pelo
+  svg += `<rect x="8" y="2" width="8" height="2" fill="${hairColor}"/>`;
+  svg += `<rect x="7" y="4" width="1" height="3" fill="${hairColor}"/>`;
+  svg += `<rect x="16" y="4" width="1" height="3" fill="${hairShadow}"/>`;
+  svg += `<rect x="14" y="2" width="2" height="2" fill="${hairShadow}"/>`;
+  // mechón con brillo
+  svg += `<rect x="9" y="2" width="3" height="0.6" fill="#5a3a1c"/>`;
+
+  // casco plateado de guardián (gimnasio 1) — cubre la cabeza
+  if(b[1]){
+    svg += `<rect x="7" y="1" width="10" height="5" fill="#d4d4d4"/>`;
+    svg += `<rect x="14" y="1" width="3" height="5" fill="#a8a8a8"/>`;
+    svg += `<rect x="7" y="1" width="10" height="0.6" fill="#eef0f2"/>`;
+    svg += `<rect x="7" y="4" width="10" height="1" fill="#4a90d2"/>`;
+    svg += `<rect x="14" y="4" width="3" height="1" fill="#3a76b3"/>`;
+    svg += `<rect x="7" y="5" width="1.2" height="2" fill="#a8a8a8"/>`;
+    svg += `<rect x="15.8" y="5" width="1.2" height="2" fill="#888"/>`;
+    svg += `<circle cx="12" cy="3" r="1" fill="#d4af37"/>`;
+    svg += `<circle cx="12" cy="3" r="1" fill="none" stroke="#a8841f" stroke-width="0.2"/>`;
+  }
+
+  // espada de la imparcialidad (gimnasio 2)
+  if(b[2]){
+    svg += `<g transform="rotate(30 5 18)">`;
+    svg += `<rect x="3.6" y="2" width="1.4" height="14" fill="#e8eef2"/>`;
+    svg += `<rect x="3.6" y="2" width="0.7" height="14" fill="#cfd8dc"/>`;
+    svg += `<rect x="4.55" y="2" width="0.25" height="14" fill="#fff"/>`;
+    svg += `<polygon points="3.6,2 5,2 4.3,0.5" fill="#e8eef2"/>`;
+    svg += `<rect x="1.8" y="15" width="5" height="1.2" fill="#d4af37"/>`;
+    svg += `<rect x="1.8" y="15" width="5" height="0.4" fill="#f0d272"/>`;
+    svg += `<rect x="3.1" y="16" width="2.4" height="3" fill="#8a6d1f"/>`;
+    svg += `<rect x="3.1" y="16" width="0.6" height="3" fill="#a8841f"/>`;
+    svg += `</g>`;
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+function getIntegrimonSVG(){
+  return `<svg viewBox="0 0 16 16" width="40" height="40" style="image-rendering:pixelated;">`
+    +`<circle cx="8" cy="8" r="6" fill="#86BC25" opacity="0.18"/>`
+    +`<polygon points="8,0 10,6 16,8 10,10 8,16 6,10 0,8 6,6" fill="#86BC25"/>`
+    +`<polygon points="8,2 9,7 14,8 9,9 8,14 7,9 2,8 7,7" fill="#d4af37"/>`
+    +`<circle cx="6.5" cy="7" r="0.6" fill="#1c1c1c"/>`
+    +`<circle cx="9.5" cy="7" r="0.6" fill="#1c1c1c"/>`
+    +`<circle cx="13" cy="3" r="1" fill="#fff" opacity="0.8"/>`
+    +`<circle cx="8" cy="8" r="1.5" fill="#fff"/>`
+    +`</svg>`;
+}
+function renderPdxAvatar(){
+  const av=document.getElementById('pdx-avatar');
+  if(av) av.innerHTML=getAvatarSVG();
+  const comp=document.getElementById('pdx-avatar-companion');
+  if(comp) comp.innerHTML = S.badges[4] ? getIntegrimonSVG() : '';
+}
+
+// ================================================
 // COMPLIANCE POKEDEX
 // ================================================
 function showPokedex(){
@@ -3570,6 +3731,7 @@ function showPokedex(){
   document.getElementById('pdx-name').textContent=S.name;
   const earned=S.badges.filter(Boolean).length;
   document.getElementById('pdx-count').textContent=earned;
+  renderPdxAvatar();
   // Section A: badges
   const bg=document.getElementById('pdx-badge-grid');bg.innerHTML='';
   GYMS.forEach((g,i)=>{
