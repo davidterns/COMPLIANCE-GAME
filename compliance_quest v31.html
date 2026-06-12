@@ -30,6 +30,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   position:relative;
   isolation:isolate;
 }
+@media (min-width:500px){
+  body:not(.fullscreen-mode) .gameboy{
+    transform:scale(1.2);transform-origin:center center;
+  }
+}
 .gameboy::before{content:'';}
 .gameboy-logo{
   position:absolute;top:8px;right:14px;
