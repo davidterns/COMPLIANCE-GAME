@@ -2520,7 +2520,7 @@ function showMap(){
   mapActive=false; battleActive=false; victoryActive=false;
   show('map');
   updateMap();
-  document.getElementById('map-header-title').textContent='★ LÍDER ÉTICO '+S.name+' ★';
+  setMapHeaderTitle('★ LÍDER ÉTICO '+S.name+' ★');
   setTimeout(scrollCamera,50);
   setTimeout(()=>{ if(musicMode!=='map') startMapMusic(); }, 200);
   setTimeout(startMapLoop, 100);
@@ -2623,7 +2623,12 @@ function getPlayerSVG(level, w=24, h=32, forMap=true){
   let bob = 0, squashX = 1, squashY = 1;
   if(wf===1 || wf===3){ bob = -2; squashX = 1.06; squashY = 0.92; }
 
-  const animStyle = `position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;transform:translateY(${bob}px) scale(${squashX},${squashY});transform-origin:50% 100%;transition:transform .09s ease-out;`;
+  // Left/right (profile) sprites are narrower (20x21) than down/up (16x21),
+  // so object-fit:contain shrinks them more. Scale them up to match the
+  // visual size of the front/back sprites.
+  const extraScale = (dir==='left' || dir==='right') ? 1.25 : 1;
+
+  const animStyle = `position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;transform:translateY(${bob}px) scale(${squashX*extraScale},${squashY*extraScale});transform-origin:50% 100%;transition:transform .09s ease-out;`;
   const sprite = `<img src="${img}" style="${animStyle}" alt="player"/>`;
   const turnWrap = `<div style="position:absolute;left:0;top:0;width:100%;height:100%;">${sprite}</div>`;
 
@@ -3052,12 +3057,26 @@ function tryEnterNearestGym(){
   openLex();
 }
 
+function setMapHeaderTitle(text){
+  const el = document.getElementById('map-header-title');
+  el.textContent = text;
+  el.style.fontSize = '';
+  requestAnimationFrame(()=>{
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    const minSize = 3;
+    while(el.scrollWidth > el.clientWidth && size > minSize){
+      size -= 0.25;
+      el.style.fontSize = size+'px';
+    }
+  });
+}
+
 let headerTimer;
 function flashHeader(msg){
   clearTimeout(headerTimer);
   const h=document.getElementById('map-header-title');
-  h.textContent=msg;
-  headerTimer=setTimeout(()=>{h.textContent='★ LÍDER ÉTICO '+S.name+' ★';},2500);
+  setMapHeaderTitle(msg);
+  headerTimer=setTimeout(()=>{setMapHeaderTitle('★ LÍDER ÉTICO '+S.name+' ★');},2500);
 }
 
 // ================================================
