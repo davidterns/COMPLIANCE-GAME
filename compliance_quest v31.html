@@ -3580,11 +3580,17 @@ function getAvatarSVG(){
 
   let svg = '<svg viewBox="0 0 24 32" width="96" height="128" style="image-rendering:pixelated;">';
 
+  // sombra en el suelo
+  svg += `<ellipse cx="12" cy="31.5" rx="6.5" ry="1" fill="#000" opacity="0.35"/>`;
+
   // capa del cumplimiento (gimnasio 3) — detrás del cuerpo
   if(b[3]){
     svg += `<polygon points="5,11 19,11 21,30 3,30" fill="#c0392b"/>`;
     svg += `<polygon points="12,11 19,11 21,30 13,30" fill="#a8332a"/>`;
     svg += `<polygon points="5,11 19,11 19,13 5,13" fill="#d4af37"/>`;
+    // emblema en la espalda
+    svg += `<circle cx="12" cy="18" r="1.3" fill="#86BC25"/>`;
+    svg += `<circle cx="12" cy="18" r="1.3" fill="none" stroke="#d4af37" stroke-width="0.3"/>`;
   }
 
   // zapatos
@@ -3592,12 +3598,25 @@ function getAvatarSVG(){
   svg += `<rect x="12" y="29" width="4" height="3" fill="${shoeMain}"/>`;
   svg += `<rect x="8" y="29" width="4" height="1" fill="${shoeHi}"/>`;
   svg += `<rect x="12" y="29" width="4" height="1" fill="${shoeHi}"/>`;
+  // cordones
+  svg += `<rect x="9" y="29.7" width="2" height="0.4" fill="#888"/>`;
+  svg += `<rect x="13" y="29.7" width="2" height="0.4" fill="#888"/>`;
+  // suelas
+  svg += `<rect x="8" y="31.5" width="4" height="0.6" fill="#000"/>`;
+  svg += `<rect x="12" y="31.5" width="4" height="0.6" fill="#000"/>`;
 
   // piernas
   svg += `<rect x="8" y="22" width="4" height="7" fill="${pantsMain}"/>`;
   svg += `<rect x="12" y="22" width="4" height="7" fill="${pantsShadow}"/>`;
+  // pliegue/raya del pantalón
+  svg += `<rect x="9.8" y="22" width="0.4" height="7" fill="${pantsShadow}"/>`;
+  svg += `<rect x="13.8" y="22" width="0.4" height="7" fill="#2e323a"/>`;
+  // bolsillos
+  svg += `<rect x="8" y="22" width="1.5" height="2" fill="${pantsShadow}" opacity="0.6"/>`;
+  svg += `<rect x="14.5" y="22" width="1.5" height="2" fill="#2e323a" opacity="0.6"/>`;
   // cinturón
   svg += `<rect x="6" y="21" width="12" height="1" fill="#2a2a2a"/>`;
+  svg += `<rect x="11" y="21" width="2" height="1" fill="#d4af37"/>`;
 
   // brazos
   svg += `<rect x="4" y="11" width="2" height="8" fill="${torsoMain}"/>`;
@@ -3614,6 +3633,8 @@ function getAvatarSVG(){
     // solapas de la chaqueta (Traje Azul Corporativo)
     svg += `<polygon points="9,11 11,11 11,16 9,14" fill="#2d4f7a"/>`;
     svg += `<polygon points="15,11 13,11 13,16 15,14" fill="#16304a"/>`;
+    // pañuelo de bolsillo
+    svg += `<polygon points="9.3,13 10.3,13 9.8,14" fill="#fff"/>`;
     // corbata verde Deloitte + pin dorado
     svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#86BC25"/>`;
     svg += `<rect x="9" y="14" width="1" height="1" fill="#d4af37"/>`;
@@ -3625,6 +3646,9 @@ function getAvatarSVG(){
     svg += `<polygon points="9,11 11,11 11,14 9,13" fill="#fff"/>`;
     svg += `<polygon points="15,11 13,11 13,14 15,13" fill="#dcdfe2"/>`;
     svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#cc3333"/>`;
+    // botones de la camisa
+    svg += `<rect x="11.3" y="14.5" width="0.5" height="0.5" fill="#cfd2d6"/>`;
+    svg += `<rect x="11.3" y="16.5" width="0.5" height="0.5" fill="#cfd2d6"/>`;
   }
 
   // cuello
@@ -3633,22 +3657,34 @@ function getAvatarSVG(){
   // cara
   svg += `<rect x="8" y="4" width="8" height="6" fill="${skin}"/>`;
   svg += `<rect x="14" y="4" width="2" height="6" fill="${skinShadow}"/>`;
+  // cejas
+  svg += `<rect x="9.7" y="6.3" width="1.3" height="0.4" fill="${hairShadow}"/>`;
+  svg += `<rect x="13" y="6.3" width="1.3" height="0.4" fill="${hairShadow}"/>`;
   // ojos
   svg += `<rect x="10" y="7" width="1" height="1" fill="#222"/>`;
   svg += `<rect x="13" y="7" width="1" height="1" fill="#222"/>`;
+  // boca
+  svg += `<rect x="10.7" y="9" width="2.3" height="0.4" fill="#a8633b"/>`;
 
   // pelo
   svg += `<rect x="8" y="2" width="8" height="2" fill="${hairColor}"/>`;
   svg += `<rect x="7" y="4" width="1" height="3" fill="${hairColor}"/>`;
   svg += `<rect x="16" y="4" width="1" height="3" fill="${hairShadow}"/>`;
   svg += `<rect x="14" y="2" width="2" height="2" fill="${hairShadow}"/>`;
+  // mechón con brillo
+  svg += `<rect x="9" y="2" width="3" height="0.6" fill="#5a3a1c"/>`;
 
   // casco plateado de guardián (gimnasio 1) — cubre la cabeza
   if(b[1]){
     svg += `<rect x="7" y="1" width="10" height="5" fill="#d4d4d4"/>`;
     svg += `<rect x="14" y="1" width="3" height="5" fill="#a8a8a8"/>`;
+    svg += `<rect x="7" y="1" width="10" height="0.6" fill="#eef0f2"/>`;
     svg += `<rect x="7" y="4" width="10" height="1" fill="#4a90d2"/>`;
+    svg += `<rect x="14" y="4" width="3" height="1" fill="#3a76b3"/>`;
+    svg += `<rect x="7" y="5" width="1.2" height="2" fill="#a8a8a8"/>`;
+    svg += `<rect x="15.8" y="5" width="1.2" height="2" fill="#888"/>`;
     svg += `<circle cx="12" cy="3" r="1" fill="#d4af37"/>`;
+    svg += `<circle cx="12" cy="3" r="1" fill="none" stroke="#a8841f" stroke-width="0.2"/>`;
   }
 
   // espada de la imparcialidad (gimnasio 2)
@@ -3656,8 +3692,12 @@ function getAvatarSVG(){
     svg += `<g transform="rotate(30 5 18)">`;
     svg += `<rect x="3.6" y="2" width="1.4" height="14" fill="#e8eef2"/>`;
     svg += `<rect x="3.6" y="2" width="0.7" height="14" fill="#cfd8dc"/>`;
+    svg += `<rect x="4.55" y="2" width="0.25" height="14" fill="#fff"/>`;
+    svg += `<polygon points="3.6,2 5,2 4.3,0.5" fill="#e8eef2"/>`;
     svg += `<rect x="1.8" y="15" width="5" height="1.2" fill="#d4af37"/>`;
+    svg += `<rect x="1.8" y="15" width="5" height="0.4" fill="#f0d272"/>`;
     svg += `<rect x="3.1" y="16" width="2.4" height="3" fill="#8a6d1f"/>`;
+    svg += `<rect x="3.1" y="16" width="0.6" height="3" fill="#a8841f"/>`;
     svg += `</g>`;
   }
 
@@ -3666,8 +3706,12 @@ function getAvatarSVG(){
 }
 function getIntegrimonSVG(){
   return `<svg viewBox="0 0 16 16" width="40" height="40" style="image-rendering:pixelated;">`
+    +`<circle cx="8" cy="8" r="6" fill="#86BC25" opacity="0.18"/>`
     +`<polygon points="8,0 10,6 16,8 10,10 8,16 6,10 0,8 6,6" fill="#86BC25"/>`
     +`<polygon points="8,2 9,7 14,8 9,9 8,14 7,9 2,8 7,7" fill="#d4af37"/>`
+    +`<circle cx="6.5" cy="7" r="0.6" fill="#1c1c1c"/>`
+    +`<circle cx="9.5" cy="7" r="0.6" fill="#1c1c1c"/>`
+    +`<circle cx="13" cy="3" r="1" fill="#fff" opacity="0.8"/>`
     +`<circle cx="8" cy="8" r="1.5" fill="#fff"/>`
     +`</svg>`;
 }
