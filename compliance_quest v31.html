@@ -2512,7 +2512,8 @@ function onBadgeContinue(){
   if(musicMode==='off') playVictoryFanfare(null);
 }
 function showMap(){
-  if(!S.fullscreenMode){
+  const enteringFullscreen = !S.fullscreenMode;
+  if(enteringFullscreen){
     S.fullscreenMode = true;
     enterFullscreenMode();
   }
@@ -2529,7 +2530,8 @@ function showMap(){
   updateLexHint();
   // Prof. LEX now appears as an automatic pop-up (no longer a map character)
   if(!S.lexBaseSeen || hasLexNew()){
-    setTimeout(openLex, 500);
+    if(enteringFullscreen) openLex();
+    else setTimeout(openLex, 500);
   }
 }
 
