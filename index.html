@@ -56,6 +56,29 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
 .game-screen{width:100%;height:100%;display:none;flex-direction:column;}
 .game-screen.active{display:flex;}
 
+/* ── FULLSCREEN MODE (chassis hidden, floating HUD) ── */
+body.fullscreen-mode{overflow:hidden;background:#000;}
+body.fullscreen-mode .gameboy{
+  position:fixed;inset:0;width:100vw;height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:#000;border-radius:0;padding:0;box-shadow:none;
+}
+body.fullscreen-mode .gameboy-logo{display:none;}
+body.fullscreen-mode .screen-housing{
+  width:390px;height:240px;padding:0;margin:0;border-radius:0;background:none;box-shadow:none;
+  transform:scale(var(--fs-scale,1));transform-origin:center center;
+}
+body.fullscreen-mode .screen-bezel{padding:0;border:none;border-radius:0;background:none;width:100%;height:100%;}
+body.fullscreen-mode .screen-bezel::before{display:none;}
+body.fullscreen-mode .screen{width:100%;height:100%;}
+body.fullscreen-mode .game-controls{
+  position:fixed;bottom:0;left:0;right:0;
+  margin:0!important;padding:14px 24px;
+  background:linear-gradient(to top, rgba(20,10,40,.55), rgba(20,10,40,0));
+  z-index:500;
+}
+body.fullscreen-mode .game-controls>div{align-items:flex-end;}
+
 /* MAP */
 #screen-map{background:var(--gb-mid);overflow:hidden;}
 .map-header{background:var(--gb-dark);color:var(--gb-light);font-size:7px;padding:4px 6px;position:relative;z-index:30;
@@ -1694,7 +1717,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   </div>
 
   <!-- ══ CONTROLS ══ -->
-  <div style="margin-top:8px;padding:0 10px 10px 10px;">
+  <div class="game-controls" style="margin-top:8px;padding:0 10px 10px 10px;">
 
     <!-- Row 1: D-Pad LEFT · Green buttons CENTER · A/B RIGHT -->
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -2211,8 +2234,22 @@ let S = {
   gym:null, qIdx:0, playerHP:10, enemyHP:10,
   locked:false, retry:null,
   px:296, py:72,  // player start: on top path, near center
-  masterVol:0.7
+  masterVol:0.7,
+  fullscreenMode:false
 };
+
+// ── FULLSCREEN MODE (chassis hidden after intro + first Lex message) ──
+function applyFullscreenScale(){
+  if(!document.body.classList.contains('fullscreen-mode')) return;
+  const scale = Math.min(window.innerWidth/390, window.innerHeight/240);
+  document.documentElement.style.setProperty('--fs-scale', scale);
+}
+function enterFullscreenMode(){
+  document.body.classList.add('fullscreen-mode');
+  applyFullscreenScale();
+  setTimeout(scrollCamera, 50);
+}
+window.addEventListener('resize', applyFullscreenScale);
 
 // ================================================
 // AUDIO  –  single-channel, no overlap
@@ -3328,7 +3365,9 @@ function restartGame(){
   S={screen:'title',name:'ROOKIE',badges:[false,false,false,false,false],
      gym:null,qIdx:0,playerHP:10,enemyHP:10,locked:false,retry:null,px:296,py:72,
      masterVol:S.masterVol,
-     lexBaseSeen:false, lexShown:[false,false,false,false,false]};
+     lexBaseSeen:false, lexShown:[false,false,false,false,false],
+     fullscreenMode:false};
+  document.body.classList.remove('fullscreen-mode');
   killMusic();
   show('title');
 }
@@ -3434,6 +3473,7 @@ function updateLexHint(){
 
 let lexPageIdx = 0;
 let lexCurrentPages = [];
+let isBaseLexOpen = false;
 
 function lexInteract(){
   initAudio(); sfxSel();
@@ -3446,6 +3486,7 @@ function openLex(){
 
   // Determine what to show BEFORE mutating state
   let pages = [];
+  isBaseLexOpen = !S.lexBaseSeen;
   if(!S.lexBaseSeen){
     pages = [...LEX_BASE];
   } else {
@@ -3529,6 +3570,11 @@ function openNewsFromInventory(gymIdx){
 
 function closeLex(){
   document.getElementById('lex-overlay').style.display='none';
+  if(isBaseLexOpen && !S.fullscreenMode){
+    S.fullscreenMode = true;
+    enterFullscreenMode();
+  }
+  isBaseLexOpen = false;
 }
 
 function openNewspaper(){
