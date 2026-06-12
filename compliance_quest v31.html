@@ -3571,56 +3571,111 @@ function lexPrev(){
 // ================================================
 function getAvatarSVG(){
   const b = S.badges;
-  const skin='#f5c878', hair='#3a2010';
-  const torsoColor = b[0] ? '#1e3a5f' : '#e8e8e8';
-  let svg = '<svg viewBox="0 0 16 20" width="80" height="100" style="image-rendering:pixelated;">';
-  // capa (gimnasio 3) — detrás del cuerpo
+  const skin='#f5c878', skinShadow='#dba562';
+  const hairColor='#3a2010', hairShadow='#241308';
+  const torsoMain = b[0] ? '#1e3a5f' : '#eef0f2';
+  const torsoShadow = b[0] ? '#16304a' : '#d2d6da';
+  const pantsMain='#4a4f57', pantsShadow='#383c42';
+  const shoeMain='#1c1c1c', shoeHi='#3a3a3a';
+
+  let svg = '<svg viewBox="0 0 24 32" width="96" height="128" style="image-rendering:pixelated;">';
+
+  // capa del cumplimiento (gimnasio 3) — detrás del cuerpo
   if(b[3]){
-    svg += `<polygon points="3,5 13,5 14,18 2,18" fill="#c0392b" stroke="#d4af37" stroke-width="0.3"/>`;
+    svg += `<polygon points="5,11 19,11 21,30 3,30" fill="#c0392b"/>`;
+    svg += `<polygon points="12,11 19,11 21,30 13,30" fill="#a8332a"/>`;
+    svg += `<polygon points="5,11 19,11 19,13 5,13" fill="#d4af37"/>`;
   }
-  // piernas y zapatos
-  svg += `<rect x="5" y="13" width="2" height="5" fill="#555"/>`;
-  svg += `<rect x="9" y="13" width="2" height="5" fill="#555"/>`;
-  svg += `<rect x="5" y="18" width="2" height="2" fill="#222"/>`;
-  svg += `<rect x="9" y="18" width="2" height="2" fill="#222"/>`;
-  // brazos y manos
-  svg += `<rect x="2" y="6" width="2" height="6" fill="${torsoColor}"/>`;
-  svg += `<rect x="12" y="6" width="2" height="6" fill="${torsoColor}"/>`;
-  svg += `<rect x="2" y="12" width="2" height="1" fill="${skin}"/>`;
-  svg += `<rect x="12" y="12" width="2" height="1" fill="${skin}"/>`;
+
+  // zapatos
+  svg += `<rect x="8" y="29" width="4" height="3" fill="${shoeMain}"/>`;
+  svg += `<rect x="12" y="29" width="4" height="3" fill="${shoeMain}"/>`;
+  svg += `<rect x="8" y="29" width="4" height="1" fill="${shoeHi}"/>`;
+  svg += `<rect x="12" y="29" width="4" height="1" fill="${shoeHi}"/>`;
+
+  // piernas
+  svg += `<rect x="8" y="22" width="4" height="7" fill="${pantsMain}"/>`;
+  svg += `<rect x="12" y="22" width="4" height="7" fill="${pantsShadow}"/>`;
+  // cinturón
+  svg += `<rect x="6" y="21" width="12" height="1" fill="#2a2a2a"/>`;
+
+  // brazos
+  svg += `<rect x="4" y="11" width="2" height="8" fill="${torsoMain}"/>`;
+  svg += `<rect x="18" y="11" width="2" height="8" fill="${torsoShadow}"/>`;
+  // manos
+  svg += `<rect x="4" y="19" width="2" height="2" fill="${skin}"/>`;
+  svg += `<rect x="18" y="19" width="2" height="2" fill="${skin}"/>`;
+
   // torso
-  svg += `<rect x="4" y="6" width="8" height="7" fill="${torsoColor}"/>`;
+  svg += `<rect x="6" y="11" width="12" height="10" fill="${torsoMain}"/>`;
+  svg += `<rect x="14" y="11" width="4" height="10" fill="${torsoShadow}"/>`;
+
   if(b[0]){
-    // corbata verde Deloitte + pin dorado (Traje Azul Corporativo)
-    svg += `<polygon points="7,7 9,7 8.5,12 7.5,12" fill="#86BC25"/>`;
-    svg += `<rect x="10" y="7" width="1" height="1" fill="#d4af37"/>`;
+    // solapas de la chaqueta (Traje Azul Corporativo)
+    svg += `<polygon points="9,11 11,11 11,16 9,14" fill="#2d4f7a"/>`;
+    svg += `<polygon points="15,11 13,11 13,16 15,14" fill="#16304a"/>`;
+    // corbata verde Deloitte + pin dorado
+    svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#86BC25"/>`;
+    svg += `<rect x="9" y="14" width="1" height="1" fill="#d4af37"/>`;
+    // gemelos dorados
+    svg += `<rect x="4" y="19" width="1" height="1" fill="#d4af37"/>`;
+    svg += `<rect x="19" y="19" width="1" height="1" fill="#d4af37"/>`;
   } else {
-    svg += `<rect x="7" y="7" width="2" height="5" fill="#cc3333"/>`;
+    // cuello de camisa + corbata roja sencilla
+    svg += `<polygon points="9,11 11,11 11,14 9,13" fill="#fff"/>`;
+    svg += `<polygon points="15,11 13,11 13,14 15,13" fill="#dcdfe2"/>`;
+    svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#cc3333"/>`;
   }
-  // cabeza y pelo
-  svg += `<rect x="4" y="0" width="8" height="2" fill="${hair}"/>`;
-  svg += `<rect x="5" y="1" width="6" height="5" fill="${skin}"/>`;
-  svg += `<rect x="6" y="3" width="1" height="1" fill="#222"/>`;
-  svg += `<rect x="9" y="3" width="1" height="1" fill="#222"/>`;
-  // casco plateado (gimnasio 1) — cubre la cabeza
+
+  // cuello
+  svg += `<rect x="10" y="10" width="4" height="1" fill="${skin}"/>`;
+
+  // cara
+  svg += `<rect x="8" y="4" width="8" height="6" fill="${skin}"/>`;
+  svg += `<rect x="14" y="4" width="2" height="6" fill="${skinShadow}"/>`;
+  // ojos
+  svg += `<rect x="10" y="7" width="1" height="1" fill="#222"/>`;
+  svg += `<rect x="13" y="7" width="1" height="1" fill="#222"/>`;
+
+  // pelo
+  svg += `<rect x="8" y="2" width="8" height="2" fill="${hairColor}"/>`;
+  svg += `<rect x="7" y="4" width="1" height="3" fill="${hairColor}"/>`;
+  svg += `<rect x="16" y="4" width="1" height="3" fill="${hairShadow}"/>`;
+  svg += `<rect x="14" y="2" width="2" height="2" fill="${hairShadow}"/>`;
+
+  // casco plateado de guardián (gimnasio 1) — cubre la cabeza
   if(b[1]){
-    svg += `<rect x="4" y="0" width="8" height="4" fill="#c8c8c8"/>`;
-    svg += `<rect x="4" y="2" width="8" height="1" fill="#4a90d2"/>`;
-    svg += `<rect x="7" y="0" width="2" height="1" fill="#d4af37"/>`;
+    svg += `<rect x="7" y="1" width="10" height="5" fill="#d4d4d4"/>`;
+    svg += `<rect x="14" y="1" width="3" height="5" fill="#a8a8a8"/>`;
+    svg += `<rect x="7" y="4" width="10" height="1" fill="#4a90d2"/>`;
+    svg += `<circle cx="12" cy="3" r="1" fill="#d4af37"/>`;
   }
+
   // espada de la imparcialidad (gimnasio 2)
   if(b[2]){
-    svg += `<rect x="1" y="2" width="1" height="12" fill="#cfd8dc" transform="rotate(25 1.5 8)"/>`;
-    svg += `<rect x="0.5" y="13" width="2" height="2" fill="#d4af37" transform="rotate(25 1.5 14)"/>`;
+    svg += `<g transform="rotate(30 5 18)">`;
+    svg += `<rect x="3.6" y="2" width="1.4" height="14" fill="#e8eef2"/>`;
+    svg += `<rect x="3.6" y="2" width="0.7" height="14" fill="#cfd8dc"/>`;
+    svg += `<rect x="1.8" y="15" width="5" height="1.2" fill="#d4af37"/>`;
+    svg += `<rect x="3.1" y="16" width="2.4" height="3" fill="#8a6d1f"/>`;
+    svg += `</g>`;
   }
+
   svg += '</svg>';
   return svg;
+}
+function getIntegrimonSVG(){
+  return `<svg viewBox="0 0 16 16" width="40" height="40" style="image-rendering:pixelated;">`
+    +`<polygon points="8,0 10,6 16,8 10,10 8,16 6,10 0,8 6,6" fill="#86BC25"/>`
+    +`<polygon points="8,2 9,7 14,8 9,9 8,14 7,9 2,8 7,7" fill="#d4af37"/>`
+    +`<circle cx="8" cy="8" r="1.5" fill="#fff"/>`
+    +`</svg>`;
 }
 function renderPdxAvatar(){
   const av=document.getElementById('pdx-avatar');
   if(av) av.innerHTML=getAvatarSVG();
   const comp=document.getElementById('pdx-avatar-companion');
-  if(comp) comp.textContent = S.badges[4] ? '✨' : '';
+  if(comp) comp.innerHTML = S.badges[4] ? getIntegrimonSVG() : '';
 }
 
 // ================================================
