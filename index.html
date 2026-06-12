@@ -213,7 +213,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
    (label sits UNDER the player sprite; player bottom edge = 28px+92px above bottom = field bottom minus label) */
 #enemy-hpbox{
   position:absolute;
-  top:76px;           /* just below enemy sprite (top:4 + h:70 + 2px gap) */
+  top:64px;           /* raised slightly so it doesn't crowd the question textbox below */
   right:4px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
@@ -1144,7 +1144,7 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
             </div>
 
             <!-- NPC 2: ROBERTO – Empleado nuevo -->
-            <div id="map-npc-2" class="map-npc" style="left:152px;top:320px;" onclick="npcInteract(2)">
+            <div id="map-npc-2" class="map-npc" style="left:120px;top:320px;" onclick="npcInteract(2)">
               <div id="npc-exclaim-2" class="npc-exclaim">?</div>
               <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAABwElEQVR4nI2ToXbiQBSGv+FUVNJHYN3giCurduqoYx+ButaBS1Zt6qgDl9h14JCkalOXOHDMI1CJuyvoTDPA7tn/nJzcM/nnu/9kZhQfGrYRANPV9HWHcmspNltMVwMEYwDLd5Sbq04BTn3doalya319CvK0SyBnvjT21yROpqt5zKZBkvnDxAOcHKjlAItyhXs/laEZ4KncBp5m89byHaUjA/uPNe8tslmhuvceoLr3yGYVeHRkfJIrgOeiUIBM0zG2tnR6EJtPsKttbZmmY5IfSzcHgJYr6utbJsmL757+HF6sJ8kL9fXt2XIZDGIREcmytQzbyKyvZTcbB8+sr2XYRrJsLSIig0HsN+PKJ6mP0Rf747fvNypotNgLj0CeF957lqKqdlJVO99JRHwKpyxbe18zTat3eINyTlWF9LtEkS9r8mXNXXKSavIA5Zze4e3zx9raYn89AzAaGfK8oHqFQ1xwiI91nheMRsaDbGNJCiA2RgC2VUFS7Oj1Otx8VUTfjqbqFfa/hbq2pOYLOjrC3Daf3Z3/VfPu+HOiI8M0HQdGHRnf1WmajgNAkMSlaYLc4Tsd+yfEgU4jXxpr6g+/Sh4CCQfXQQAAAABJRU5ErkJggg==" width="29" height="31" style="image-rendering:pixelated;object-fit:contain;display:block;margin:0 auto;" alt="Roberto"/>
               <div class="npc-label">ROBERTO</div>
@@ -2142,7 +2142,7 @@ const NPC_DATA = [
            'Es confidencial y anónimo.\nPuedes reportar conductas\ncontrarias a la ética.',
            'La empresa protege al\ndenunciante de represalias.',
            '¡Hablar no es delatar!\nEs proteger a todos\ny a la empresa.'] },
-  { id:2, name:'ROBERTO', x:152, y:320,
+  { id:2, name:'ROBERTO', x:120, y:320,
     lines:['¡Soy nuevo en la empresa!\nEstoy aprendiendo sobre\nCompliance.',
            '¿Sabías que el Código de\nConducta me obliga desde\nel primer día?',
            'Cada empleado es parte\ndel sistema de Compliance.\n¡Incluido yo!',
