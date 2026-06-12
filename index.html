@@ -2512,6 +2512,10 @@ function onBadgeContinue(){
   if(musicMode==='off') playVictoryFanfare(null);
 }
 function showMap(){
+  if(!S.fullscreenMode){
+    S.fullscreenMode = true;
+    enterFullscreenMode();
+  }
   mapActive=false; battleActive=false; victoryActive=false;
   show('map');
   updateMap();
@@ -3511,7 +3515,6 @@ function updateLexHint(){
 
 let lexPageIdx = 0;
 let lexCurrentPages = [];
-let isBaseLexOpen = false;
 
 function lexInteract(){
   initAudio(); sfxSel();
@@ -3524,7 +3527,6 @@ function openLex(){
 
   // Determine what to show BEFORE mutating state
   let pages = [];
-  isBaseLexOpen = !S.lexBaseSeen;
   if(!S.lexBaseSeen){
     pages = [...LEX_BASE];
   } else {
@@ -3608,11 +3610,6 @@ function openNewsFromInventory(gymIdx){
 
 function closeLex(){
   document.getElementById('lex-overlay').style.display='none';
-  if(isBaseLexOpen && !S.fullscreenMode){
-    S.fullscreenMode = true;
-    enterFullscreenMode();
-  }
-  isBaseLexOpen = false;
 }
 
 function openNewspaper(){
