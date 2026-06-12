@@ -2202,7 +2202,7 @@ const NPC_DATA = [
            'La política Anticorrupción\nprohíbe CUALQUIER ventaja\nindebida.',
            'Regalos, pagos de\nfacilitación, favores...\n¡Todo está prohibido!',
            'Ante la más mínima duda:\nconsulta a Compliance\nantes de actuar.'] },
-  { id:1, name:'MARINA', x:472, y:256,
+  { id:1, name:'MARINA', x:476, y:128,
     lines:['Hola... ¿Sabes que existe\nel Canal de Denuncias?',
            'Es confidencial y anónimo.\nPuedes reportar conductas\ncontrarias a la ética.',
            'La empresa protege al\ndenunciante de represalias.',
@@ -2212,7 +2212,7 @@ const NPC_DATA = [
            '¿Sabías que el Código de\nConducta me obliga desde\nel primer día?',
            'Cada empleado es parte\ndel sistema de Compliance.\n¡Incluido yo!',
            'Tengo dudas... pero sé que\npuedo preguntar a\nCompliance siempre.'] },
-  { id:3, name:'ELENA DIR.', x:120, y:72,
+  { id:3, name:'ELENA DIR.', x:480, y:340,
     lines:['Buenos días. Soy directora\nde área. Compliance es\nprioridad para mí.',
            'Un conflicto de interés\nno penaliza si lo declaras\na tiempo.',
            'La clave es la transparencia:\ndeclarar, abstenerse\ny protegerse.',
@@ -2512,10 +2512,15 @@ function onBadgeContinue(){
   if(musicMode==='off') playVictoryFanfare(null);
 }
 function showMap(){
+  const enteringFullscreen = !S.fullscreenMode;
+  if(enteringFullscreen){
+    S.fullscreenMode = true;
+    enterFullscreenMode();
+  }
   mapActive=false; battleActive=false; victoryActive=false;
   show('map');
   updateMap();
-  document.getElementById('map-header-title').textContent='★ LÍDER ÉTICO '+S.name+' ★';
+  setMapHeaderTitle('★ LÍDER ÉTICO '+S.name+' ★');
   setTimeout(scrollCamera,50);
   setTimeout(()=>{ if(musicMode!=='map') startMapMusic(); }, 200);
   setTimeout(startMapLoop, 100);
@@ -2525,7 +2530,8 @@ function showMap(){
   updateLexHint();
   // Prof. LEX now appears as an automatic pop-up (no longer a map character)
   if(!S.lexBaseSeen || hasLexNew()){
-    setTimeout(openLex, 500);
+    if(enteringFullscreen) openLex();
+    else setTimeout(openLex, 500);
   }
 }
 
@@ -2617,7 +2623,12 @@ function getPlayerSVG(level, w=24, h=32, forMap=true){
   let bob = 0, squashX = 1, squashY = 1;
   if(wf===1 || wf===3){ bob = -2; squashX = 1.06; squashY = 0.92; }
 
-  const animStyle = `position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;transform:translateY(${bob}px) scale(${squashX},${squashY});transform-origin:50% 100%;transition:transform .09s ease-out;`;
+  // Left/right (profile) sprites are narrower (20x21) than down/up (16x21),
+  // so object-fit:contain shrinks them more. Scale them up to match the
+  // visual size of the front/back sprites.
+  const extraScale = (dir==='left' || dir==='right') ? 1.25 : 1;
+
+  const animStyle = `position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;transform:translateY(${bob}px) scale(${squashX*extraScale},${squashY*extraScale});transform-origin:50% 100%;transition:transform .09s ease-out;`;
   const sprite = `<img src="${img}" style="${animStyle}" alt="player"/>`;
   const turnWrap = `<div style="position:absolute;left:0;top:0;width:100%;height:100%;">${sprite}</div>`;
 
@@ -3046,12 +3057,26 @@ function tryEnterNearestGym(){
   openLex();
 }
 
+function setMapHeaderTitle(text){
+  const el = document.getElementById('map-header-title');
+  el.textContent = text;
+  el.style.fontSize = '';
+  requestAnimationFrame(()=>{
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    const minSize = 3;
+    while(el.scrollWidth > el.clientWidth && size > minSize){
+      size -= 0.25;
+      el.style.fontSize = size+'px';
+    }
+  });
+}
+
 let headerTimer;
 function flashHeader(msg){
   clearTimeout(headerTimer);
   const h=document.getElementById('map-header-title');
-  h.textContent=msg;
-  headerTimer=setTimeout(()=>{h.textContent='★ LÍDER ÉTICO '+S.name+' ★';},2500);
+  setMapHeaderTitle(msg);
+  headerTimer=setTimeout(()=>{setMapHeaderTitle('★ LÍDER ÉTICO '+S.name+' ★');},2500);
 }
 
 // ================================================
@@ -3511,7 +3536,6 @@ function updateLexHint(){
 
 let lexPageIdx = 0;
 let lexCurrentPages = [];
-let isBaseLexOpen = false;
 
 function lexInteract(){
   initAudio(); sfxSel();
@@ -3524,7 +3548,6 @@ function openLex(){
 
   // Determine what to show BEFORE mutating state
   let pages = [];
-  isBaseLexOpen = !S.lexBaseSeen;
   if(!S.lexBaseSeen){
     pages = [...LEX_BASE];
   } else {
@@ -3608,11 +3631,6 @@ function openNewsFromInventory(gymIdx){
 
 function closeLex(){
   document.getElementById('lex-overlay').style.display='none';
-  if(isBaseLexOpen && !S.fullscreenMode){
-    S.fullscreenMode = true;
-    enterFullscreenMode();
-  }
-  isBaseLexOpen = false;
 }
 
 function openNewspaper(){
