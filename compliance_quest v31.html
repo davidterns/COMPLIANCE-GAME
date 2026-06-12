@@ -65,7 +65,7 @@ body.fullscreen-mode .gameboy{
 }
 body.fullscreen-mode .gameboy-logo{display:none;}
 body.fullscreen-mode .screen-housing{
-  width:450px;height:280px;padding:0;margin:0;border-radius:0;background:none;box-shadow:none;
+  width:510px;height:320px;padding:0;margin:0;border-radius:0;background:none;box-shadow:none;
   transform:scale(var(--fs-scale-x,1),var(--fs-scale-y,1));transform-origin:center center;
 }
 body.fullscreen-mode .screen-bezel{padding:0;border:none;border-radius:0;background:none;width:100%;height:100%;}
@@ -2279,8 +2279,8 @@ let S = {
 // ── FULLSCREEN MODE (chassis hidden after intro + first Lex message) ──
 function applyFullscreenScale(){
   if(!document.body.classList.contains('fullscreen-mode')) return;
-  document.documentElement.style.setProperty('--fs-scale-x', window.innerWidth/450);
-  document.documentElement.style.setProperty('--fs-scale-y', window.innerHeight/280);
+  document.documentElement.style.setProperty('--fs-scale-x', window.innerWidth/510);
+  document.documentElement.style.setProperty('--fs-scale-y', window.innerHeight/320);
 }
 function enterFullscreenMode(){
   document.body.classList.add('fullscreen-mode');
