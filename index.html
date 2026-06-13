@@ -234,7 +234,7 @@ body.battle-mode .game-controls{display:none!important;}
 }
 .enemy-slide-in{animation:slideInFromRight .55s ease-out forwards;}
 .player-slide-in{animation:slideInFromLeft .55s ease-out forwards;}
-.battle-field{flex:1 1 46%;min-height:0;position:relative;overflow:hidden;}
+.battle-field{flex:1 1 38%;min-height:0;position:relative;overflow:hidden;}
 .battle-textbox{background:var(--gb-lightest);border-top:3px solid var(--gb-dark);padding:6px 8px;
   font-size:7px;color:var(--gb-dark);flex:1;display:flex;flex-direction:column;
   justify-content:space-between;line-height:1.8;}
@@ -1392,12 +1392,12 @@ body.battle-mode .game-controls{display:none!important;}
             </svg>
 
             <!-- Enemy sprite: TOP-RIGHT of field -->
-            <div id="enemy-sprite" style="position:absolute;top:2px;right:4px;width:84px;height:90px;">
-              <svg id="enemy-svg" viewBox="0 0 22 40" width="84" height="105" style="image-rendering:pixelated;"></svg>
+            <div id="enemy-sprite" style="position:absolute;top:0px;right:4px;width:96px;height:103px;">
+              <svg id="enemy-svg" viewBox="0 0 22 40" width="96" height="120" style="image-rendering:pixelated;"></svg>
             </div>
 
             <!-- Player sprite: BOTTOM-LEFT of field -->
-            <div id="player-sprite" style="position:absolute;bottom:20px;left:6px;width:84px;height:90px;">
+            <div id="player-sprite" style="position:absolute;bottom:4px;left:6px;width:96px;height:103px;">
               <svg viewBox="0 0 38 56" width="76" height="92" style="image-rendering:pixelated;">
                 <!-- ══ DELOITTE LÍDER ÉTICO ══ -->
 
@@ -1593,7 +1593,7 @@ body.battle-mode .game-controls{display:none!important;}
           <div id="explanation-box" style="display:none;background:#0d0d1a;
             border-top:2px solid #c84000;border-left:3px solid #86BC25;
             padding:5px 8px 6px 9px;font-family:'Press Start 2P',monospace;font-size:5.5px;
-            color:#e8e0c8;line-height:2;max-height:70px;overflow-y:auto;">
+            color:#e8e0c8;line-height:2;max-height:90px;overflow-y:auto;">
             <div id="explanation-text"></div>
           </div>
         </div>
@@ -3104,7 +3104,7 @@ function startBattle(gymId){
   document.getElementById('enemy-name-disp').textContent=gym.leader;
   document.getElementById('player-name-disp').textContent='LÍDER ÉTICO '+S.name;
   // Player battle sprite is always the same character (no visual progression)
-  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(84, 90);
+  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(96, 103);
   es.style.transform='translateX(130px)'; es.style.opacity='0'; es.style.transition='none';
   ps.style.transform='translateX(-130px)'; ps.style.opacity='0'; ps.style.transition='none';
   const ehp=document.getElementById('enemy-hpbox');
