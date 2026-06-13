@@ -245,7 +245,7 @@ body.battle-mode .game-controls{display:none!important;}
 .battle-btn:hover{background:var(--gb-dark);color:var(--gb-light);}
 .battle-btn.correct{background:var(--gb-dark);color:#8bff8b;}
 .battle-btn.wrong{background:#600000;color:#ff8b8b;}
-.hp-bar-outer{height:6px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);overflow:hidden;}
+.hp-bar-outer{height:5px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);overflow:hidden;}
 .hp-bar-inner{height:100%;transition:width .5s,background .3s;}
 
 /* HP name boxes: BELOW each sprite — zero overlap guaranteed.
@@ -254,22 +254,22 @@ body.battle-mode .game-controls{display:none!important;}
    (label sits UNDER the player sprite; player bottom edge = 28px+92px above bottom = field bottom minus label) */
 #enemy-hpbox{
   position:absolute;
-  top:64px;           /* raised slightly so it doesn't crowd the question textbox below */
+  bottom:8px;         /* aligned with the enemy's feet, mirroring the player hp box */
   right:4px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
-  padding:2px 5px;
-  min-width:95px;
+  padding:1px 4px;
+  min-width:78px;
   z-index:10;
 }
 #player-hpbox{
   position:absolute;
-  bottom:8px;         /* gap above the question textbox to avoid overlap/clipping */
+  bottom:4px;         /* gap above the question textbox to avoid overlap/clipping */
   left:6px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
-  padding:2px 5px;
-  min-width:95px;
+  padding:1px 4px;
+  min-width:78px;
   z-index:10;
 }
 
@@ -1397,7 +1397,7 @@ body.battle-mode .game-controls{display:none!important;}
             </div>
 
             <!-- Player sprite: BOTTOM-LEFT of field -->
-            <div id="player-sprite" style="position:absolute;bottom:4px;left:6px;width:96px;height:103px;">
+            <div id="player-sprite" style="position:absolute;bottom:16px;left:6px;width:96px;height:103px;">
               <svg viewBox="0 0 38 56" width="76" height="92" style="image-rendering:pixelated;">
                 <!-- ══ DELOITTE LÍDER ÉTICO ══ -->
 
@@ -1571,18 +1571,18 @@ body.battle-mode .game-controls{display:none!important;}
 
             <!-- Enemy HP box: TOP-RIGHT (opposite from enemy sprite which is top-left) -->
             <div id="enemy-hpbox">
-              <div style="font-size:6px;color:var(--gb-dark);" id="enemy-name-disp">LÍDER</div>
-              <div style="font-size:5px;color:var(--gb-dark);margin:2px 0;">PV</div>
+              <div style="font-size:5px;color:var(--gb-dark);" id="enemy-name-disp">LÍDER</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin:1px 0;">PV</div>
               <div class="hp-bar-outer"><div id="enemy-hp-bar" class="hp-bar-inner" style="width:100%;background:var(--hp-green);"></div></div>
-              <div style="font-size:5px;color:var(--gb-dark);margin-top:2px;" id="enemy-hp-text">10/10</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin-top:1px;" id="enemy-hp-text">10/10</div>
             </div>
 
             <!-- Player HP box: BOTTOM-LEFT (opposite from player sprite which is bottom-right) -->
             <div id="player-hpbox">
-              <div style="font-size:6px;color:var(--gb-dark);" id="player-name-disp">LÍDER ÉTICO</div>
-              <div style="font-size:5px;color:var(--gb-dark);margin:2px 0;">PV</div>
+              <div style="font-size:5px;color:var(--gb-dark);" id="player-name-disp">LÍDER ÉTICO</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin:1px 0;">PV</div>
               <div class="hp-bar-outer"><div id="player-hp-bar" class="hp-bar-inner" style="width:100%;background:var(--hp-green);"></div></div>
-              <div style="font-size:5px;color:var(--gb-dark);margin-top:2px;" id="player-hp-text">10/10</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin-top:1px;" id="player-hp-text">10/10</div>
             </div>
           </div>
           <div class="battle-textbox" id="battle-textbox">
