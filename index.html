@@ -30,6 +30,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   position:relative;
   isolation:isolate;
 }
+@media (min-width:500px){
+  body:not(.fullscreen-mode) .gameboy{
+    transform:scale(1.2);transform-origin:center center;
+  }
+}
 .gameboy::before{content:'';}
 .gameboy-logo{
   position:absolute;top:8px;right:14px;
@@ -65,7 +70,7 @@ body.fullscreen-mode .gameboy{
 }
 body.fullscreen-mode .gameboy-logo{display:none;}
 body.fullscreen-mode .screen-housing{
-  width:390px;height:240px;padding:0;margin:0;border-radius:0;background:none;box-shadow:none;
+  width:510px;height:320px;padding:0;margin:0;border-radius:0;background:none;box-shadow:none;
   transform:scale(var(--fs-scale-x,1),var(--fs-scale-y,1));transform-origin:center center;
 }
 body.fullscreen-mode .screen-bezel{padding:0;border:none;border-radius:0;background:none;width:100%;height:100%;}
@@ -90,10 +95,12 @@ body.fullscreen-mode .game-controls>div{align-items:flex-end;}
   color:var(--gb-light);font-family:'Press Start 2P',monospace;font-size:7px;cursor:pointer;padding:0;white-space:nowrap;}
 .map-header-btn:hover{color:#fff;}
 body.fullscreen-mode .map-header-actions{display:flex;gap:10px;}
-body.fullscreen-mode .map-header-title{text-align:center;}
+body.fullscreen-mode .map-header{justify-content:center;gap:24px;}
+body.fullscreen-mode .map-header-title{flex:none;text-align:center;}
 body.fullscreen-mode .map-header-title,
 body.fullscreen-mode .map-header-btn{font-size:5px;}
-body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
+body.fullscreen-mode .game-controls .hud-green-buttons{display:none!important;}
+body.battle-mode .game-controls{display:none!important;}
 .map-area{flex:1;position:relative;overflow:hidden;}
 .gym-node{position:absolute;width:80px;height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .gym-building{width:40px;height:36px;position:relative;transition:transform .15s;}
@@ -227,18 +234,18 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
 }
 .enemy-slide-in{animation:slideInFromRight .55s ease-out forwards;}
 .player-slide-in{animation:slideInFromLeft .55s ease-out forwards;}
-.battle-field{flex:1;position:relative;overflow:hidden;}
+.battle-field{flex:1 1 38%;min-height:0;position:relative;overflow:hidden;}
 .battle-textbox{background:var(--gb-lightest);border-top:3px solid var(--gb-dark);padding:6px 8px;
-  font-size:7px;color:var(--gb-dark);min-height:60px;display:flex;flex-direction:column;
+  font-size:7px;color:var(--gb-dark);flex:1;display:flex;flex-direction:column;
   justify-content:space-between;line-height:1.8;}
-.battle-actions{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;}
+.battle-actions{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;flex:1;}
 .battle-btn{background:var(--gb-mid);border:2px solid var(--gb-dark);color:var(--gb-dark);
   font-family:'Press Start 2P',monospace;font-size:5.5px;padding:5px 3px;cursor:pointer;
-  text-align:left;line-height:1.5;}
+  text-align:left;line-height:1.5;display:flex;align-items:center;}
 .battle-btn:hover{background:var(--gb-dark);color:var(--gb-light);}
 .battle-btn.correct{background:var(--gb-dark);color:#8bff8b;}
 .battle-btn.wrong{background:#600000;color:#ff8b8b;}
-.hp-bar-outer{height:6px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);overflow:hidden;}
+.hp-bar-outer{height:5px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);overflow:hidden;}
 .hp-bar-inner{height:100%;transition:width .5s,background .3s;}
 
 /* HP name boxes: BELOW each sprite — zero overlap guaranteed.
@@ -247,22 +254,22 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
    (label sits UNDER the player sprite; player bottom edge = 28px+92px above bottom = field bottom minus label) */
 #enemy-hpbox{
   position:absolute;
-  top:64px;           /* raised slightly so it doesn't crowd the question textbox below */
+  top:105px;         /* immediately below the enemy sprite's feet (sprite height 103px) */
   right:4px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
-  padding:2px 5px;
-  min-width:95px;
+  padding:1px 4px;
+  min-width:78px;
   z-index:10;
 }
 #player-hpbox{
   position:absolute;
-  bottom:8px;         /* gap above the question textbox to avoid overlap/clipping */
+  bottom:4px;         /* gap above the question textbox to avoid overlap/clipping */
   left:6px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
-  padding:2px 5px;
-  min-width:95px;
+  padding:1px 4px;
+  min-width:78px;
   z-index:10;
 }
 
@@ -1385,12 +1392,12 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
             </svg>
 
             <!-- Enemy sprite: TOP-RIGHT of field -->
-            <div id="enemy-sprite" style="position:absolute;top:4px;right:4px;width:66px;height:70px;">
-              <svg id="enemy-svg" viewBox="0 0 22 40" width="66" height="83" style="image-rendering:pixelated;"></svg>
+            <div id="enemy-sprite" style="position:absolute;top:0px;right:4px;width:96px;height:103px;">
+              <svg id="enemy-svg" viewBox="0 0 22 40" width="96" height="120" style="image-rendering:pixelated;"></svg>
             </div>
 
             <!-- Player sprite: BOTTOM-LEFT of field -->
-            <div id="player-sprite" style="position:absolute;bottom:26px;left:6px;width:66px;height:70px;">
+            <div id="player-sprite" style="position:absolute;bottom:16px;left:6px;width:96px;height:103px;">
               <svg viewBox="0 0 38 56" width="76" height="92" style="image-rendering:pixelated;">
                 <!-- ══ DELOITTE LÍDER ÉTICO ══ -->
 
@@ -1564,18 +1571,18 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
 
             <!-- Enemy HP box: TOP-RIGHT (opposite from enemy sprite which is top-left) -->
             <div id="enemy-hpbox">
-              <div style="font-size:6px;color:var(--gb-dark);" id="enemy-name-disp">LÍDER</div>
-              <div style="font-size:5px;color:var(--gb-dark);margin:2px 0;">PV</div>
+              <div style="font-size:5px;color:var(--gb-dark);" id="enemy-name-disp">LÍDER</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin:1px 0;">PV</div>
               <div class="hp-bar-outer"><div id="enemy-hp-bar" class="hp-bar-inner" style="width:100%;background:var(--hp-green);"></div></div>
-              <div style="font-size:5px;color:var(--gb-dark);margin-top:2px;" id="enemy-hp-text">10/10</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin-top:1px;" id="enemy-hp-text">10/10</div>
             </div>
 
             <!-- Player HP box: BOTTOM-LEFT (opposite from player sprite which is bottom-right) -->
             <div id="player-hpbox">
-              <div style="font-size:6px;color:var(--gb-dark);" id="player-name-disp">LÍDER ÉTICO</div>
-              <div style="font-size:5px;color:var(--gb-dark);margin:2px 0;">PV</div>
+              <div style="font-size:5px;color:var(--gb-dark);" id="player-name-disp">LÍDER ÉTICO</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin:1px 0;">PV</div>
               <div class="hp-bar-outer"><div id="player-hp-bar" class="hp-bar-inner" style="width:100%;background:var(--hp-green);"></div></div>
-              <div style="font-size:5px;color:var(--gb-dark);margin-top:2px;" id="player-hp-text">10/10</div>
+              <div style="font-size:4px;color:var(--gb-dark);margin-top:1px;" id="player-hp-text">10/10</div>
             </div>
           </div>
           <div class="battle-textbox" id="battle-textbox">
@@ -1586,7 +1593,7 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
           <div id="explanation-box" style="display:none;background:#0d0d1a;
             border-top:2px solid #c84000;border-left:3px solid #86BC25;
             padding:5px 8px 6px 9px;font-family:'Press Start 2P',monospace;font-size:5.5px;
-            color:#e8e0c8;line-height:2;max-height:70px;overflow-y:auto;">
+            color:#e8e0c8;line-height:2;max-height:90px;overflow-y:auto;">
             <div id="explanation-text"></div>
           </div>
         </div>
@@ -1806,17 +1813,17 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none;}
       <div style="display:flex;gap:6px;align-items:flex-end;flex-shrink:0;">
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
           <button onclick="handleB()"
-            style="width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;
+            style="width:27px;height:27px;border-radius:50%;border:none;cursor:pointer;
             background:radial-gradient(circle at 40% 35%,#cc3366,#881144);
-            color:white;font-family:'Press Start 2P',monospace;font-size:6px;
+            color:white;font-family:'Press Start 2P',monospace;font-size:7px;
             box-shadow:0 3px 0 #440011;">B</button>
           <span style="font-size:4px;color:#6a6a5a;">B</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
           <button onclick="handleA()"
-            style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;
+            style="width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
             background:radial-gradient(circle at 40% 35%,#cc3366,#881144);
-            color:white;font-family:'Press Start 2P',monospace;font-size:7.5px;
+            color:white;font-family:'Press Start 2P',monospace;font-size:9px;
             box-shadow:0 3px 0 #440011;">A</button>
           <span style="font-size:4px;color:#6a6a5a;">A</span>
         </div>
@@ -2279,8 +2286,8 @@ let S = {
 // ── FULLSCREEN MODE (chassis hidden after intro + first Lex message) ──
 function applyFullscreenScale(){
   if(!document.body.classList.contains('fullscreen-mode')) return;
-  document.documentElement.style.setProperty('--fs-scale-x', window.innerWidth/390);
-  document.documentElement.style.setProperty('--fs-scale-y', window.innerHeight/240);
+  document.documentElement.style.setProperty('--fs-scale-x', window.innerWidth/510);
+  document.documentElement.style.setProperty('--fs-scale-y', window.innerHeight/320);
 }
 function enterFullscreenMode(){
   document.body.classList.add('fullscreen-mode');
@@ -2455,6 +2462,7 @@ function show(id){
   document.querySelectorAll('.game-screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   S.screen=id;
+  document.body.classList.toggle('battle-mode', id==='battle');
 }
 
 
@@ -3096,7 +3104,7 @@ function startBattle(gymId){
   document.getElementById('enemy-name-disp').textContent=gym.leader;
   document.getElementById('player-name-disp').textContent='LÍDER ÉTICO '+S.name;
   // Player battle sprite is always the same character (no visual progression)
-  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(66, 70);
+  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(96, 103);
   es.style.transform='translateX(130px)'; es.style.opacity='0'; es.style.transition='none';
   ps.style.transform='translateX(-130px)'; ps.style.opacity='0'; ps.style.transition='none';
   const ehp=document.getElementById('enemy-hpbox');
