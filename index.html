@@ -254,7 +254,7 @@ body.battle-mode .game-controls{display:none!important;}
    (label sits UNDER the player sprite; player bottom edge = 28px+92px above bottom = field bottom minus label) */
 #enemy-hpbox{
   position:absolute;
-  bottom:8px;         /* aligned with the enemy's feet, mirroring the player hp box */
+  top:105px;         /* immediately below the enemy sprite's feet (sprite height 103px) */
   right:4px;
   background:var(--gb-lightest);
   border:2px solid var(--gb-dark);
