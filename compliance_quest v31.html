@@ -277,6 +277,15 @@ body.battle-mode .game-controls{display:none!important;}
 /* BADGE */
 #screen-badge{background:var(--gb-dark);align-items:center;justify-content:center;}
 @keyframes badgeSpin{0%{transform:rotateY(0)}50%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
+@keyframes equipFlash{
+  0%{transform:translate(-50%,-50%) scale(.4);opacity:0;}
+  40%{transform:translate(-50%,-50%) scale(1.6);opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(2.2);opacity:0;}
+}
+@keyframes equipPulse{
+  0%,100%{filter:drop-shadow(0 0 0 #86BC25);}
+  50%{filter:drop-shadow(0 0 12px #86BC25);}
+}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
 @keyframes flash{0%,100%{opacity:1}50%{opacity:.15}}
@@ -1587,7 +1596,7 @@ body.battle-mode .game-controls{display:none!important;}
             </div>
           </div>
           <div class="battle-textbox" id="battle-textbox">
-            <div id="battle-text" style="flex:1;">¿Qué harás?</div>
+            <div id="battle-text">¿Qué harás?</div>
             <div class="battle-actions" id="battle-actions"></div>
           </div>
           <!-- Explanation box: shown only on wrong answer -->
@@ -1610,7 +1619,22 @@ body.battle-mode .game-controls{display:none!important;}
             <div style="background:var(--gb-mid-dark);border:1px solid #86BC25;padding:5px 6px;width:100%;border-radius:2px;">
               <div style="font-size:7.5px;color:var(--gb-lightest);text-align:center;line-height:2;" id="badge-statement"></div>
             </div>
-            <button onclick="showGearScreen()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;margin-top:6px;">¡VER RECOMPENSA! ▶</button>
+            <button onclick="showEquipScreen()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;margin-top:6px;">¡VER RECOMPENSA! ▶</button>
+          </div>
+        </div>
+
+        <!-- EQUIP ANIMATION SCREEN: avatar equips the new accessory -->
+        <div class="game-screen" id="screen-equip">
+          <div style="background:var(--gb-dark);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;overflow:hidden;">
+            <div style="display:flex;gap:4px;align-items:center;"><div style="width:6px;height:6px;border-radius:50%;background:#86BC25;"></div><div style="font-size:5px;color:#86BC25;">DELOITTE COMPLIANCE</div></div>
+            <div style="font-size:6px;color:var(--gb-light);text-align:center;line-height:2;">¡EQUIPÁNDOTE!</div>
+            <div style="position:relative;width:96px;height:128px;">
+              <div id="equip-avatar-before" style="position:absolute;left:0;top:0;width:96px;height:128px;transition:opacity .5s;"></div>
+              <div id="equip-avatar-after" style="position:absolute;left:0;top:0;width:96px;height:128px;opacity:0;transition:opacity .5s;"></div>
+              <div id="equip-flash" style="position:absolute;left:50%;top:50%;width:96px;height:128px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.95) 0%, rgba(134,188,37,.6) 40%, transparent 70%);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.4);"></div>
+              <div id="equip-companion" style="position:absolute;right:-32px;bottom:14px;opacity:0;transition:opacity .5s;"></div>
+            </div>
+            <div id="equip-name" style="font-size:7px;color:gold;text-align:center;line-height:1.8;"></div>
           </div>
         </div>
 
@@ -1646,6 +1670,8 @@ body.battle-mode .game-controls{display:none!important;}
             <div style="flex:1;padding:5px 10px;overflow-y:auto;">
               <div id="gear-desc" style="font-size:7.5px;color:var(--gb-lightest);text-align:center;line-height:2;"></div>
               <div id="gear-detail" style="font-size:7px;color:var(--gb-mid);text-align:center;line-height:2;margin-top:3px;border-top:1px solid #1a3a1a;padding-top:3px;"></div>
+              <div id="gear-link-title" style="font-size:6px;color:#86BC25;text-align:center;line-height:2;margin-top:5px;border-top:1px solid #1a3a1a;padding-top:4px;">📋 RELACIÓN CON COMPLIANCE</div>
+              <div id="gear-link" style="font-size:7px;color:var(--gb-lightest);text-align:justify;line-height:1.9;margin-top:3px;"></div>
             </div>
             <button onclick="onBadgeContinue()" style="background:#0f380f;border:2px solid #86BC25;color:#86BC25;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;cursor:pointer;width:100%;flex-shrink:0;">CONTINUAR AL MAPA ▶</button>
           </div>
@@ -2264,11 +2290,11 @@ function checkNearNPCs(){
 
 // GYM entrance positions (center of gym building, pixels on map)
 const GYM_POS = [
-  {x:36,  y:48},   // Gym 0: top-left (col 2 row 2)
-  {x:572, y:64},   // Gym 1: top-right (col 35 row 2)
-  {x:312, y:240},  // Gym 2: center (col 18 row 15)
-  {x:572, y:422},  // Gym 3: bottom-right
-  {x:36,  y:422}   // Gym 4: bottom-left
+  {x:45,  y:64},   // Gym 0: top-left (col 2 row 2) - centered on front door
+  {x:599, y:64},   // Gym 1: top-right (col 35 row 2) - centered on front door
+  {x:317, y:256},  // Gym 2: center (col 18 row 15) - centered on front door
+  {x:599, y:438},  // Gym 3: bottom-right - centered on front door
+  {x:45,  y:438}   // Gym 4: bottom-left - centered on front door
 ];
 
 // ================================================
@@ -2467,6 +2493,45 @@ function show(id){
 }
 
 
+function showEquipScreen(){
+  const acc = ACCESSORIES[S.gym];
+  if(!acc){ showGearScreen(); return; }
+
+  const before = document.getElementById('equip-avatar-before');
+  const after = document.getElementById('equip-avatar-after');
+  const flash = document.getElementById('equip-flash');
+  const comp = document.getElementById('equip-companion');
+
+  S.badges[S.gym] = false;
+  before.innerHTML = getAvatarSVG();
+  S.badges[S.gym] = true;
+  after.innerHTML = getAvatarSVG();
+  comp.innerHTML = (S.gym===4) ? getIntegrimonSVG() : '';
+
+  document.getElementById('equip-name').textContent = '¡Te equipas con: '+acc.name+'!';
+
+  before.style.transition='none'; after.style.transition='none'; comp.style.transition='none';
+  before.style.opacity='1'; after.style.opacity='0'; comp.style.opacity='0';
+  flash.style.animation='none';
+
+  show('equip');
+
+  requestAnimationFrame(()=>{
+    before.style.transition='opacity .5s';
+    after.style.transition='opacity .5s';
+    comp.style.transition='opacity .5s';
+  });
+
+  setTimeout(()=>{
+    flash.style.animation='equipFlash .8s ease-out';
+    before.style.opacity='0';
+    after.style.opacity='1';
+    if(S.gym===4) comp.style.opacity='1';
+  }, 900);
+
+  setTimeout(showGearScreen, 3000);
+}
+
 function showGearScreen(){
   const gymId = S.gym;
   const acc = ACCESSORIES[gymId];
@@ -2476,6 +2541,7 @@ function showGearScreen(){
   document.getElementById('gear-name').textContent  = acc.name;
   document.getElementById('gear-desc').textContent  = acc.desc;
   document.getElementById('gear-detail').textContent= acc.detail;
+  document.getElementById('gear-link').textContent  = acc.complianceLink;
   document.getElementById('gear-arrow-label').textContent = acc.emoji;
 
   // The character's appearance never changes; show the accessory icon
@@ -2727,6 +2793,10 @@ function updateMap(){
 const STEP=4;
 const HEDGE_BOXES = [[0,96,16,16],[0,112,16,16],[0,224,16,16],[0,240,16,16],[0,352,16,16],[0,368,16,16],[16,96,16,16],[16,112,16,16],[16,224,16,16],[16,240,16,16],[16,352,16,16],[16,368,16,16],[32,160,16,16],[32,176,16,16],[32,288,16,16],[32,304,16,16],[48,160,16,16],[48,176,16,16],[48,288,16,16],[48,304,16,16],[80,0,16,16],[80,96,16,16],[80,112,16,16],[80,352,16,16],[80,368,16,16],[80,400,16,16],[96,0,16,16],[96,96,16,16],[96,112,16,16],[96,352,16,16],[96,368,16,16],[96,400,16,16],[112,0,16,16],[112,160,16,16],[112,176,16,16],[112,288,16,16],[112,304,16,16],[112,400,16,16],[128,0,16,16],[128,160,16,16],[128,176,16,16],[128,288,16,16],[128,304,16,16],[128,400,16,16],[144,0,16,16],[144,400,16,16],[160,0,16,16],[160,96,16,16],[160,112,16,16],[160,400,16,16],[176,0,16,16],[176,96,16,16],[176,112,16,16],[176,352,16,16],[176,368,16,16],[176,400,16,16],[192,0,16,16],[192,160,16,16],[192,176,16,16],[192,224,16,16],[192,240,16,16],[192,288,16,16],[192,304,16,16],[192,352,16,16],[192,368,16,16],[192,400,16,16],[208,0,16,16],[208,160,16,16],[208,176,16,16],[208,288,16,16],[208,304,16,16],[208,400,16,16],[224,0,16,16],[224,400,16,16],[240,0,16,16],[240,400,16,16],[256,0,16,16],[256,96,16,16],[256,112,16,16],[256,224,16,16],[256,240,16,16],[256,352,16,16],[256,368,16,16],[256,400,16,16],[272,0,16,16],[272,96,16,16],[272,112,16,16],[272,160,16,16],[272,176,16,16],[272,240,16,16],[272,288,16,16],[272,304,16,16],[272,352,16,16],[272,368,16,16],[272,400,16,16],[288,0,16,16],[288,160,16,16],[288,176,16,16],[288,288,16,16],[288,304,16,16],[288,400,16,16],[304,0,16,16],[304,400,16,16],[320,0,16,16],[320,400,16,16],[336,0,16,16],[336,96,16,16],[336,112,16,16],[336,400,16,16],[352,0,16,16],[352,96,16,16],[352,112,16,16],[352,160,16,16],[352,176,16,16],[352,224,16,16],[352,240,16,16],[352,288,16,16],[352,304,16,16],[352,352,16,16],[352,368,16,16],[352,400,16,16],[368,0,16,16],[368,160,16,16],[368,176,16,16],[368,224,16,16],[368,240,16,16],[368,288,16,16],[368,304,16,16],[368,352,16,16],[368,368,16,16],[368,400,16,16],[384,0,16,16],[384,400,16,16],[400,0,16,16],[400,400,16,16],[416,0,16,16],[416,400,16,16],[432,96,16,16],[432,112,16,16],[432,160,16,16],[432,176,16,16],[432,224,16,16],[432,240,16,16],[432,288,16,16],[432,304,16,16],[432,352,16,16],[432,368,16,16],[448,96,16,16],[448,112,16,16],[448,160,16,16],[448,176,16,16],[448,224,16,16],[448,240,16,16],[448,288,16,16],[448,304,16,16],[448,352,16,16],[448,368,16,16],[512,0,16,16],[512,16,16,16],[512,32,16,16],[512,96,16,16],[512,112,16,16],[512,160,16,16],[512,176,16,16],[512,288,16,16],[512,304,16,16],[512,400,16,16],[512,416,16,16],[512,432,16,16],[528,0,16,16],[528,96,16,16],[528,112,16,16],[528,160,16,16],[528,176,16,16],[528,224,16,16],[528,240,16,16],[528,288,16,16],[528,304,16,16],[528,352,16,16],[528,368,16,16],[528,400,16,16],[544,0,16,16],[544,224,16,16],[544,240,16,16],[544,352,16,16],[544,368,16,16],[544,400,16,16],[576,160,16,16],[576,176,16,16],[576,288,16,16],[576,304,16,16],[592,96,16,16],[592,112,16,16],[592,160,16,16],[592,176,16,16],[592,224,16,16],[592,240,16,16],[592,288,16,16],[592,304,16,16],[592,352,16,16],[592,368,16,16],[608,96,16,16],[608,112,16,16],[608,224,16,16],[608,240,16,16],[608,352,16,16],[608,368,16,16]];
 const GYM_BOXES = [[4,22,72,50],[558,22,72,50],[276,214,72,50],[558,396,72,50],[4,396,72,50]];
+// Doorway gaps: a walkable opening in each gym building's collision box,
+// centered on the front door drawn in each gym's SVG, so the player can
+// walk straight in through the main entrance.
+const DOOR_GAPS = [[37,50,16,24],[591,50,16,24],[309,242,16,24],[591,424,16,24],[37,424,16,24]];
 
 function collidesWithHedge(nx, ny){
   // Small feet-only hitbox so single-tile gaps between hedges remain passable
@@ -2734,8 +2804,13 @@ function collidesWithHedge(nx, ny){
   for(const [hx,hy,hw,hh] of HEDGE_BOXES){
     if(fx < hx+hw && fx+pw > hx && fy < hy+hh && fy+ph > hy) return true;
   }
-  for(const [hx,hy,hw,hh] of GYM_BOXES){
-    if(fx < hx+hw && fx+pw > hx && fy < hy+hh && fy+ph > hy) return true;
+  for(let i=0;i<GYM_BOXES.length;i++){
+    const [hx,hy,hw,hh]=GYM_BOXES[i];
+    if(fx < hx+hw && fx+pw > hx && fy < hy+hh && fy+ph > hy){
+      const [gx,gy,gw,gh]=DOOR_GAPS[i];
+      if(fx < gx+gw && fx+pw > gx && fy < gy+gh && fy+ph > gy) continue;
+      return true;
+    }
   }
   return false;
 }
