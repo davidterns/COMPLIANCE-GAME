@@ -246,6 +246,10 @@ body.battle-mode .game-controls{display:none!important;}
 .battle-btn:hover{background:var(--gb-dark);color:var(--gb-light);}
 .battle-btn.correct{background:var(--gb-dark);color:#8bff8b;}
 .battle-btn.wrong{background:#600000;color:#ff8b8b;}
+#battle-abandon-btn{margin-top:4px;width:100%;flex:0 0 auto;background:#600000;
+  border:2px solid var(--gb-dark);color:#ff8b8b;font-family:'Press Start 2P',monospace;
+  font-size:6px;padding:3px 4px;cursor:pointer;}
+#battle-abandon-btn:hover{background:#7a0000;}
 .hp-bar-outer{height:5px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);overflow:hidden;}
 .hp-bar-inner{height:100%;transition:width .5s,background .3s;}
 
@@ -1598,6 +1602,7 @@ body.battle-mode .game-controls{display:none!important;}
           <div class="battle-textbox" id="battle-textbox">
             <div id="battle-text">¿Qué harás?</div>
             <div class="battle-actions" id="battle-actions"></div>
+            <button id="battle-abandon-btn" onclick="handleB()">🚪 ABANDONAR GIMNASIO</button>
           </div>
           <!-- Explanation box: shown only on wrong answer -->
           <div id="explanation-box" style="display:none;background:#0d0d1a;
@@ -3804,12 +3809,15 @@ function getAvatarSVG(){
   svg += `<rect x="6" y="21" width="12" height="1" fill="#2a2a2a"/>`;
   svg += `<rect x="11" y="21" width="2" height="1" fill="#d4af37"/>`;
 
-  // brazos
-  svg += `<rect x="4" y="11" width="2" height="8" fill="${torsoMain}"/>`;
-  svg += `<rect x="18" y="11" width="2" height="8" fill="${torsoShadow}"/>`;
+  // brazos: el hombro queda pegado al torso y se abren en diagonal
+  // hacia afuera hasta la mano, separándose un poco del cuerpo
+  const lHandX = 2;
+  const rHandX = 20;
+  svg += `<polygon points="4,11 6,11 ${lHandX+2},19 ${lHandX},19" fill="${torsoMain}"/>`;
+  svg += `<polygon points="18,11 20,11 ${rHandX+2},19 ${rHandX},19" fill="${torsoShadow}"/>`;
   // manos
-  svg += `<rect x="4" y="19" width="2" height="2" fill="${skin}"/>`;
-  svg += `<rect x="18" y="19" width="2" height="2" fill="${skin}"/>`;
+  svg += `<rect x="${lHandX}" y="19" width="2" height="2" fill="${skin}"/>`;
+  svg += `<rect x="${rHandX}" y="19" width="2" height="2" fill="${skin}"/>`;
 
   // torso
   svg += `<rect x="6" y="11" width="12" height="10" fill="${torsoMain}"/>`;
@@ -3825,8 +3833,8 @@ function getAvatarSVG(){
     svg += `<polygon points="11,12 13,12 12.5,19 11.5,19" fill="#86BC25"/>`;
     svg += `<rect x="9" y="14" width="1" height="1" fill="#d4af37"/>`;
     // gemelos dorados
-    svg += `<rect x="4" y="19" width="1" height="1" fill="#d4af37"/>`;
-    svg += `<rect x="19" y="19" width="1" height="1" fill="#d4af37"/>`;
+    svg += `<rect x="${lHandX}" y="19" width="1" height="1" fill="#d4af37"/>`;
+    svg += `<rect x="${rHandX+1}" y="19" width="1" height="1" fill="#d4af37"/>`;
   } else {
     // cuello de camisa + corbata roja sencilla
     svg += `<polygon points="9,11 11,11 11,14 9,13" fill="#fff"/>`;
@@ -3872,18 +3880,17 @@ function getAvatarSVG(){
     svg += `<rect x="12.4" y="2.1" width="0.7" height="1" fill="#86BC25"/>`;
   }
 
-  // espada de la imparcialidad (gimnasio 2)
+  // espada de la imparcialidad (gimnasio 2) — empuñada en vertical,
+  // apuntando hacia arriba, sin tapar el torso ni la cara del avatar
   if(b[2]){
-    svg += `<g transform="rotate(30 5 18)">`;
-    svg += `<rect x="3.6" y="2" width="1.4" height="14" fill="#e8eef2"/>`;
-    svg += `<rect x="3.6" y="2" width="0.7" height="14" fill="#cfd8dc"/>`;
-    svg += `<rect x="4.55" y="2" width="0.25" height="14" fill="#fff"/>`;
-    svg += `<polygon points="3.6,2 5,2 4.3,0.5" fill="#e8eef2"/>`;
-    svg += `<rect x="1.8" y="15" width="5" height="1.2" fill="#d4af37"/>`;
-    svg += `<rect x="1.8" y="15" width="5" height="0.4" fill="#f0d272"/>`;
-    svg += `<rect x="3.1" y="16" width="2.4" height="3" fill="#8a6d1f"/>`;
-    svg += `<rect x="3.1" y="16" width="0.6" height="3" fill="#a8841f"/>`;
-    svg += `</g>`;
+    svg += `<rect x="20.35" y="4"    width="1.3"  height="13.5" fill="#e8eef2"/>`;
+    svg += `<rect x="20.35" y="4"    width="0.55" height="13.5" fill="#cfd8dc"/>`;
+    svg += `<rect x="21.1"  y="4"    width="0.25" height="13.5" fill="#fff"/>`;
+    svg += `<polygon points="20.35,4 21.65,4 21,1.5" fill="#cfd8dc"/>`;
+    svg += `<rect x="19.6"  y="17.5" width="2.8"  height="1"  fill="#d4af37"/>`;
+    svg += `<rect x="19.6"  y="17.5" width="2.8"  height="0.35" fill="#f0d272"/>`;
+    svg += `<rect x="20.3"  y="18.5" width="1.4"  height="3"  fill="#8a6d1f"/>`;
+    svg += `<rect x="20.3"  y="18.5" width="0.5"  height="3"  fill="#a8841f"/>`;
   }
 
   svg += '</svg>';
