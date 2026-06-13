@@ -3190,6 +3190,9 @@ function startBattle(gymId){
   ps.style.transform='translateX(-130px)'; ps.style.opacity='0'; ps.style.transition='none';
   const ehp=document.getElementById('enemy-hpbox');
   const php=document.getElementById('player-hpbox');
+  // ajuste fino para centrar el cartel del rival bajo su sprite
+  const ENEMY_HPBOX_SHIFT = [0,0,14,10,10];
+  ehp.style.right = (4 + ENEMY_HPBOX_SHIFT[gymId]) + 'px';
   ehp.style.opacity='0'; ehp.style.transition='none';
   php.style.opacity='0'; php.style.transition='none';
   updateHPs(); setBT(''); clearBA();
