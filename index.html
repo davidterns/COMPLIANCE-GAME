@@ -2666,7 +2666,9 @@ function showMap(){
     updateMap();
     setMapHeaderTitle('★ LÍDER ÉTICO '+S.name+' ★');
     setTimeout(scrollCamera,50);
-    setTimeout(()=>{ if(musicMode!=='map') startMapMusic(); }, 200);
+    // When arriving from the intro transition, the main theme starts once
+    // the iris reveal has fully finished (see maybeOpenLex below).
+    if(!fromIntro) setTimeout(()=>{ if(musicMode!=='map') startMapMusic(); }, 200);
     setTimeout(startMapLoop, 100);
     // Initialise first-time hint (base info not yet seen)
     if(!S.hasOwnProperty('lexBaseSeen')) S.lexBaseSeen = false;
@@ -2677,8 +2679,10 @@ function showMap(){
   // Prof. LEX now appears as an automatic pop-up (no longer a map character).
   // A short pause after the iris fully closes makes the sequence read as
   // "circle disappears completely, then the message appears" rather than
-  // both happening at once.
+  // both happening at once. The main theme starts playing right as the
+  // map is revealed, for the very first time.
   const maybeOpenLex = () => {
+    if(musicMode!=='map') startMapMusic();
     if(!S.lexBaseSeen || hasLexNew()) setTimeout(openLex, 300);
   };
 
