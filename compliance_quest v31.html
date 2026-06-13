@@ -2644,9 +2644,12 @@ function showMap(){
     updateLexHint();
   };
 
-  // Prof. LEX now appears as an automatic pop-up (no longer a map character)
+  // Prof. LEX now appears as an automatic pop-up (no longer a map character).
+  // A short pause after the iris fully closes makes the sequence read as
+  // "circle disappears completely, then the message appears" rather than
+  // both happening at once.
   const maybeOpenLex = () => {
-    if(!S.lexBaseSeen || hasLexNew()) openLex();
+    if(!S.lexBaseSeen || hasLexNew()) setTimeout(openLex, 300);
   };
 
   if(fromIntro){
