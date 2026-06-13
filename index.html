@@ -88,6 +88,18 @@ body.fullscreen-mode .game-controls{
   z-index:500;
 }
 body.fullscreen-mode .game-controls>div{align-items:flex-end;}
+/* Bigger D-pad and A/B buttons in fullscreen mode */
+body.fullscreen-mode #dpad{width:110px!important;height:110px!important;}
+body.fullscreen-mode .dpad-btn{font-size:22px!important;}
+body.fullscreen-mode #dpad-up,
+body.fullscreen-mode #dpad-down{border-radius:8px 8px 0 0!important;}
+body.fullscreen-mode #dpad-down{border-radius:0 0 8px 8px!important;}
+body.fullscreen-mode #dpad-left{border-radius:8px 0 0 8px!important;}
+body.fullscreen-mode #dpad-right{border-radius:0 8px 8px 0!important;}
+body.fullscreen-mode .game-controls [onclick="handleA()"]{width:64px!important;height:64px!important;font-size:18px!important;}
+body.fullscreen-mode .game-controls [onclick="handleB()"]{width:50px!important;height:50px!important;font-size:14px!important;}
+body.fullscreen-mode .game-controls [onclick="handleA()"]+span,
+body.fullscreen-mode .game-controls [onclick="handleB()"]+span{font-size:8px!important;}
 
 /* MAP */
 #screen-map{background:var(--gb-mid);overflow:hidden;}
@@ -130,6 +142,17 @@ body.fullscreen-mode #lex-overlay button,
 body.fullscreen-mode #npc-overlay button,
 body.fullscreen-mode #lex-overlay [style*="A / ENTER"],
 body.fullscreen-mode #npc-overlay [style*="A / ENTER"]{font-size:10px!important;padding:8px 14px!important;}
+
+/* ── Test de Hierba Alta: mismo tamaño/centrado que diálogos LEX/NPC ── */
+body.fullscreen-mode #grass-overlay>div{width:640px!important;max-width:90vw!important;border-width:5px!important;border-radius:8px!important;}
+body.fullscreen-mode #grass-overlay [style*="padding:10px"]{padding:24px 28px!important;}
+body.fullscreen-mode #grass-title{font-size:14px!important;}
+body.fullscreen-mode #grass-overlay [style*="font-size:14px"]{font-size:24px!important;}
+body.fullscreen-mode #grass-q{font-size:16px!important;line-height:2.3!important;margin-bottom:18px!important;}
+body.fullscreen-mode #grass-answers{gap:10px!important;}
+body.fullscreen-mode #grass-answers .battle-btn{font-size:14px!important;padding:10px 12px!important;}
+body.fullscreen-mode #grass-exp{font-size:13px!important;line-height:2!important;margin-top:14px!important;}
+body.fullscreen-mode #grass-overlay [style*="background:#1e5010"]{padding:12px 20px!important;}
 
 /* ── Compliance Pokédex / News overlays: enlarged in fullscreen ── */
 body.fullscreen-mode .pdx-device{width:600px!important;max-width:94vw!important;max-height:94vh!important;border-radius:14px 14px 28px 14px!important;}
@@ -2644,9 +2667,12 @@ function showMap(){
     updateLexHint();
   };
 
-  // Prof. LEX now appears as an automatic pop-up (no longer a map character)
+  // Prof. LEX now appears as an automatic pop-up (no longer a map character).
+  // A short pause after the iris fully closes makes the sequence read as
+  // "circle disappears completely, then the message appears" rather than
+  // both happening at once.
   const maybeOpenLex = () => {
-    if(!S.lexBaseSeen || hasLexNew()) openLex();
+    if(!S.lexBaseSeen || hasLexNew()) setTimeout(openLex, 300);
   };
 
   if(fromIntro){
