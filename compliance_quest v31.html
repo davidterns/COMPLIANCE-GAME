@@ -246,6 +246,10 @@ body.battle-mode .game-controls{display:none!important;}
 .battle-btn:hover{background:var(--gb-dark);color:var(--gb-light);}
 .battle-btn.correct{background:var(--gb-dark);color:#8bff8b;}
 .battle-btn.wrong{background:#600000;color:#ff8b8b;}
+#battle-abandon-btn{margin-top:4px;width:100%;flex:0 0 auto;background:#600000;
+  border:2px solid var(--gb-dark);color:#ff8b8b;font-family:'Press Start 2P',monospace;
+  font-size:6px;padding:3px 4px;cursor:pointer;}
+#battle-abandon-btn:hover{background:#7a0000;}
 .hp-bar-outer{height:5px;background:var(--gb-dark);border:1px solid var(--gb-mid-dark);overflow:hidden;}
 .hp-bar-inner{height:100%;transition:width .5s,background .3s;}
 
@@ -1598,6 +1602,7 @@ body.battle-mode .game-controls{display:none!important;}
           <div class="battle-textbox" id="battle-textbox">
             <div id="battle-text">¿Qué harás?</div>
             <div class="battle-actions" id="battle-actions"></div>
+            <button id="battle-abandon-btn" onclick="handleB()">🚪 ABANDONAR GIMNASIO</button>
           </div>
           <!-- Explanation box: shown only on wrong answer -->
           <div id="explanation-box" style="display:none;background:#0d0d1a;
