@@ -2626,7 +2626,7 @@ function showMap(){
   const enteringFullscreen = !S.fullscreenMode;
   const fromIntro = S.screen === 'intro';
 
-  const proceed = () => {
+  const setupMap = () => {
     if(enteringFullscreen){
       S.fullscreenMode = true;
       enterFullscreenMode();
@@ -2642,25 +2642,29 @@ function showMap(){
     if(!S.hasOwnProperty('lexBaseSeen')) S.lexBaseSeen = false;
     if(!S.lexShown) S.lexShown = [false,false,false,false,false];
     updateLexHint();
-    // Prof. LEX now appears as an automatic pop-up (no longer a map character)
-    if(!S.lexBaseSeen || hasLexNew()){
-      if(enteringFullscreen) openLex();
-      else setTimeout(openLex, 500);
-    }
+  };
+
+  // Prof. LEX now appears as an automatic pop-up (no longer a map character)
+  const maybeOpenLex = () => {
+    if(!S.lexBaseSeen || hasLexNew()) openLex();
   };
 
   if(fromIntro){
-    // Pokémon-style iris/circle-wipe transition into the fullscreen map
-    irisTransition(proceed);
+    // Pokémon-style iris/circle-wipe transition into the fullscreen map.
+    // The map is set up while covered, and Prof. LEX's message only
+    // opens once the transition has fully finished revealing the map.
+    irisTransition(setupMap, maybeOpenLex);
   } else {
-    proceed();
+    setupMap();
+    if(!S.lexBaseSeen || hasLexNew()) setTimeout(openLex, 500);
   }
 }
 
 // Classic Pokémon iris/circle-wipe: shrinks a circular hole to a point
 // (covering the screen in black), runs `onCovered` while fully covered,
-// then expands the hole again to reveal the new scene.
-function irisTransition(onCovered, closeMs=1200, openMs=1800){
+// then expands the hole again to reveal the new scene, running
+// `onRevealed` once the reveal animation has fully finished.
+function irisTransition(onCovered, onRevealed, closeMs=1200, openMs=1800){
   const main = document.getElementById('main-screen');
   const iris = document.getElementById('global-iris');
   const rect = main.getBoundingClientRect();
@@ -2681,7 +2685,10 @@ function irisTransition(onCovered, closeMs=1200, openMs=1800){
         const t2 = Math.min(1, (now2-openStart)/openMs);
         iris.style.setProperty('--iris-r', (maxR*t2)+'px');
         if(t2<1) requestAnimationFrame(open);
-        else iris.style.display='none';
+        else {
+          iris.style.display='none';
+          if(onRevealed) onRevealed();
+        }
       }
       requestAnimationFrame(open);
     }
