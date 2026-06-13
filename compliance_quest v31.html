@@ -154,20 +154,23 @@ body.fullscreen-mode .pdx-policy-sub{font-size:11px!important;}
 body.fullscreen-mode .pdx-empty{font-size:10px!important;padding:16px!important;}
 body.fullscreen-mode .pdx-close{font-size:11px!important;padding:12px!important;}
 body.fullscreen-mode #pokedex-overlay [style*="font-size:5px"]{font-size:10px!important;}
-body.fullscreen-mode #pdx-avatar-companion{font-size:36px!important;}
-body.fullscreen-mode #pdx-avatar svg,
-body.fullscreen-mode #pdx-avatar-companion svg{width:64px!important;height:64px!important;}
+body.fullscreen-mode #pdx-avatar-box{padding:24px!important;min-height:240px!important;gap:24px!important;}
+body.fullscreen-mode #pdx-avatar-companion{font-size:80px!important;}
+body.fullscreen-mode #pdx-avatar svg{width:200px!important;height:200px!important;}
+body.fullscreen-mode #pdx-avatar-companion svg{width:96px!important;height:96px!important;}
 body.fullscreen-mode #pdx-gear-list [style*="font-size:4px"]{font-size:8px!important;}
 body.fullscreen-mode #pdx-gear-list [style*="font-size:5px"]{font-size:10px!important;}
 body.fullscreen-mode #pdx-gear-list [style*="font-size:7px"]{font-size:13px!important;}
 body.fullscreen-mode #pdx-gear-list [style*="width:22px;height:30px"]{width:40px!important;height:54px!important;font-size:32px!important;}
-body.fullscreen-mode #news-inv-overlay>div{max-width:560px!important;}
-body.fullscreen-mode #news-inv-overlay [style*="font-size:7px"]{font-size:14px!important;}
-body.fullscreen-mode #news-inv-overlay [style*="font-size:22px"]{font-size:40px!important;}
-body.fullscreen-mode #news-inv-overlay [style*="font-size:4.5px"]{font-size:9px!important;}
-body.fullscreen-mode #news-inv-overlay [style*="font-size:4px"]{font-size:8px!important;}
-body.fullscreen-mode #news-inv-overlay [style*="font-size:5px"]{font-size:10px!important;}
-body.fullscreen-mode #news-inv-overlay button{font-size:11px!important;padding:10px!important;}
+body.fullscreen-mode #news-inv-overlay>div{max-width:800px!important;width:90vw!important;}
+body.fullscreen-mode #news-inv-overlay [style*="font-size:7px"]{font-size:20px!important;}
+body.fullscreen-mode #news-inv-overlay [style*="font-size:22px"]{font-size:64px!important;}
+body.fullscreen-mode #news-inv-overlay [style*="font-size:4.5px"]{font-size:14px!important;}
+body.fullscreen-mode #news-inv-overlay [style*="font-size:4px"]{font-size:13px!important;}
+body.fullscreen-mode #news-inv-overlay [style*="font-size:5px"]{font-size:15px!important;}
+body.fullscreen-mode #news-inv-grid{gap:18px!important;padding:24px!important;}
+body.fullscreen-mode #news-inv-grid>div{padding:16px!important;gap:10px!important;border-radius:8px!important;}
+body.fullscreen-mode #news-inv-overlay button{font-size:14px!important;padding:14px!important;}
 body.fullscreen-mode #newspaper-overlay>div{max-width:600px!important;}
 .map-area{flex:1;position:relative;overflow:hidden;}
 .gym-node{position:absolute;width:80px;height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
@@ -2030,7 +2033,7 @@ body.fullscreen-mode #newspaper-overlay>div{max-width:600px!important;}
       <div class="pdx-section">
         <div class="pdx-sec-title">③ ACCESORIOS DEL PERSONAJE</div>
         <div style="font-size:5px;color:#666;margin-bottom:6px;line-height:1.8;">Se desbloquean al superar cada gimnasio</div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:6px;background:#111;border:2px solid #333;border-radius:3px;padding:6px;margin-bottom:6px;">
+        <div id="pdx-avatar-box" style="display:flex;align-items:center;justify-content:center;gap:6px;background:#111;border:2px solid #333;border-radius:3px;padding:6px;margin-bottom:6px;">
           <div id="pdx-avatar"></div>
           <div id="pdx-avatar-companion" style="font-size:20px;"></div>
         </div>
