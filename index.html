@@ -100,6 +100,7 @@ body.fullscreen-mode .map-header-title{flex:none;text-align:center;}
 body.fullscreen-mode .map-header-title,
 body.fullscreen-mode .map-header-btn{font-size:5px;}
 body.fullscreen-mode .game-controls .hud-green-buttons{display:none!important;}
+body.battle-mode .game-controls{display:none!important;}
 .map-area{flex:1;position:relative;overflow:hidden;}
 .gym-node{position:absolute;width:80px;height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .gym-building{width:40px;height:36px;position:relative;transition:transform .15s;}
@@ -233,14 +234,14 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none!important;}
 }
 .enemy-slide-in{animation:slideInFromRight .55s ease-out forwards;}
 .player-slide-in{animation:slideInFromLeft .55s ease-out forwards;}
-.battle-field{flex:1;position:relative;overflow:hidden;}
+.battle-field{flex:1 1 56%;min-height:0;position:relative;overflow:hidden;}
 .battle-textbox{background:var(--gb-lightest);border-top:3px solid var(--gb-dark);padding:6px 8px;
-  font-size:7px;color:var(--gb-dark);min-height:60px;display:flex;flex-direction:column;
+  font-size:7px;color:var(--gb-dark);flex:1;display:flex;flex-direction:column;
   justify-content:space-between;line-height:1.8;}
-.battle-actions{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;}
+.battle-actions{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;flex:1;}
 .battle-btn{background:var(--gb-mid);border:2px solid var(--gb-dark);color:var(--gb-dark);
   font-family:'Press Start 2P',monospace;font-size:5.5px;padding:5px 3px;cursor:pointer;
-  text-align:left;line-height:1.5;}
+  text-align:left;line-height:1.5;display:flex;align-items:center;}
 .battle-btn:hover{background:var(--gb-dark);color:var(--gb-light);}
 .battle-btn.correct{background:var(--gb-dark);color:#8bff8b;}
 .battle-btn.wrong{background:#600000;color:#ff8b8b;}
@@ -1391,12 +1392,12 @@ body.fullscreen-mode .game-controls .hud-green-buttons{display:none!important;}
             </svg>
 
             <!-- Enemy sprite: TOP-RIGHT of field -->
-            <div id="enemy-sprite" style="position:absolute;top:4px;right:4px;width:66px;height:70px;">
-              <svg id="enemy-svg" viewBox="0 0 22 40" width="66" height="83" style="image-rendering:pixelated;"></svg>
+            <div id="enemy-sprite" style="position:absolute;top:2px;right:4px;width:84px;height:90px;">
+              <svg id="enemy-svg" viewBox="0 0 22 40" width="84" height="105" style="image-rendering:pixelated;"></svg>
             </div>
 
             <!-- Player sprite: BOTTOM-LEFT of field -->
-            <div id="player-sprite" style="position:absolute;bottom:26px;left:6px;width:66px;height:70px;">
+            <div id="player-sprite" style="position:absolute;bottom:20px;left:6px;width:84px;height:90px;">
               <svg viewBox="0 0 38 56" width="76" height="92" style="image-rendering:pixelated;">
                 <!-- ══ DELOITTE LÍDER ÉTICO ══ -->
 
@@ -2461,6 +2462,7 @@ function show(id){
   document.querySelectorAll('.game-screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   S.screen=id;
+  document.body.classList.toggle('battle-mode', id==='battle');
 }
 
 
@@ -3102,7 +3104,7 @@ function startBattle(gymId){
   document.getElementById('enemy-name-disp').textContent=gym.leader;
   document.getElementById('player-name-disp').textContent='LÍDER ÉTICO '+S.name;
   // Player battle sprite is always the same character (no visual progression)
-  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(66, 70);
+  document.getElementById('player-sprite').innerHTML = getBattlePlayerImg(84, 90);
   es.style.transform='translateX(130px)'; es.style.opacity='0'; es.style.transition='none';
   ps.style.transform='translateX(-130px)'; ps.style.opacity='0'; ps.style.transition='none';
   const ehp=document.getElementById('enemy-hpbox');
