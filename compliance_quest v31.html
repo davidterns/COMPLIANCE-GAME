@@ -2594,7 +2594,7 @@ function showMap(){
 // Classic Pokémon iris/circle-wipe: shrinks a circular hole to a point
 // (covering the screen in black), runs `onCovered` while fully covered,
 // then expands the hole again to reveal the new scene.
-function irisTransition(onCovered, closeMs=260, openMs=420){
+function irisTransition(onCovered, closeMs=600, openMs=900){
   const main = document.getElementById('main-screen');
   const iris = document.getElementById('global-iris');
   const rect = main.getBoundingClientRect();
