@@ -88,6 +88,18 @@ body.fullscreen-mode .game-controls{
   z-index:500;
 }
 body.fullscreen-mode .game-controls>div{align-items:flex-end;}
+/* Bigger D-pad and A/B buttons in fullscreen mode */
+body.fullscreen-mode #dpad{width:110px!important;height:110px!important;}
+body.fullscreen-mode .dpad-btn{font-size:22px!important;}
+body.fullscreen-mode #dpad-up,
+body.fullscreen-mode #dpad-down{border-radius:8px 8px 0 0!important;}
+body.fullscreen-mode #dpad-down{border-radius:0 0 8px 8px!important;}
+body.fullscreen-mode #dpad-left{border-radius:8px 0 0 8px!important;}
+body.fullscreen-mode #dpad-right{border-radius:0 8px 8px 0!important;}
+body.fullscreen-mode .game-controls [onclick="handleA()"]{width:64px!important;height:64px!important;font-size:18px!important;}
+body.fullscreen-mode .game-controls [onclick="handleB()"]{width:50px!important;height:50px!important;font-size:14px!important;}
+body.fullscreen-mode .game-controls [onclick="handleA()"]+span,
+body.fullscreen-mode .game-controls [onclick="handleB()"]+span{font-size:8px!important;}
 
 /* MAP */
 #screen-map{background:var(--gb-mid);overflow:hidden;}
