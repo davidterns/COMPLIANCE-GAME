@@ -60,8 +60,11 @@ body{background:linear-gradient(135deg,#0a0818 0%,#120c28 50%,#0a0818 100%);disp
   background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);}
 .game-screen{width:100%;height:100%;display:none;flex-direction:column;}
 .game-screen.active{display:flex;}
-/* Global flash overlay for full-screen transitions (e.g. intro → map) */
-#global-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:300;}
+/* Global iris/circle-wipe overlay for full-screen transitions (e.g. intro → map) */
+#global-iris{position:absolute;inset:0;background:#0a0a0a;pointer-events:none;z-index:300;display:none;
+  --iris-r:9999px;
+  -webkit-mask-image:radial-gradient(circle var(--iris-r) at 50% 50%, transparent 0, transparent var(--iris-r), #000 calc(var(--iris-r) + 1px));
+  mask-image:radial-gradient(circle var(--iris-r) at 50% 50%, transparent 0, transparent var(--iris-r), #000 calc(var(--iris-r) + 1px));}
 
 /* ── FULLSCREEN MODE (chassis hidden, floating HUD) ── */
 body.fullscreen-mode{overflow:hidden;background:#000;}
@@ -411,7 +414,7 @@ body.battle-mode .game-controls{display:none!important;}
     <div class="screen-bezel">
       <div class="screen" id="main-screen">
         <div class="scanlines"></div>
-        <div id="global-flash"></div>
+        <div id="global-iris"></div>
 
         <!-- TITLE -->
         <div class="game-screen active" id="screen-title">
@@ -2581,23 +2584,43 @@ function showMap(){
   };
 
   if(fromIntro){
-    // Pokémon-style white-flash transition into the fullscreen map
-    const flash=document.getElementById('global-flash');
-    flash.style.transition='none'; flash.style.opacity='0';
-    requestAnimationFrame(()=>{
-      flash.style.transition='opacity .18s ease-in';
-      flash.style.opacity='1';
-      setTimeout(()=>{
-        proceed();
-        requestAnimationFrame(()=>{
-          flash.style.transition='opacity .4s ease-out';
-          flash.style.opacity='0';
-        });
-      }, 220);
-    });
+    // Pokémon-style iris/circle-wipe transition into the fullscreen map
+    irisTransition(proceed);
   } else {
     proceed();
   }
+}
+
+// Classic Pokémon iris/circle-wipe: shrinks a circular hole to a point
+// (covering the screen in black), runs `onCovered` while fully covered,
+// then expands the hole again to reveal the new scene.
+function irisTransition(onCovered, closeMs=260, openMs=420){
+  const main = document.getElementById('main-screen');
+  const iris = document.getElementById('global-iris');
+  const rect = main.getBoundingClientRect();
+  const maxR = Math.hypot(rect.width, rect.height)/2 + 10;
+
+  iris.style.display='block';
+  iris.style.setProperty('--iris-r', maxR+'px');
+
+  const closeStart = performance.now();
+  function close(now){
+    const t = Math.min(1, (now-closeStart)/closeMs);
+    iris.style.setProperty('--iris-r', (maxR*(1-t))+'px');
+    if(t<1) requestAnimationFrame(close);
+    else {
+      onCovered();
+      const openStart = performance.now();
+      function open(now2){
+        const t2 = Math.min(1, (now2-openStart)/openMs);
+        iris.style.setProperty('--iris-r', (maxR*t2)+'px');
+        if(t2<1) requestAnimationFrame(open);
+        else iris.style.display='none';
+      }
+      requestAnimationFrame(open);
+    }
+  }
+  requestAnimationFrame(close);
 }
 
 function showMapAfterWin(){
