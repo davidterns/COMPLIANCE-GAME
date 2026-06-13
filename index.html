@@ -3549,7 +3549,6 @@ function handleStart(){
 
 function showNameScreen(){
   show('name');
-  if(musicMode!=='map') startMapMusic();
   const inp=document.getElementById('name-input');
   inp.value='';
   setTimeout(()=>inp.focus(),150);
@@ -3589,8 +3588,6 @@ let introFull = false;
 
 function showIntro(){
   show('intro');
-  if(musicMode!=='map') startMapMusic();
-  startMapMusic();
   const el = document.getElementById('intro-text');
   el.innerHTML = '';
   document.getElementById('intro-prompt').style.display = 'none';
