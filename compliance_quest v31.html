@@ -3877,18 +3877,17 @@ function getAvatarSVG(){
     svg += `<rect x="12.4" y="2.1" width="0.7" height="1" fill="#86BC25"/>`;
   }
 
-  // espada de la imparcialidad (gimnasio 2)
+  // espada de la imparcialidad (gimnasio 2) — envainada al costado derecho,
+  // sin tapar el torso ni la cara del avatar
   if(b[2]){
-    svg += `<g transform="rotate(30 5 18)">`;
-    svg += `<rect x="3.6" y="2" width="1.4" height="14" fill="#e8eef2"/>`;
-    svg += `<rect x="3.6" y="2" width="0.7" height="14" fill="#cfd8dc"/>`;
-    svg += `<rect x="4.55" y="2" width="0.25" height="14" fill="#fff"/>`;
-    svg += `<polygon points="3.6,2 5,2 4.3,0.5" fill="#e8eef2"/>`;
-    svg += `<rect x="1.8" y="15" width="5" height="1.2" fill="#d4af37"/>`;
-    svg += `<rect x="1.8" y="15" width="5" height="0.4" fill="#f0d272"/>`;
-    svg += `<rect x="3.1" y="16" width="2.4" height="3" fill="#8a6d1f"/>`;
-    svg += `<rect x="3.1" y="16" width="0.6" height="3" fill="#a8841f"/>`;
-    svg += `</g>`;
+    svg += `<rect x="20.3" y="13"   width="1.4" height="13" fill="#e8eef2"/>`;
+    svg += `<rect x="20.3" y="13"   width="0.6" height="13" fill="#cfd8dc"/>`;
+    svg += `<rect x="21.1" y="13"   width="0.25" height="13" fill="#fff"/>`;
+    svg += `<polygon points="20.3,26 21.7,26 21,28" fill="#cfd8dc"/>`;
+    svg += `<rect x="19.6" y="12"   width="2.8" height="1" fill="#d4af37"/>`;
+    svg += `<rect x="19.6" y="12"   width="2.8" height="0.35" fill="#f0d272"/>`;
+    svg += `<rect x="20.4" y="10.3" width="1.2" height="2" fill="#8a6d1f"/>`;
+    svg += `<rect x="20.4" y="10.3" width="0.4" height="2" fill="#a8841f"/>`;
   }
 
   svg += '</svg>';
